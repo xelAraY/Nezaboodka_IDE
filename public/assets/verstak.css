@@ -1,0 +1,144 @@
+
+/* Verstak Layout Presets */
+
+v-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: initial;
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+v-block[wrapping] > v-line {
+  flex-flow: wrap;
+}
+
+v-grid {
+  display: grid;
+  flex-basis: 0;
+  grid-auto-rows: minmax(min-content, 1fr);
+  grid-auto-columns: minmax(min-content, 1fr);
+  text-align: initial;
+}
+
+v-line {
+  display: flex;
+  flex-direction: row;
+}
+
+v-text {
+  flex-shrink: 1;
+}
+
+v-text:not([wrapping]), v-text[wrapping="false"] {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+v-text[wrapping], v-text[wrapping="true"] {
+  display: inline-grid;
+}
+
+v-group {
+  display: contents;
+}
+
+v-grid > v-line {
+  display: none;
+}
+
+v-grid > v-block {
+  place-self: stretch;
+}
+
+v-line > *:not([overlay]) { align-self: center; }
+[overlay] { position: absolute; min-width: 100%; box-sizing: border-box; }
+[overlay="hidden"] { display: none; }
+[overlay="rightward-downward"] { left: 0; top: 100%; }
+[overlay="rightward-upward"] { left: 0; bottom: 100%; }
+[overlay="leftward-downward"] { right: 0; top: 100%; }
+[overlay="leftward-upward"] { right: 0; bottom: 100%; }
+[stacking="true"] { position: relative; }
+
+/* Verstak Blinking Effect */
+
+.verstak-blinking-effect-0-0 {
+  animation: verstak-blinking-animation-ex-0-1 1.5s ease-in 1 !important;
+}
+
+.verstak-blinking-effect-0-1 {
+  animation: verstak-blinking-animation-ex-0-2 1.5s ease-in 1 !important;
+}
+
+.verstak-blinking-effect-1-0 {
+  animation: verstak-blinking-animation-ex-1-1 1.5s ease-in 1 !important;
+}
+
+.verstak-blinking-effect-1-1 {
+  animation: verstak-blinking-animation-ex-1-2 1.5s ease-in 1 !important;
+}
+
+.verstak-blinking-effect-2-0 {
+  animation: verstak-blinking-animation-ex-2-1 1.5s ease-in 1 !important;
+}
+
+.verstak-blinking-effect-2-1 {
+  animation: verstak-blinking-animation-ex-2-2 1.5s ease-in 1 !important;
+}
+
+/* Verstak Blinking Animation */
+
+@keyframes verstak-blinking-animation-0-2 {
+  from { box-shadow: 0 0 0 2px red inset; }
+}
+
+@keyframes verstak-blinking-animation-1-1 {
+  from { box-shadow: 0 0 0 2px #0000BB inset; }
+}
+
+@keyframes verstak-blinking-animation-1-2 {
+  from { box-shadow: 0 0 0 2px #0000BB inset; }
+}
+
+@keyframes verstak-blinking-animation-2-1 {
+  from { box-shadow: 0 0 0 2px #00BB00 inset; }
+}
+
+@keyframes verstak-blinking-animation-2-2 {
+  from { box-shadow: 0 0 0 2px #00BB00 inset; }
+}
+
+/* Verstak Blinking Animation */
+
+@keyframes verstak-blinking-animation-ex-0-1 {
+  from { outline-offset: -1px; outline: 2px solid red; }
+  to { outline-offset: -1px; outline: 2px solid transparent; }
+}
+
+@keyframes verstak-blinking-animation-ex-0-2 {
+  from { outline-offset: -1px; outline: 2px solid red; }
+  to { outline-offset: -1px; outline: 2px solid transparent; }
+}
+
+@keyframes verstak-blinking-animation-ex-1-1 {
+  from { outline-offset: -1px; outline: 2px solid #0000BB; }
+  to { outline-offset: -1px; outline: 2px solid transparent; }
+}
+
+@keyframes verstak-blinking-animation-ex-1-2 {
+  from { outline-offset: -1px; outline: 2px solid #0000BB; }
+  to { outline-offset: -1px; outline: 2px solid transparent; }
+}
+
+@keyframes verstak-blinking-animation-ex-2-1 {
+  from { outline-offset: -1px; outline: 2px solid #00BB00; }
+  to { outline-offset: -1px; outline: 2px solid transparent; }
+}
+
+@keyframes verstak-blinking-animation-ex-2-2 {
+  from { outline-offset: -1px; outline: 2px solid #00BB00; }
+  to { outline-offset: -1px; outline: 2px solid transparent; }
+}
