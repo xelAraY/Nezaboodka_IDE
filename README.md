@@ -1,4 +1,4 @@
-# Verstak Demo
+# IDE
 
 Tech Stack:
 
