@@ -1,12 +1,12 @@
 import { css } from "@emotion/css"
-import { cached } from "../../library/reactronic/source/Rx"
 import { AppTheme } from "./AppTheme"
 
 export class LightAppTheme extends AppTheme {
   name = "Light Theme"
-  fillColor = "#F0F0F0"
+  fillColor = "white"
   textColor = "black"
-  panelFillColor = "white"
+  spaceFillColor = "#F0F0F0"
+  accentColor = "crimson"
 
   markdown = css`
     .toc-inner {

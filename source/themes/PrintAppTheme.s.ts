@@ -7,7 +7,8 @@ export class PrintAppTheme extends AppTheme {
   textColor = "black"
   positiveColor = "black"
   negativeColor = "black"
-  panelFillColor = "white"
+  spaceFillColor = "white"
+  accentColor = "black"
 
   markdown = css`
     .toc-inner {

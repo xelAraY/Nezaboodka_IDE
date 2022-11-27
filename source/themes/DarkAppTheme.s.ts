@@ -3,12 +3,13 @@ import { AppTheme } from "./AppTheme"
 
 export class DarkAppTheme extends AppTheme {
   name = "Dark Theme"
-  fillColor = "#15293e"
+  fillColor = "#14344F"
   textColor = "white"
-  panelFillColor = "#14344F"
   positiveColor = "rgb(160, 237, 49)"
   negativeColor = "orangered"
   shadow = "0.1rem 0.1rem 0.5rem 0 black"
+  spaceFillColor = "#15293e"
+  accentColor = "#FFFFA0"
 
   markdown = css`
     .toc-inner {

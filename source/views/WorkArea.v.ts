@@ -41,7 +41,7 @@ const ExampleData = (place: string) => (
     render(b) {
       const theme = useContext(GostTheme) as AppTheme
       b.cells = place
-      b.style(theme.important)
+      b.style(theme.accent)
       PlainText(place)
     }
   })

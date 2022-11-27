@@ -1,8 +1,7 @@
 import { refs } from "reactronic"
-import { Block, Align, PlainText, useContext, subContext, line, lineFeed } from "verstak"
+import { Block, Align, PlainText, useContext, setContext, line, lineFeed } from "verstak"
 import { Markdown } from "verstak-markdown"
 import { createFieldModel, Field, GostTheme } from "gost-pi"
-import { AppTheme } from "themes/AppTheme"
 import { App } from "models/App"
 import { ToolBar } from "./ToolBar.v"
 import { StatusBar } from "./StatusBar.v"
@@ -17,7 +16,7 @@ export const MainWindow = () => (
     render(b) {
       const app = useContext(App)
       const theme = app.theme
-      subContext(GostTheme, theme)
+      setContext(GostTheme, theme)
 
       b.contentAlignment = Align.Top
       b.heightGrowth = 1
@@ -68,7 +67,7 @@ export const MainWindow = () => (
         WorkArea({
           render(b) {
             b.style(theme.panel)
-            b.style(theme.important)
+            b.style(theme.accent)
             b.widthGrowth = 3
             b.heightGrowth = 1
           }

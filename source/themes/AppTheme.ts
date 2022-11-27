@@ -3,7 +3,8 @@ import { css } from "@emotion/css"
 import { GostTheme } from "gost-pi"
 
 export class AppTheme extends GostTheme {
-  panelFillColor: string = ""
+  accentColor: string = ""
+  spaceFillColor: string = ""
   markdown: string = ""
 
   @cached
@@ -12,12 +13,12 @@ export class AppTheme extends GostTheme {
     padding: 1rem;
     box-shadow: ${this.shadow};
     border-radius: ${this.borderRadius};
-    background-color: ${this.panelFillColor};
+    background-color: ${this.fillColor};
   `}
 
 
   @cached
-  get important(): string { return css`
-    border: 1px solid ${this.negativeColor};
+  get accent(): string { return css`
+    border: 1px solid ${this.accentColor};
   `}
 }

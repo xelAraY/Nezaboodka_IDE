@@ -30,7 +30,7 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
           // b.style(s.Clickable)
           // b.style(s.Logo)
           b.native.style.outlineOffset = "-1px"
-          b.native.onclick = () => Transaction.run(null, () => app.blinkingEffect = !app.blinkingEffect)
+          // b.native.onclick = () => Transaction.run(null, () => app.blinkingEffect = !app.blinkingEffect)
         },
         render(b) {
           b.native.style.boxShadow = app.blinkingEffect ? "0.025rem 0.025rem 0.35rem 0 red" : ""
@@ -64,7 +64,7 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
       })
       Block({ // Account
         initialize(b) {
-          b.native.onclick = () => Transaction.run(null, () => app.nextTheme())
+          // b.native.onclick = () => Transaction.run(null, () => app.nextTheme())
         },
         render(b) {
           b.style(theme.panel)

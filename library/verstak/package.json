@@ -1,0 +1,54 @@
+{
+  "name": "verstak",
+  "version": "0.22.516",
+  "description": "Verstak - Front-End Library",
+  "publisher": "Nezaboodka Software",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "build/dist/source/api.js",
+  "types": "build/dist/source/api.d.ts",
+  "files": [
+    "build/dist/source/**/*.*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nezaboodka/verstak.git"
+  },
+  "keywords": [
+    "nezaboodka",
+    "reactronic",
+    "state management",
+    "rendering",
+    "consistent",
+    "reactive",
+    "reactivity",
+    "transactional",
+    "asynchronous",
+    "ui"
+  ],
+  "bugs": {
+    "url": "https://github.com/nezaboodka/verstak/issues"
+  },
+  "homepage": "https://github.com/nezaboodka/verstak/blob/master/README.md#readme",
+  "dependencies": {
+    "reactronic": "^0.22.510"
+  },
+  "devDependencies": {
+    "@types/node": "18.11.9",
+    "@typescript-eslint/eslint-plugin": "5.42.1",
+    "@typescript-eslint/parser": "5.42.1",
+    "ava": "4.3.3",
+    "c8": "7.12.0",
+    "eslint": "8.27.0",
+    "ts-node": "10.9.1",
+    "tsconfig-paths": "4.1.0",
+    "typescript": "4.8.4"
+  },
+  "scripts": {
+    "build": "eslint source/**/*.ts test/**/*.ts && tsc",
+    "fix": "eslint --fix source/**/*.ts test/**/*.ts",
+    "pack": "eslint source/**/*.ts test/**/*.ts && tsc --sourceMap false --removeComments true",
+    "test": "ava",
+    "cover": "c8 ava && open build/coverage/index.html"
+  }
+}
