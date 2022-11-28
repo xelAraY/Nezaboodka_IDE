@@ -7,19 +7,31 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
     render(b) {
       // Blocks can be layed out automatically
       // based on their order and line feeds.
-      Ruler("1", Align.Left, true)
-      Ruler("A", Align.Top + Align.Center)
-      Ruler("B", Align.Top + Align.Center)
-      Ruler("C", Align.Top + Align.Center); lineFeed()
-      Ruler("2", Align.Left); lineFeed()
-      Ruler("3", Align.Left); lineFeed()
+      // Ruler("1", Align.Left, true)
+      // Ruler("A", Align.Top + Align.Center)
+      // Ruler("B", Align.Top + Align.Center)
+      // Ruler("C", Align.Top + Align.Center); lineFeed()
+      // Ruler("2", Align.Left); lineFeed()
+      // Ruler("3", Align.Left); lineFeed()
       // Blocks can also be layed out
       // explicitly in exact cells.
-      ExampleData("B2")
-      ExampleData("A1:B1")
-      ExampleData("C1:C2")
-      ExampleData("B3:C3")
-      ExampleData("A2:A3")
+      const squareCountWidth = Math.trunc(window.innerWidth/20)
+      const sqareCountHeight = Math.trunc(window.innerHeight/20)
+
+      for (var i = 1; i < 3; i++){
+        for (var j = 'A'; j < 'A'+3; j+=1){
+          console.log(j.toString()+i.toString())
+          ExampleData(j.toString()+i.toString())
+        }
+        lineFeed()
+      }
+
+      //ExampleData("A1")
+      // ExampleData("A1:B1")
+      // ExampleData("C1:C2")
+      // ExampleData("B3:C3")
+      // ExampleData("A2:B2")
+      // ExampleData("A3")
     }},
   })
 )

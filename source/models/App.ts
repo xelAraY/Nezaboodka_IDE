@@ -1,7 +1,8 @@
-import { ObservableObject, raw, reactive, transactional } from "reactronic"
+import { ObservableObject, raw, reactive, transactional, cached } from "reactronic"
 import { BaseHtmlDriver, HtmlSensors } from "verstak"
 import { AppTheme } from "themes/AppTheme"
 import { Loader } from "./Loader"
+import { cache } from "@emotion/css"
 
 export class App extends ObservableObject {
   version: string
@@ -10,6 +11,7 @@ export class App extends ObservableObject {
   activeThemeIndex: number
   blinkingEffect: boolean
   loader: Loader
+  widthGrowthCount: number
 
   constructor(version: string, ...themes: Array<AppTheme>) {
     super()
@@ -19,6 +21,7 @@ export class App extends ObservableObject {
     this.activeThemeIndex = 0
     this.blinkingEffect = false
     this.loader = new Loader()
+    this.widthGrowthCount = 2
   }
 
   get theme(): AppTheme {
@@ -38,5 +41,10 @@ export class App extends ObservableObject {
   @reactive
   protected applyBlinkingEffect(): void {
     BaseHtmlDriver.blinkingEffect = this.blinkingEffect ? "verstak-blinking-effect" : undefined
+  }
+
+  @cached
+  public getWidthGrowth():Number{
+    return this.widthGrowthCount
   }
 }
