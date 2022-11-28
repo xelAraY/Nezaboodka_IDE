@@ -18,13 +18,13 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
       const squareCountWidth = Math.trunc(window.innerWidth/20)
       const sqareCountHeight = Math.trunc(window.innerHeight/20)
 
-      for (var i = 1; i < 3; i++){
-        for (var j = 'A'; j < 'A'+3; j+=1){
-          console.log(j.toString()+i.toString())
-          ExampleData(j.toString()+i.toString())
-        }
-        lineFeed()
-      }
+      // for (var i = 1; i < 3; i++){
+      //   for (var j = 'A'; j < 'A'+3; j+=1){
+      //     console.log(j.toString()+i.toString())
+      //     ExampleData(j.toString()+i.toString())
+      //   }
+      //   lineFeed()
+      // }
 
       //ExampleData("A1")
       // ExampleData("A1:B1")

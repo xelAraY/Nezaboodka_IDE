@@ -118,40 +118,11 @@ export const MainWindow = () => (
         })
       })
 
-      line(l => {
-        StatusBar(b => {
-          b.widthGrowth = 1
-        })
-      })
+      // line(l => {
+      //   StatusBar(b => {
+      //     b.widthGrowth = 1
+      //   })
+      // })
     },
   })
 )
-
-const EXAMPLE_CODE = `
-Block size is automatically adjusted to size of table
-cells, while cells are automatically adjusted to screen
-size of each user. System is suitable both to lay out
-application panels and to create reusable components.
-
-\`\`\` js
-Grid("Example", {
-  render(b) {
-    // Blocks can be layed out automatically
-    // based on their order and line feeds.
-    Ruler("1", Align.Left, true)
-    Ruler("A", Align.Top + Align.Center)
-    Ruler("B", Align.Top + Align.Center)
-    Ruler("C", Align.Top + Align.Center); lineFeed()
-    Ruler("2", Align.Left); lineFeed()
-    Ruler("3", Align.Left); lineFeed()
-    // Blocks can also be layed out
-    // explicitly in exact cells.
-    ExampleData("B2")
-    ExampleData("A1:B1")
-    ExampleData("C1:C2")
-    ExampleData("B3:C3")
-    ExampleData("A2:A3")
-  },
-})
-\`\`\`
-`

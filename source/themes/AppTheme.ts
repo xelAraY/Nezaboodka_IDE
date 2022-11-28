@@ -38,4 +38,10 @@ export class AppTheme extends GostTheme {
   get accent(): string { return css`
     border: 1px solid ${this.accentColor};
   `}
+
+  @cached
+  get toolbarButton(): string { return css`
+    margin: 10px;
+    color: green;
+  `}
 }
