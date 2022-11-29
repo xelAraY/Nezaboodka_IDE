@@ -27,7 +27,7 @@ export class GostTheme implements Theme {
   textColor = "black"
   positiveColor = "green"
   negativeColor = "red"
-  borderRadius = "0.35rem"
+  borderRadius = "0 rem"
   outlineWidth = "1px"
   outlineColor = "rgba(127, 127, 127, 0.5)"
   outlinePadding = "0.25em"

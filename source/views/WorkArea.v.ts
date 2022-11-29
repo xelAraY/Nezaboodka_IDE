@@ -1,3 +1,4 @@
+import { css } from "@emotion/css"
 import { GostTheme } from "gost-pi"
 import { AppTheme } from "themes/AppTheme"
 import { Grid, BlockBody, Block, PlainText, HtmlText, lineFeed, Align, vmt, useContext } from "verstak"
@@ -15,16 +16,33 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
       // Ruler("3", Align.Left); lineFeed()
       // Blocks can also be layed out
       // explicitly in exact cells.
-      const squareCountWidth = Math.trunc(window.innerWidth/20)
+      const squareCountWidth = Math.trunc(window.innerHeight/20)
       const sqareCountHeight = Math.trunc(window.innerHeight/20)
 
-      // for (var i = 1; i < 3; i++){
-      //   for (var j = 'A'; j < 'A'+3; j+=1){
-      //     console.log(j.toString()+i.toString())
-      //     ExampleData(j.toString()+i.toString())
-      //   }
-      //   lineFeed()
-      // }
+      //Draw grid
+      for (var i = 0; i < sqareCountHeight / 2; i++){
+        for (var j = 0; j < squareCountWidth / 2; j++){
+          Block({
+            initialize(b){
+              b.contentAlignment = Align.Stretch
+              b.frameAlignment = Align.Default
+            },
+            render(b) {
+              const theme = useContext(GostTheme) as AppTheme
+              // b.style(theme.panel)
+              b.style( css`margin: 0 rem ;
+                padding: 0 ;
+                border: 1px solid;
+                border-radius: 0 rem;
+                border-color: #655c3f;
+                background-color: #fdf1ce;`)
+              b.cells = {down : i, right : j}
+            }
+          })
+
+        }
+        lineFeed()
+      }
 
       //ExampleData("A1")
       // ExampleData("A1:B1")

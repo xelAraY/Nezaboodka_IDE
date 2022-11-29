@@ -19,7 +19,7 @@ export class AppTheme extends GostTheme {
   @cached
   get LeftPanel(): string { return css`
     margin: 0.5rem 0rem 0.5rem 0.5rem;
-    padding: 1rem;
+    padding: 0rem;
     box-shadow: ${this.shadow};
     border-radius: ${this.borderRadius};
     background-color: ${this.fillColor};
@@ -28,7 +28,7 @@ export class AppTheme extends GostTheme {
   @cached
   get RightPanel(): string { return css`
     margin: 0.5rem 0.5rem 0.5rem 0rem;
-    padding: 1rem;
+    padding: 0rem;
     box-shadow: ${this.shadow};
     border-radius: ${this.borderRadius};
     background-color: ${this.fillColor};

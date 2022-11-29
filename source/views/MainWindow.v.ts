@@ -6,6 +6,7 @@ import { App } from "models/App"
 import { ToolBar } from "./ToolBar.v"
 import { StatusBar } from "./StatusBar.v"
 import { WorkArea } from "./WorkArea.v"
+import { css } from "@emotion/css"
 
 export const MainWindow = () => (
   Block({ autonomous: true,
@@ -83,7 +84,8 @@ export const MainWindow = () => (
             },
 
             render(b){
-
+              b.style(css`
+              background-color: #d9e8fb;`)
             }
           })
         })
@@ -97,19 +99,7 @@ export const MainWindow = () => (
           }
         })
 
-        // Block({
-        //   autonomous: true,
-        //   triggers: { theme },
-        //   render(b) {
-        //     b.style(theme.panel)
-        //     b.style(theme.markdown)
-        //     b.minWidth = "16rem"
-        //     b.widthGrowth = 2
-        //     b.contentAlignment = Align.Left + Align.Top,
-        //     b.frameAlignment = Align.Stretch,
-        //     Markdown(EXAMPLE_CODE)
-        //   }
-        // })
+    
       })
 
       line(l => {
