@@ -1,7 +1,7 @@
 import { css } from "@emotion/css"
-import { GostTheme } from "gost-pi"
+import { $theme} from "gost-pi"
 import { AppTheme } from "themes/AppTheme"
-import { Grid, BlockBody, Block, PlainText, HtmlText, lineFeed, Align, vmt, useContext } from "verstak"
+import { Grid, BlockBody, Block, PlainText, HtmlText, lineFeed, Align, vmt } from "verstak"
 
 export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
   Grid({ ...vmt(body), base: {
@@ -28,7 +28,7 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
               b.frameAlignment = Align.Default
             },
             render(b) {
-              const theme = useContext(GostTheme) as AppTheme
+              const theme = $theme.value as AppTheme
               // b.style(theme.panel)
               b.style( css`margin: 0 rem ;
                 padding: 0 ;
@@ -69,7 +69,7 @@ const ExampleData = (place: string) => (
       b.contentAlignment = Align.Center + Align.CenterV
     },
     render(b) {
-      const theme = useContext(GostTheme) as AppTheme
+      const theme = $theme.value as AppTheme
       b.cells = place
       b.style(theme.accent)
       PlainText(place)

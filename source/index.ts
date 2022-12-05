@@ -1,7 +1,7 @@
 import { Transaction } from "reactronic"
-import { VBlock, HtmlBody, setContext, lineFeed } from "verstak"
+import { VBlock, HtmlBody, lineFeed } from "verstak"
 import { configureDebugging } from "dbg"
-import { App } from "models/App"
+import { $app, App } from "models/App"
 import { MainWindow } from "views/MainWindow.v"
 import { LightAppTheme } from "themes/LightAppTheme.s"
 import { DarkAppTheme } from "themes/DarkAppTheme.s"
@@ -26,7 +26,7 @@ VBlock.root(() => {
   HtmlBody({
     autonomous: true,
     render(b) {
-      setContext(App, app)
+      $app.value = app
       const t = app.theme
       const css = b.native.style
       css.color = t.textColor

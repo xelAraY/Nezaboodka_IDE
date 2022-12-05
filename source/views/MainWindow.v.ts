@@ -1,8 +1,8 @@
 import { refs } from "reactronic"
-import { Block, Align, PlainText, useContext, setContext, line, lineFeed } from "verstak"
+import { Block, Align, PlainText, line, lineFeed } from "verstak"
 import { Markdown } from "verstak-markdown"
-import { createFieldModel, Field, GostTheme } from "gost-pi"
-import { App } from "models/App"
+import { $theme, createFieldModel, Field} from "gost-pi"
+import { $app, App } from "models/App"
 import { ToolBar } from "./ToolBar.v"
 import { StatusBar } from "./StatusBar.v"
 import { WorkArea } from "./WorkArea.v"
@@ -11,13 +11,13 @@ import { css } from "@emotion/css"
 export const MainWindow = () => (
   Block({ autonomous: true,
     initialize(b) {
-      const app = useContext(App)
-      app.sensors.listen(b.native)
+    
+      $app.value.sensors.listen(b.native)
     },
     render(b) {
-      const app = useContext(App)
+      const app = $app.value
       const theme = app.theme
-      setContext(GostTheme, theme)
+      $theme.value = theme
 
       b.contentAlignment = Align.Top
       b.heightGrowth = 1

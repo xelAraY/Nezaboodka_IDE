@@ -1,8 +1,7 @@
-import { ObservableObject, raw, reactive, transactional, cached } from "reactronic"
-import { BaseHtmlDriver, HtmlSensors } from "verstak"
+import { ObservableObject, reactive, transactional, cached } from "reactronic"
+import { BaseHtmlDriver, ContextVariable, HtmlSensors } from "verstak"
 import { AppTheme } from "themes/AppTheme"
 import { Loader } from "./Loader"
-import { cache } from "@emotion/css"
 
 export class App extends ObservableObject {
   version: string
@@ -48,3 +47,5 @@ export class App extends ObservableObject {
     return this.widthGrowthCount
   }
 }
+
+export const $app = new ContextVariable<App>()

@@ -1,0 +1,9 @@
+[submodule "reactronic"]
+	path = reactronic
+	url = https://github.com/nezaboodka/reactronic
+[submodule "verstak"]
+	path = verstak
+	url = https://github.com/nezaboodka/verstak
+[submodule "verstak-markdown"]
+	path = verstak-markdown
+	url = https://github.com/nezaboodka/verstak-markdown

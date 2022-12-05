@@ -1,33 +1,30 @@
 import { Transaction } from "reactronic"
-import { setContext, tryUseContext } from "verstak"
-import { StylingParams } from "./Styling"
-import { ButtonStyling, DefaultButtonStyling } from "./Button.v"
-import { FieldStyling, DefaultFieldStyling  } from "./Field.v"
-import { IconStyling, DefaultIconStyling  } from "./Icon.v"
-import { ToggleStyling, DefaultToggleStyling } from "./Toggle.v"
+import { ContextVariable } from "verstak"
+import { AbstractTheme } from "./theme/Styling"
+import { ButtonStyling, DefaultButtonStyling } from "./theme/Button.s"
+import { FieldStyling, DefaultFieldStyling  } from "./theme/Field.s"
+import { IconStyling, DefaultIconStyling  } from "./theme/Icon.s"
+import { ToggleStyling, DefaultToggleStyling } from "./theme/Toggle.s"
 
-export interface Theme extends StylingParams {
+export { type ButtonStyling, type DefaultButtonStyling } from "./theme/Button.s"
+export { type FieldStyling, type DefaultFieldStyling  } from "./theme/Field.s"
+export { type IconStyling, type DefaultIconStyling  } from "./theme/Icon.s"
+export { type ToggleStyling, type DefaultToggleStyling } from "./theme/Toggle.s"
+
+export interface Theme extends AbstractTheme {
   readonly button: ButtonStyling
   readonly field: FieldStyling
   readonly icon: IconStyling
   readonly toggle: ToggleStyling
 }
 
-export function useTheme(): Theme {
-  return tryUseContext(GostTheme) ?? (DefaultGostTheme ??= Transaction.run({ separation: true }, () => new GostTheme()))
-}
-
-export function setTheme(theme: Theme): void {
-  setContext(GostTheme, theme)
-}
-
-export class GostTheme implements Theme {
-  name = "Default Theme"
+export class DefaultGostTheme implements Theme {
+  name = "Default Gost Theme"
   fillColor = "white"
   textColor = "black"
   positiveColor = "green"
   negativeColor = "red"
-  borderRadius = "0 rem"
+  borderRadius = "0.35rem"
   outlineWidth = "1px"
   outlineColor = "rgba(127, 127, 127, 0.5)"
   outlinePadding = "0.25em"
@@ -38,21 +35,5 @@ export class GostTheme implements Theme {
   toggle = new DefaultToggleStyling(this)
 }
 
-let DefaultGostTheme: GostTheme | undefined = undefined
-
-// export abstract class GostTheme extends ObservableObject implements Theme {
-//   abstract fillColor: string
-//   abstract textColor: string
-//   abstract positiveColor: string
-//   abstract negativeColor: string
-//   abstract borderRadius: string
-//   abstract outlineWidth: string
-//   abstract outlineColor: string
-//   abstract outlinePadding: string
-//   abstract shadow: string
-
-//   abstract button: ButtonStyle
-//   abstract field: FieldStyle
-//   abstract icon: IconStyle
-//   abstract toggle: ToggleStyle
-// }
+export const $theme = new ContextVariable<Theme>(
+  Transaction.run({ separation: true }, () => new DefaultGostTheme()))
