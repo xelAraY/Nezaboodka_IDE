@@ -23,7 +23,7 @@ export class App extends ObservableObject {
     this.activeThemeIndex = 0
     this.blinkingEffect = false
     this.loader = new Loader()
-    this.widthGrowthCount = 2
+    this.widthGrowthCount = 3
   }
 
   get theme(): AppTheme {

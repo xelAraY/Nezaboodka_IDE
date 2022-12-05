@@ -5,6 +5,7 @@ import { Icon} from "gost-pi"
 import { $app, App } from "models/App"
 import { observableModel } from "common/Utils"
 import { AppTheme } from "themes/AppTheme"
+import { css } from "@emotion/css"
 
 export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
   Block({ ...vmt(body), base: {
@@ -13,59 +14,75 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
       const theme = app.theme
       //const theme = useContext(GostTheme) as AppTheme
       b.style(theme.panel)
-      Button({ key: "Run",
-        initialize(b) {
-
-          // b.model = observableModel({
-          //   icon: "fa-solid fa-palette",
-          //   label: "Run",
-          //   //action() { app.nextTheme() }
-          // })
-        },
-        render(b) {
-          Icon("fa-solid fa-play")
-          b.style(theme.toolbarButton)
-        }
+      Block(b => {
+        Icon("fa-solid fa-play fa-lg")
+        b.style(theme.toolbarButtonRun)
       })
-      Button({ key: "Run in one step",
-        initialize(b) {
-          // b.model = observableModel({
-          //   icon: "fa-solid fa-palette",
-          //   label: "Run",
-          //   //action() { app.nextTheme() }
-          // })
-        },
-        render(b) {
-          b.style(theme.panel)
-          Icon("fa-solid fa-forward-step")
-        }
+      Block(b => {
+        Icon("fa-solid fa-forward-step fa-lg")
+        b.style(theme.toolbarButtonStep)
       })
-      Button({ key: "Clear",
-        initialize(b) {
-          // b.model = observableModel({
-          //   icon: "fa-solid fa-palette",
-          //   label: "Run",
-          //   //action() { app.nextTheme() }
-          // })
-        },
-        render(b) {
-          b.style(theme.panel)
-          Icon("fa-solid fa-eraser")
-        }
+      Block(b => {
+        Icon("fa-solid fa-eraser fa-lg")
+        b.style(theme.toolbarButtonClear)
       })
-      Button({ key: "Change color scheme",
-        initialize(b) {
-          // b.model = observableModel({
-          //   icon: "fa-solid fa-palette",
-          //   label: "Run",
-          //   //action() { app.nextTheme() }
-          // })
-        },
-        render(b) {
-          b.style(theme.panel)
-          Icon("fa-solid fa-palette")
-        }
+      Block(b => {
+        Icon("fa-solid fa-palette fa-lg")
+        b.style(theme.toolbarButtonChangeColor)
       })
+      // Button({ key: "Run",
+      //   initialize(b) {
+      //     b.style(css`margin 100px;`)
+      //     // b.model = observableModel({
+      //     //   icon: "fa-solid fa-palette",
+      //     //   label: "Run",
+      //     //   //action() { app.nextTheme() }
+      //     // })
+      //   },
+      //   render(b) {
+      //     Icon("fa-solid fa-play fa-lg")
+      //     b.style(theme.toolbarButton)
+      //   }
+      // })
+      // Button({ key: "Run in one step",
+      //   initialize(b) {
+      //     // b.model = observableModel({
+      //     //   icon: "fa-solid fa-palette",
+      //     //   label: "Run",
+      //     //   //action() { app.nextTheme() }
+      //     // })
+      //   },
+      //   render(b) {
+      //     b.style(theme.panel)
+      //     Icon("fa-solid fa-forward-step fa-lg")
+      //   }
+      // })
+      // Button({ key: "Clear",
+      //   initialize(b) {
+      //     // b.model = observableModel({
+      //     //   icon: "fa-solid fa-palette",
+      //     //   label: "Run",
+      //     //   //action() { app.nextTheme() }
+      //     // })
+      //   },
+      //   render(b) {
+      //     b.style(theme.panel)
+      //     Icon("fa-solid fa-eraser fa-lg")
+      //   }
+      // })
+      // Button({ key: "Change color scheme",
+      //   initialize(b) {
+      //     // b.model = observableModel({
+      //     //   icon: "fa-solid fa-palette",
+      //     //   label: "Run",
+      //     //   //action() { app.nextTheme() }
+      //     // })
+      //   },
+      //   render(b) {
+      //     b.style(theme.panel)
+      //     Icon("fa-solid fa-palette fa-lg")
+      //   }
+      // })
       // Image({ // logo
       //   initialize(b, base) {
       //     base()

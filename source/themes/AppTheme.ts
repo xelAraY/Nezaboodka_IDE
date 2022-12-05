@@ -42,8 +42,38 @@ export class AppTheme extends DefaultGostTheme {
   `}
 
   @cached
-  get toolbarButton(): string { return css`
+  get toolbarButtonRun(): string { return css`
     margin: 10px;
     color: green;
+    cursor: pointer;
+  `}
+
+  @cached
+  get toolbarButtonStep(): string { return css`
+    margin: 10px;
+    color: black;
+    cursor: pointer;
+  `}
+
+  @cached
+  get toolbarButtonClear(): string { return css`
+    margin: 10px;
+    color: black;
+    cursor: pointer;
+  `}
+
+  @cached
+  get toolbarButtonChangeColor(): string { return css`
+    margin: 10px;
+    color: #EB9F1D;
+    cursor: pointer;
+  `}
+
+  @cached
+  get spliter(): string { return css`
+    border: 1px solid black;
+    background-color: black;
+    width: 3px;
+    margin: 10px 0px 10px 0px;
   `}
 }

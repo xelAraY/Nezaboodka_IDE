@@ -12,7 +12,7 @@ import { editor } from "monaco-editor"
 export const MainWindow = () => (
   Block({ autonomous: true,
     initialize(b) {
-    
+
       $app.value.sensors.listen(b.native)
     },
     render(b) {
@@ -69,11 +69,11 @@ export const MainWindow = () => (
           b.contentAlignment = Align.Top
           b.widthGrowth = 3
           b.heightGrowth = 1
-          
-          app.setEditor(editor.create(b.native, 
-            {language: 'typescript', automaticLayout: true, smoothScrolling: true, 
+
+          app.setEditor(editor.create(b.native,
+            {language: 'typescript', automaticLayout: true, smoothScrolling: true,
             theme: 'vs-dark', fontSize: 18}))
-          
+
           // Field({
           //   initialize(b) {
           //     const loader = app.loader
@@ -88,7 +88,7 @@ export const MainWindow = () => (
           //     //   isHotText: true,
           //     //   isMultiLineText: true,
           //     //   })
-              
+
           //   },
 
           //   render(b){
@@ -96,6 +96,11 @@ export const MainWindow = () => (
           //     background-color: #d9e8fb;`)
           //   }
           // })
+        })
+
+        Block(b => {
+          b.style(theme.spliter)
+          b.heightGrowth = 1
         })
 
         WorkArea({
@@ -106,8 +111,6 @@ export const MainWindow = () => (
             b.heightGrowth = 1
           }
         })
-
-    
       })
 
       line(l => {
