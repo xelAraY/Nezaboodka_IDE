@@ -2,6 +2,8 @@ import { ObservableObject, reactive, transactional, cached } from "reactronic"
 import { BaseHtmlDriver, ContextVariable, HtmlSensors } from "verstak"
 import { AppTheme } from "themes/AppTheme"
 import { Loader } from "./Loader"
+import { editor } from "monaco-editor"
+
 
 export class App extends ObservableObject {
   version: string
@@ -11,6 +13,7 @@ export class App extends ObservableObject {
   blinkingEffect: boolean
   loader: Loader
   widthGrowthCount: number
+  editor: editor.IStandaloneCodeEditor | undefined
 
   constructor(version: string, ...themes: Array<AppTheme>) {
     super()
@@ -45,6 +48,14 @@ export class App extends ObservableObject {
   @cached
   public getWidthGrowth():Number{
     return this.widthGrowthCount
+  }
+
+  public setEditor (editor: editor.IStandaloneCodeEditor): void{
+    this.editor = editor
+  }
+
+  public getEditor(): editor.IStandaloneCodeEditor | undefined{
+    return this.editor
   }
 }
 

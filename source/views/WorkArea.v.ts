@@ -16,8 +16,8 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
       // Ruler("3", Align.Left); lineFeed()
       // Blocks can also be layed out
       // explicitly in exact cells.
-      const squareCountWidth = Math.trunc(window.innerHeight/20)
-      const sqareCountHeight = Math.trunc(window.innerHeight/20)
+      const squareCountWidth = Math.trunc((window.innerHeight)/20 )
+      const sqareCountHeight = Math.trunc((window.innerHeight)/20 )
 
       //Draw grid
       for (var i = 0; i < sqareCountHeight / 2; i++){

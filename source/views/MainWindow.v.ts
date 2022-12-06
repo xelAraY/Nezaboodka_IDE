@@ -1,5 +1,5 @@
 import { refs } from "reactronic"
-import { Block, Align, PlainText, line, lineFeed } from "verstak"
+import { Block, Align, PlainText, line, lineFeed, VBlock } from "verstak"
 import { Markdown } from "verstak-markdown"
 import { $theme, createFieldModel, Field} from "gost-pi"
 import { $app, App } from "models/App"
@@ -7,6 +7,7 @@ import { ToolBar } from "./ToolBar.v"
 import { StatusBar } from "./StatusBar.v"
 import { WorkArea } from "./WorkArea.v"
 import { css } from "@emotion/css"
+import { editor } from "monaco-editor"
 
 export const MainWindow = () => (
   Block({ autonomous: true,
@@ -62,32 +63,39 @@ export const MainWindow = () => (
         // })
 
         Block(b => {
+
           b.style(theme.LeftPanel)
           b.style(theme.accent)
           b.contentAlignment = Align.Top
           b.widthGrowth = 3
           b.heightGrowth = 1
-          Field({
-            initialize(b) {
-            const loader = app.loader
-            b.widthGrowth = 3
-            b.heightGrowth = 1
-            b.contentAlignment = Align.Top
-            b.model = createFieldModel({
-              // icon: "fa-solid fa-search",
-              //text: "refs(loader).filter",
-              text: "",
-              options: new Array<string>(0),
-              isHotText: true,
-              isMultiLineText: true,
-              })
-            },
+          
+          app.setEditor(editor.create(b.native, 
+            {language: 'typescript', automaticLayout: true, smoothScrolling: true, 
+            theme: 'vs-dark', fontSize: 18}))
+          
+          // Field({
+          //   initialize(b) {
+          //     const loader = app.loader
+          //     b.widthGrowth = 3
+          //     b.heightGrowth = 1
+          //     b.contentAlignment = Align.Top
+          //     // b.model = createFieldModel({
+          //     //   // icon: "fa-solid fa-search",
+          //     //   //text: "refs(loader).filter",
+          //     //   text: "",
+          //     //   options: new Array<string>(0),
+          //     //   isHotText: true,
+          //     //   isMultiLineText: true,
+          //     //   })
+              
+          //   },
 
-            render(b){
-              b.style(css`
-              background-color: #d9e8fb;`)
-            }
-          })
+          //   render(b){
+          //     b.style(css`
+          //     background-color: #d9e8fb;`)
+          //   }
+          // })
         })
 
         WorkArea({

@@ -23,6 +23,7 @@ export class AppTheme extends DefaultGostTheme {
     box-shadow: ${this.shadow};
     border-radius: ${this.borderRadius};
     background-color: ${this.fillColor};
+    height: 90vh;
   `}
 
   @cached
@@ -32,6 +33,7 @@ export class AppTheme extends DefaultGostTheme {
     box-shadow: ${this.shadow};
     border-radius: ${this.borderRadius};
     background-color: ${this.fillColor};
+    height: 90vh;
   `}
 
   @cached
