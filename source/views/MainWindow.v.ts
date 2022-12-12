@@ -1,12 +1,8 @@
-import { refs } from "reactronic"
-import { Block, Align, PlainText, line, lineFeed, VBlock } from "verstak"
-import { Markdown } from "verstak-markdown"
-import { $theme, createFieldModel, Field} from "gost-pi"
-import { $app, App } from "models/App"
+import { Block, Align, line, VBlock } from "verstak"
+import { $theme} from "gost-pi"
+import { $app } from "models/App"
 import { ToolBar } from "./ToolBar.v"
-import { StatusBar } from "./StatusBar.v"
 import { WorkArea } from "./WorkArea.v"
-import { css } from "@emotion/css"
 import { editor } from "monaco-editor"
 
 export const MainWindow = () => (
@@ -76,7 +72,6 @@ export const MainWindow = () => (
           app.setEditor(editor.create(b.native,
             {language: 'typescript', automaticLayout: true, smoothScrolling: true,
             theme: 'vs-dark', fontSize: 18}))
-
         })
 
 
@@ -113,12 +108,6 @@ export const MainWindow = () => (
           b.widthGrowth = 1
         })
       })
-
-      // line(l => {
-      //   StatusBar(b => {
-      //     b.widthGrowth = 1
-      //   })
-      // })
     },
   })
 )

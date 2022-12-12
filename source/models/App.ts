@@ -1,4 +1,4 @@
-import { ObservableObject, reactive, transactional, cached } from "reactronic"
+import { ObservableObject, reactive, transactional } from "reactronic"
 import { BaseHtmlDriver, ContextVariable, HtmlSensors } from "verstak"
 import { AppTheme } from "themes/AppTheme"
 import { Loader } from "./Loader"
@@ -45,7 +45,6 @@ export class App extends ObservableObject {
     BaseHtmlDriver.blinkingEffect = this.blinkingEffect ? "verstak-blinking-effect" : undefined
   }
 
-  @cached
   public getWidthGrowth():Number{
     return this.widthGrowthCount
   }

@@ -63,7 +63,7 @@ export class AppTheme extends DefaultGostTheme {
   `}
 
   @cached
-  get toolbarButtonChangeColor(): string { return css`
+  get toolbarButtonChangeTheme(): string { return css`
     margin: 10px;
     color: #EB9F1D;
     cursor: pointer;
