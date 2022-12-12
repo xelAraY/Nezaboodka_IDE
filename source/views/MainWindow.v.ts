@@ -29,25 +29,24 @@ export const MainWindow = () => (
         if (isResize && codeEditor && grid) {
           let editorWidth: number = codeEditor.native.offsetWidth
           let gridWindowWidth: number = grid.native.offsetWidth
-          
+
           if (mousePrevPos === undefined) {
-            mousePrevPos = _.clientX
+            mousePrevPos = _.pageX
           }
 
-          let offsetX = (_.clientX - mousePrevPos)
+          let offsetX = (_.pageX - mousePrevPos)
           editorWidth += offsetX
           gridWindowWidth -= offsetX
 
           let editorStyle = editorWidth + 'px'
-          codeEditor.native.style
-          .width = editorStyle
+          codeEditor.native.style.width = editorStyle
           codeEditor.native.style.maxWidth = editorStyle
 
           let gridStyle = gridWindowWidth + 'px'
           grid.native.style.width = gridStyle
           grid.native.style.maxWidth = gridStyle
 
-          mousePrevPos = _.clientX
+          mousePrevPos = _.pageX
         }
       }
 
@@ -59,7 +58,7 @@ export const MainWindow = () => (
         mousePrevPos = undefined
       })
 
-      line(l => { 
+      line(l => {
 
         codeEditor = Block(b => {
 

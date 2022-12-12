@@ -8,6 +8,7 @@ body {
   max-height: 100vh;
   font-family: sans-serif;
   font-size: min(5vw, 0.5cm);
+  overflow: hidden;
 }
 
 body > v-block,

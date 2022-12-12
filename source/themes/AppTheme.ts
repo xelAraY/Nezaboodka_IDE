@@ -9,11 +9,12 @@ export class AppTheme extends DefaultGostTheme {
 
   @cached
   get panel(): string { return css`
-    margin: 0.5rem ;
+    margin: 0rem 0.5rem 0.5rem 0.5rem;
     padding: 1rem;
     box-shadow: ${this.shadow};
     border-radius: ${this.borderRadius};
     background-color: ${this.fillColor};
+    height: 5vh;
   `}
 
   @cached
@@ -23,7 +24,7 @@ export class AppTheme extends DefaultGostTheme {
     box-shadow: ${this.shadow};
     border-radius: ${this.borderRadius};
     background-color: ${this.fillColor};
-    height: 90vh;
+    height: 87vh;
   `}
 
   @cached
@@ -33,7 +34,7 @@ export class AppTheme extends DefaultGostTheme {
     box-shadow: ${this.shadow};
     border-radius: ${this.borderRadius};
     background-color: ${this.fillColor};
-    height: 90vh;
+    height: 87vh;
   `}
 
   @cached
