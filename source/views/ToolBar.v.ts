@@ -39,7 +39,12 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
           b.model = {
             icon: "fa-solid fa-eraser fa-lg",
             label: "",
-            action: () => alert("123")
+            action: () => {
+              let editor = app.getEditor()
+              if (editor !== undefined){
+                editor?.setValue('')
+              }
+            }
           }
         },
         render(b) {
@@ -51,10 +56,10 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
           b.model = {
             icon: "fa-solid fa-palette fa-lg",
             label: "",
-            action: () => { 
+            action: () => {
               let codeEditor = app.getEditor()
               app.nextTheme()
-              
+
             }
           }
         },
