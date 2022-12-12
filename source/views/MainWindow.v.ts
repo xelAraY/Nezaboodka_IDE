@@ -24,45 +24,48 @@ export const MainWindow = () => (
       b.heightGrowth = 1
       b.widthGrowth = Number(app.getWidthGrowth())
 
-      line(l => { // main line
-        // Block(b => {
-        //   b.style(app.theme.panel)
-        //   b.minWidth = "10rem"
-        //   b.contentAlignment = Align.Top
-        //   b.frameAlignment = Align.Stretch
-        //   PlainText("Navigation Bar")
-        //   lineFeed()
-        //   Field({
-        //     initialize(b) {
-        //       const loader = app.loader
-        //       b.minWidth = "10em"
-        //       b.model = createFieldModel({
-        //         icon: "fa-solid fa-search",
-        //         text: refs(loader).filter,
-        //         options: refs(loader).loaded,
-        //         isHotText: true,
-        //         isMultiLineText: false,
-        //       })
-        //     },
-        //   })
-        //   lineFeed()
-        //   Block(b => b.heightGrowth = 1)
-        //   lineFeed()
-        //   Field({
-        //     initialize(b) {
-        //       const loader = app.loader
-        //       b.minWidth = "10em"
-        //       b.model = createFieldModel({
-        //         text: refs(loader).filter,
-        //         options: refs(loader).loaded,
-        //         isHotText: true,
-        //         isMultiLineText: false,
-        //       })
-        //     },
-        //   })
-        // })
+      let codeEditor : VBlock<HTMLElement, unknown, void> | undefined = undefined
+      let grid : VBlock<HTMLElement, unknown, void> | undefined = undefined
+      let mousePrevPos: number | undefined = undefined
+      let isResize: boolean = false
 
-        let codeEditor = Block(b => {
+      let splitterMouseMove = (_: MouseEvent) => {
+        if (isResize && codeEditor && grid) {
+          let editorWidth: number = codeEditor.native.offsetWidth
+          let gridWindowWidth: number = grid.native.offsetWidth
+          
+          if (mousePrevPos === undefined) {
+            mousePrevPos = _.clientX
+          }
+
+          let offsetX = (_.clientX - mousePrevPos)
+          editorWidth += offsetX
+          gridWindowWidth -= offsetX
+
+          let editorStyle = editorWidth + 'px'
+          codeEditor.native.style
+          .width = editorStyle
+          codeEditor.native.style.maxWidth = editorStyle
+
+          let gridStyle = gridWindowWidth + 'px'
+          grid.native.style.width = gridStyle
+          grid.native.style.maxWidth = gridStyle
+
+          mousePrevPos = _.clientX
+        }
+      }
+
+      b.native.addEventListener('mousemove', _ => {
+        splitterMouseMove(_)
+      })
+      b.native.addEventListener('mouseup', _ => {
+        isResize = false
+        mousePrevPos = undefined
+      })
+
+      line(l => { 
+
+        codeEditor = Block(b => {
 
           b.style(theme.LeftPanel)
           b.style(theme.accent)
@@ -74,41 +77,28 @@ export const MainWindow = () => (
             {language: 'typescript', automaticLayout: true, smoothScrolling: true,
             theme: 'vs-dark', fontSize: 18}))
 
-          // Field({
-          //   initialize(b) {
-          //     const loader = app.loader
-          //     b.widthGrowth = 3
-          //     b.heightGrowth = 1
-          //     b.contentAlignment = Align.Top
-          //     // b.model = createFieldModel({
-          //     //   // icon: "fa-solid fa-search",
-          //     //   //text: "refs(loader).filter",
-          //     //   text: "",
-          //     //   options: new Array<string>(0),
-          //     //   isHotText: true,
-          //     //   isMultiLineText: true,
-          //     //   })
-
-          //   },
-
-          //   render(b){
-          //     b.style(css`
-          //     background-color: #d9e8fb;`)
-          //   }
-          // })
         })
 
-        let spliter = Block(b => {
+
+        Block(b => {
           b.style(theme.spliter)
           b.heightGrowth = 1
           b.native.addEventListener('mousemove', _ => {
             b.native.style.cursor = 'col-resize'
+            splitterMouseMove(_)
+          })
+          b.native.addEventListener('mousedown', _ => {
+            isResize = true
+          })
+          b.native.addEventListener('mouseup', _ => {
+            isResize = false
+            mousePrevPos = undefined
           })
 
         })
 
 
-        let grid = WorkArea({
+        grid = WorkArea({
           render(b) {
             b.style(theme.RightPanel)
             b.style(theme.accent)
