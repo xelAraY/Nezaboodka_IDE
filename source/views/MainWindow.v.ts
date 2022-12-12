@@ -62,7 +62,7 @@ export const MainWindow = () => (
         //   })
         // })
 
-        Block(b => {
+        let codeEditor = Block(b => {
 
           b.style(theme.LeftPanel)
           b.style(theme.accent)
@@ -98,12 +98,17 @@ export const MainWindow = () => (
           // })
         })
 
-        Block(b => {
+        let spliter = Block(b => {
           b.style(theme.spliter)
           b.heightGrowth = 1
+          b.native.addEventListener('mousemove', _ => {
+            b.native.style.cursor = 'col-resize'
+          })
+
         })
 
-        WorkArea({
+
+        let grid = WorkArea({
           render(b) {
             b.style(theme.RightPanel)
             b.style(theme.accent)
