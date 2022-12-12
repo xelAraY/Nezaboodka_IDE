@@ -21,7 +21,48 @@ export const MainWindow = () => (
       b.widthGrowth = Number(app.getWidthGrowth())
 
       line(l => { // main line
+<<<<<<< HEAD
         Block(b => {
+=======
+        // Block(b => {
+        //   b.style(app.theme.panel)
+        //   b.minWidth = "10rem"
+        //   b.contentAlignment = Align.Top
+        //   b.frameAlignment = Align.Stretch
+        //   PlainText("Navigation Bar")
+        //   lineFeed()
+        //   Field({
+        //     initialize(b) {
+        //       const loader = app.loader
+        //       b.minWidth = "10em"
+        //       b.model = createFieldModel({
+        //         icon: "fa-solid fa-search",
+        //         text: refs(loader).filter,
+        //         options: refs(loader).loaded,
+        //         isHotText: true,
+        //         isMultiLineText: false,
+        //       })
+        //     },
+        //   })
+        //   lineFeed()
+        //   Block(b => b.heightGrowth = 1)
+        //   lineFeed()
+        //   Field({
+        //     initialize(b) {
+        //       const loader = app.loader
+        //       b.minWidth = "10em"
+        //       b.model = createFieldModel({
+        //         text: refs(loader).filter,
+        //         options: refs(loader).loaded,
+        //         isHotText: true,
+        //         isMultiLineText: false,
+        //       })
+        //     },
+        //   })
+        // })
+
+        let codeEditor = Block(b => {
+>>>>>>> a87943a905ccdeb6827a8dde0bee9faffcc1b11c
 
           b.style(theme.LeftPanel)
           b.style(theme.accent)
@@ -34,12 +75,17 @@ export const MainWindow = () => (
             theme: 'vs-dark', fontSize: 18}))
         })
 
-        Block(b => {
+        let spliter = Block(b => {
           b.style(theme.spliter)
           b.heightGrowth = 1
+          b.native.addEventListener('mousemove', _ => {
+            b.native.style.cursor = 'col-resize'
+          })
+
         })
 
-        WorkArea({
+
+        let grid = WorkArea({
           render(b) {
             b.style(theme.RightPanel)
             b.style(theme.accent)

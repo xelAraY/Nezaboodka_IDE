@@ -71,9 +71,10 @@ export class AppTheme extends DefaultGostTheme {
 
   @cached
   get spliter(): string { return css`
-    border: 1px solid black;
-    background-color: black;
+    border: 0px solid black;
+    background-color: white;
     width: 3px;
-    margin: 10px 0px 10px 0px;
+    opacity: 0.0;
+    margin: 5px 0px 10px 0px;
   `}
 }
