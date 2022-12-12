@@ -1,6 +1,7 @@
 import { Block, BlockBody, vmt} from "verstak"
 import { Button} from "gost-pi"
 import { $app } from "models/App"
+import { editor } from "monaco-editor"
 
 export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
   Block({ ...vmt(body), base: {
@@ -50,7 +51,11 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
           b.model = {
             icon: "fa-solid fa-palette fa-lg",
             label: "",
-            action: () => { app.nextTheme() }
+            action: () => { 
+              let codeEditor = app.getEditor()
+              app.nextTheme()
+              
+            }
           }
         },
         render(b) {

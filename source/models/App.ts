@@ -1,4 +1,4 @@
-import { ObservableObject, reactive, transactional } from "reactronic"
+import { raw, ObservableObject, reactive, transactional } from "reactronic"
 import { BaseHtmlDriver, ContextVariable, HtmlSensors } from "verstak"
 import { AppTheme } from "themes/AppTheme"
 import { Loader } from "./Loader"
@@ -13,6 +13,7 @@ export class App extends ObservableObject {
   blinkingEffect: boolean
   loader: Loader
   widthGrowthCount: number
+  @raw
   editor: editor.IStandaloneCodeEditor | undefined
 
   constructor(version: string, ...themes: Array<AppTheme>) {
@@ -24,6 +25,7 @@ export class App extends ObservableObject {
     this.blinkingEffect = false
     this.loader = new Loader()
     this.widthGrowthCount = 3
+    this.editor = undefined
   }
 
   get theme(): AppTheme {

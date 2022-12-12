@@ -69,9 +69,11 @@ export const MainWindow = () => (
           b.widthGrowth = 3
           b.heightGrowth = 1
 
-          app.setEditor(editor.create(b.native,
-            {language: 'typescript', automaticLayout: true, smoothScrolling: true,
-            theme: 'vs-dark', fontSize: 18}))
+          if (app.getEditor() === undefined){
+            app.setEditor(editor.create(b.native,
+              {language: 'typescript', automaticLayout: true, smoothScrolling: true,
+              theme: 'vs-dark', fontSize: 18}))
+          }
         })
 
 
