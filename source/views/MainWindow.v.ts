@@ -21,49 +21,7 @@ export const MainWindow = () => (
       b.widthGrowth = Number(app.getWidthGrowth())
 
       line(l => { // main line
-<<<<<<< HEAD
         Block(b => {
-=======
-        // Block(b => {
-        //   b.style(app.theme.panel)
-        //   b.minWidth = "10rem"
-        //   b.contentAlignment = Align.Top
-        //   b.frameAlignment = Align.Stretch
-        //   PlainText("Navigation Bar")
-        //   lineFeed()
-        //   Field({
-        //     initialize(b) {
-        //       const loader = app.loader
-        //       b.minWidth = "10em"
-        //       b.model = createFieldModel({
-        //         icon: "fa-solid fa-search",
-        //         text: refs(loader).filter,
-        //         options: refs(loader).loaded,
-        //         isHotText: true,
-        //         isMultiLineText: false,
-        //       })
-        //     },
-        //   })
-        //   lineFeed()
-        //   Block(b => b.heightGrowth = 1)
-        //   lineFeed()
-        //   Field({
-        //     initialize(b) {
-        //       const loader = app.loader
-        //       b.minWidth = "10em"
-        //       b.model = createFieldModel({
-        //         text: refs(loader).filter,
-        //         options: refs(loader).loaded,
-        //         isHotText: true,
-        //         isMultiLineText: false,
-        //       })
-        //     },
-        //   })
-        // })
-
-        let codeEditor = Block(b => {
->>>>>>> a87943a905ccdeb6827a8dde0bee9faffcc1b11c
-
           b.style(theme.LeftPanel)
           b.style(theme.accent)
           b.contentAlignment = Align.Top
