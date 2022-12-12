@@ -1,13 +1,13 @@
 {
-  "name": "verstak-demo",
+  "name": "Nezaboodka IDE",
   "version": "0.1.0",
-  "description": "Verstak Demo",
+  "description": "IDE for artel",
   "license": "MIT",
   "main": "index.ts",
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nezaboodka/verstak-demo.git"
+    "url": "https://github.com/xelAraY/Nezaboodka_IDE"
   },
   "scripts": {
     "lint:fix": "eslint --fix \"source/**/*.ts\" \"library/**/*.ts\"",
