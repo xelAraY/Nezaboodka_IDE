@@ -67,6 +67,20 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
           b.style(theme.toolbarButtonChangeTheme)
         }
       })
+      Button({ key: "Change monaco theme",
+        initialize(b) {
+          b.model = {
+            icon: "fa-solid fa-paint-roller fa-lg",
+            label: "",
+            action: () => {
+              app.nextMonacoTheme()
+            }
+          }
+        },
+        render(b) {
+          b.style(theme.toolbarButtonChangeTheme)
+        }
+      })
     }},
   })
 )

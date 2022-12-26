@@ -13,6 +13,9 @@ export class App extends ObservableObject {
   blinkingEffect: boolean
   loader: Loader
   widthGrowthCount: number
+  monacoThemes: string[]
+  activeMonacoThemeIndex: number
+
   @raw
   editor: editor.IStandaloneCodeEditor | undefined
 
@@ -26,6 +29,8 @@ export class App extends ObservableObject {
     this.loader = new Loader()
     this.widthGrowthCount = 3
     this.editor = undefined
+    this.monacoThemes = ['vs', 'vs-dark', 'hc-black', 'hc-light']
+    this.activeMonacoThemeIndex = 0
   }
 
   get theme(): AppTheme {
@@ -35,6 +40,12 @@ export class App extends ObservableObject {
   @transactional
   nextTheme(): void {
     this.activeThemeIndex = (this.activeThemeIndex + 1) % this.allThemes.length
+  }
+
+  @transactional
+  nextMonacoTheme(): void {
+    this.activeMonacoThemeIndex = (this.activeMonacoThemeIndex + 1) % this.monacoThemes.length
+    this.editor?.updateOptions({theme: this.monacoThemes[this.activeMonacoThemeIndex]})
   }
 
   @reactive
