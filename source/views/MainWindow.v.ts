@@ -26,6 +26,7 @@ export const MainWindow = () => (
 
       let splitterMouseMove = (_: MouseEvent) => {
         if (isResize && codeEditor && grid) {
+          
           let editorWidth: number = codeEditor.native.offsetWidth
           let gridWindowWidth: number = grid.native.offsetWidth
 
@@ -41,7 +42,6 @@ export const MainWindow = () => (
           let gridStyle = gridWindowWidth + 'px'
           grid.native.style.width = gridStyle
           grid.native.style.maxWidth = gridStyle
-
 
         }
       }

@@ -72,3 +72,7 @@ export class App extends ObservableObject {
 }
 
 export const $app = new ContextVariable<App>()
+
+export const ROW_COUNT = 10
+
+export const COLUMN_COUNT = 10
