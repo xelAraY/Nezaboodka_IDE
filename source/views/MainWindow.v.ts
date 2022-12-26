@@ -22,7 +22,6 @@ export const MainWindow = () => (
 
       let codeEditor : VBlock<HTMLElement, unknown, void> | undefined = undefined
       let grid : VBlock<HTMLElement, unknown, void> | undefined = undefined
-      let mousePrevPos: number | undefined = undefined
       let isResize: boolean = false
 
       let splitterMouseMove = (_: MouseEvent) => {
@@ -30,11 +29,8 @@ export const MainWindow = () => (
           let editorWidth: number = codeEditor.native.offsetWidth
           let gridWindowWidth: number = grid.native.offsetWidth
 
-          if (mousePrevPos === undefined) {
-            mousePrevPos = _.pageX
-          }
+          let offsetX: number = _.clientX - (codeEditor.native.offsetLeft + editorWidth) 
 
-          let offsetX = (_.pageX - mousePrevPos)
           editorWidth += offsetX
           gridWindowWidth -= offsetX
 
@@ -46,7 +42,7 @@ export const MainWindow = () => (
           grid.native.style.width = gridStyle
           grid.native.style.maxWidth = gridStyle
 
-          mousePrevPos = _.pageX
+
         }
       }
 
@@ -55,7 +51,6 @@ export const MainWindow = () => (
       })
       b.native.addEventListener('mouseup', _ => {
         isResize = false
-        mousePrevPos = undefined
       })
 
       line(l => {
@@ -88,7 +83,6 @@ export const MainWindow = () => (
           })
           b.native.addEventListener('mouseup', _ => {
             isResize = false
-            mousePrevPos = undefined
           })
 
         })
