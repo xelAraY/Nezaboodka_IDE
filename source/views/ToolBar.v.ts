@@ -1,10 +1,10 @@
-import { Block, BlockBody, vmt} from "verstak"
+import { Block, BlockBody} from "verstak"
 import { Button} from "gost-pi"
 import { $app } from "models/App"
 import { editor } from "monaco-editor"
 
 export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
-  Block({ ...vmt(body), base: {
+  Block(body, {
     render(b) {
       const app = $app.value
       const theme = app.theme
@@ -82,5 +82,5 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
         }
       })
     }},
-  })
+  )
 )

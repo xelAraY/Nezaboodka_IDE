@@ -1,12 +1,15 @@
-import { Block, BlockBody, vmt } from "verstak"
+import { Block, BlockBody } from "verstak"
 import { $theme } from "./Theme"
 
-export const Icon = (name: string, body?: BlockBody<HTMLElement, void, void>) => (
-  Block({ autonomous: true, ...vmt(body), base: {
-    render(b) {
-      const s = $theme.value.icon
-      b.style(name)
-      b.style(s.main)
-    },
-  }})
-)
+export function Icon(name: string, body?: BlockBody<HTMLElement, void, void>) {
+  return (
+    Block(body, {
+      reaction: true,
+      render(b) {
+        const s = $theme.value.icon
+        b.style(name)
+        b.style(s.main)
+      },
+    })
+  )
+}

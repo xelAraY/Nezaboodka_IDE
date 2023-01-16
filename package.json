@@ -23,7 +23,9 @@
     "medium-editor": "5.23.3",
     "monaco-editor": "0.34.1",
     "normalize-url": "8.0.0",
-    "prismjs": "1.29.0"
+    "prismjs": "1.29.0", 
+    "verstak": "0.23.105",
+    "reactronic": "0.23.101"
   },
   "devDependencies": {
     "@emotion/css": "11.10.5",

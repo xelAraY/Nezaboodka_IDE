@@ -1,9 +1,9 @@
 import { css } from "@emotion/css"
-import { Grid, BlockBody, Block, PlainText, HtmlText, lineFeed, line, Align, vmt, VBlock } from "verstak"
+import { Grid, BlockBody, Block, PlainText, HtmlText, lineFeed, line, Align, VBlock } from "verstak"
 import { COLUMN_COUNT, ROW_COUNT } from "models/App"
 
 export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
-  Grid({ ...vmt(body), base: {
+  Grid(body, {
       initialize(b){
         b.contentAlignment = Align.Stretch
         b.frameAlignment = Align.Default
@@ -79,14 +79,16 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
 
       }
     }
-  })
+  )
 )
 
 const Ruler = (title: string, frameAlignment: Align, overlap?: boolean) => (
-  Block(b => {
-    b.frameAlignment = frameAlignment
-    b.cells = { horizontalOverlap: overlap }
-    b.native.style.fontSize = 'smaller'
-    HtmlText(`&nbsp;${title}`)
+  Block({
+    render(b) {
+      b.frameAlignment = frameAlignment
+      b.cells = { horizontalOverlap: overlap }
+      b.native.style.fontSize = 'smaller'
+      HtmlText(`&nbsp;${title}`)
+    }
   })
 )

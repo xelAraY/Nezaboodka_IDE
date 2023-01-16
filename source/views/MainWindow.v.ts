@@ -6,7 +6,7 @@ import { WorkArea } from "./WorkArea.v"
 import { editor } from "monaco-editor"
 
 export const MainWindow = () => (
-  Block({ autonomous: true,
+  Block({ reaction: true,
     initialize(b) {
 
       $app.value.sensors.listen(b.native)
@@ -55,36 +55,38 @@ export const MainWindow = () => (
 
       line(l => {
 
-        codeEditor = Block(b => {
+        codeEditor = Block({
+          render(b) {
 
-          b.style(theme.LeftPanel)
-          b.style(theme.accent)
-          b.contentAlignment = Align.Top
-          b.widthGrowth = 3
-          b.heightGrowth = 1
+            b.style(theme.LeftPanel)
+            b.style(theme.accent)
+            b.contentAlignment = Align.Top
+            b.widthGrowth = 3
+            b.heightGrowth = 1
 
-          if (app.getEditor() === undefined){
-            app.setEditor(editor.create(b.native,
-              {language: 'typescript', automaticLayout: true, smoothScrolling: true,
-              theme: 'vs-dark', fontSize: 18}))
+            if (app.getEditor() === undefined){
+              app.setEditor(editor.create(b.native,
+                {language: 'typescript', automaticLayout: true, smoothScrolling: true,
+                theme: 'vs-dark', fontSize: 18}))
+            }
           }
         })
 
-
-        Block(b => {
-          b.style(theme.spliter)
-          b.heightGrowth = 1
-          b.native.addEventListener('mousemove', _ => {
-            b.native.style.cursor = 'col-resize'
-            splitterMouseMove(_)
-          })
-          b.native.addEventListener('mousedown', _ => {
-            isResize = true
-          })
-          b.native.addEventListener('mouseup', _ => {
-            isResize = false
-          })
-
+        Block({
+          render(b) {
+            b.style(theme.spliter)
+            b.heightGrowth = 1
+            b.native.addEventListener('mousemove', _ => {
+              b.native.style.cursor = 'col-resize'
+              splitterMouseMove(_)
+            })
+            b.native.addEventListener('mousedown', _ => {
+              isResize = true
+            })
+            b.native.addEventListener('mouseup', _ => {
+              isResize = false
+            })
+          }
         })
 
 
@@ -99,8 +101,10 @@ export const MainWindow = () => (
       })
 
       line(l => {
-        ToolBar(b => {
-          b.widthGrowth = 1
+        ToolBar({
+          render(b) {
+            b.widthGrowth = 1
+          }
         })
       })
     },

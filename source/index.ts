@@ -23,7 +23,7 @@ const app = Transaction.run(null, () =>
 
 VBlock.root(() => {
   HtmlBody({
-    autonomous: true,
+    reaction: true,
     render(b) {
       $app.value = app
       const t = app.theme

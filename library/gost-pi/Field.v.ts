@@ -1,5 +1,5 @@
 import { Transaction } from "reactronic"
-import { Block, BlockBody, PlainText, FocusModel, lineFeed, vmt, ReactingFocuser } from "verstak"
+import { Block, BlockBody, PlainText, FocusModel, lineFeed, ReactingFocuser } from "verstak"
 import { observableModel, ValuesOrRefs } from "common/Utils"
 import { $theme, FieldStyling } from "./Theme"
 import { Icon } from "./Icon.v"
@@ -16,26 +16,34 @@ export interface FieldModel<T = string> extends FocusModel {
   inputStyle: string
 }
 
-export const Field = (body?: BlockBody<HTMLElement, FieldModel>) => (
-  Block<FieldModel>({ autonomous: true, ...vmt(body), base: {
-    initialize(b) {
-      b.model ??= createFieldModel()
-      b.native.dataForSensor.focus = b.model
-      b.native.onscroll = () => {
-        b.model.position = b.native.scrollTop
-      }
-    },
-    render(b) {
-      const m = b.model
-      const s = $theme.value.field
-      b.style(s.main)
-      if (m.icon)
-        Icon(m.icon, b => b.style(s.icon))
-      FieldInput(m, s)
-      FieldPopup(m, s)
-    },
-  }})
-)
+export function Field(body?: BlockBody<HTMLElement, FieldModel>) {
+  return (
+    Block<FieldModel>(body, {
+      reaction: true,
+      initialize(b) {
+        b.model ??= createFieldModel()
+        b.native.dataForSensor.focus = b.model
+        b.native.onscroll = () => {
+          b.model.position = b.native.scrollTop
+        }
+      },
+      render(b) {
+        const m = b.model
+        const s = $theme.value.field
+        b.style(s.main)
+        if (m.icon)
+          Icon(m.icon, {
+            render(b, base) {
+              base()
+              b.style(s.icon)
+            }
+          })
+        FieldInput(m, s)
+        FieldPopup(m, s)
+      },
+    })
+  )
+}
 
 export function createFieldModel<T>(props?: Partial<ValuesOrRefs<FieldModel<T>>>): FieldModel<T> {
   return observableModel({
@@ -56,7 +64,7 @@ function FieldInput(model: FieldModel, s: FieldStyling) {
   return (
     PlainText(model.text, {
       key: FieldInput.name,
-      initialize(b) {
+      initialize(b, base) {
         const e = b.native
         b.style(s.input)
         b.widthGrowth = 1
@@ -77,41 +85,44 @@ function FieldInput(model: FieldModel, s: FieldStyling) {
           else if (m.isHotText)
             Transaction.run(null, () => { m.text = e.innerText })
         }
+        base()
       },
-      redefinedRender(b) {
+      render(b) {
         const e = b.native
         if (!model.isEditMode)
           e.innerText = model.text
-        ReactingFocuser(e, model)
+        ReactingFocuser("focuser", e, model)
       },
     })
   )
 }
 
-const FieldPopup = (model: FieldModel, s: FieldStyling) => (
-  Block({ // popup itself
-    key: FieldPopup.name,
-    initialize(b) {
-      const e = b.native
-      e.onscroll = () => model.position = e.scrollTop
-    },
-    render(b) {
-      b.style(s.popup)
-      const visible = b.overlayVisible = model.isEditMode
-      if (visible) {
-        const options = model.options
-        if (options.length > 0) {
-          for (const x of model.options) {
-            lineFeed()
-            PlainText(x, { key: x })
+function FieldPopup(model: FieldModel, s: FieldStyling) {
+  return (
+    Block({
+      key: FieldPopup.name,
+      initialize(b) {
+        const e = b.native
+        e.onscroll = () => model.position = e.scrollTop
+      },
+      render(b) {
+        b.style(s.popup)
+        const visible = b.overlayVisible = model.isEditMode
+        if (visible) {
+          const options = model.options
+          if (options.length > 0) {
+            for (const x of model.options) {
+              lineFeed()
+              PlainText(x, { key: x })
+            }
           }
+          else
+            PlainText("(nothing)", { key: "(nothing)" })
         }
-        else
-          PlainText("(nothing)", { key: "(nothing)" })
-      }
-    },
-  })
-)
+      },
+    })
+  )
+}
 
 function isApplyKey(m: FieldModel, event: KeyboardEvent): boolean {
   return event.key === "Enter" && (
