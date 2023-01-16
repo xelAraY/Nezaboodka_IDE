@@ -91,7 +91,8 @@ export const MainWindow = () => (
 
 
         grid = WorkArea({
-          render(b) {
+          render(b, base) {
+            base()
             b.style(theme.RightPanel)
             b.style(theme.accent)
             b.widthGrowth = 3
@@ -102,7 +103,8 @@ export const MainWindow = () => (
 
       line(l => {
         ToolBar({
-          render(b) {
+          render(b, base) {
+            base()
             b.widthGrowth = 1
           }
         })

@@ -3,7 +3,7 @@ import { Grid, BlockBody, Block, PlainText, HtmlText, lineFeed, line, Align, VBl
 import { COLUMN_COUNT, ROW_COUNT } from "models/App"
 
 export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
-  Grid(body, {
+  Grid(body, {reaction: true,
       initialize(b){
         b.contentAlignment = Align.Stretch
         b.frameAlignment = Align.Default
