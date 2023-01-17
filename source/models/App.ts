@@ -3,12 +3,8 @@ import { BaseHtmlDriver, ContextVariable, HtmlSensors, I } from "verstak"
 import { AppTheme } from "themes/AppTheme"
 import { Loader } from "./Loader"
 import { editor } from "monaco-editor"
-import { ArtelMonacoClient } from "../../library/artel/packages/monaco-client/source"
-
-import { Compilation } from "../../library/artel/packages/compiler/source/compilation/Compilation"
-import { Uri } from "../../library/artel/packages/compiler/source/Uri"
-import { Parser } from "../../library/artel/packages/compiler/source/parser/Parser"
 import Worker from "../../library/artel/packages/monaco-client/source/worker?worker"
+import { Uri, Parser, Compilation, ArtelMonacoClient } from "./ArtelClasses"
 
 export class App extends ObservableObject {
   version: string
@@ -48,6 +44,50 @@ export class App extends ObservableObject {
   async updateTextModel(): Promise<void> {
     const client = new ArtelMonacoClient()
     this.textModelArtel = await client.getModel(new Worker())
+  }
+
+  @transactional
+  compileArtel(code: string): string {
+    const compilation = new Compilation(new Uri(['project']), [
+      {
+        uri: new Uri(['project', 'module']),
+        sourceFiles: [
+          {
+            uri: new Uri(['project', 'module', 'sheet.a']),
+            syntax: new Parser(code).parse(),
+          }
+        ]
+      }
+    ])
+    let compilationResult: string
+    try {
+      const emitterResult = compilation.emitWithDiagnostics()
+      //const codeWithHelperFunction = helperArtelFunctions + emitterResult.code
+      const codeWithHelperFunction = emitterResult.code
+      compilationResult = codeWithHelperFunction
+      // const mainFileDiagnostics = emitterResult.diagnostics[1]
+      // const syntaxErrors = mainFileDiagnostics.syntax.items.map<LanguageError>((d: { message: any; range: { start: any; length: any } }) => ({
+      //   kind: 'syntax',
+      //   message: d.message,
+      //   span: { start: d.range.start, length: d.range.length }
+      // }))
+      // const semanticErrors = mainFileDiagnostics.semantic.items.map<LanguageError>((d: { message: any; range: { start: any; length: any } }) => ({
+      //   kind: 'semantic',
+      //   message: d.message,
+      //   span: { start: d.range.start, length: d.range.length }
+      // }))
+      // compilationResult = {
+      //   code: codeWithHelperFunction,
+      //   errors: [...syntaxErrors, ...semanticErrors]
+      // }
+    } catch (_) {
+      // compilationResult = {
+      //   code: '',
+      //   errors: [{ kind: 'semantic', message: 'Emitter error', span: { start: 0, length: 1 } }]
+      // }
+      compilationResult = ''
+    }
+    return compilationResult
   }
 
   @transactional
