@@ -55,7 +55,7 @@ export const MainWindow = () => (
 
       line(l => {
 
-        codeEditor = Block({
+        codeEditor = Block({reaction: true,
           render(b) {
 
             b.style(theme.LeftPanel)
@@ -66,9 +66,14 @@ export const MainWindow = () => (
 
             if (app.getEditor() === undefined){
               app.setEditor(editor.create(b.native,
-                {language: 'typescript', automaticLayout: true, smoothScrolling: true,
+                {automaticLayout: true, smoothScrolling: true,
                 theme: 'vs-dark', fontSize: 18}))
             }
+
+            if (app.textModelArtel){
+              app.editor?.setModel(app.textModelArtel)
+            }
+            
           }
         })
 
