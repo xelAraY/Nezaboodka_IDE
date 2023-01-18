@@ -1,7 +1,6 @@
 import { Block, BlockBody} from "verstak"
 import { Button, createFieldModel} from "gost-pi"
 import { $app } from "models/App"
-import { editor } from "monaco-editor"
 
 export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
   Block(body, {
@@ -14,7 +13,15 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
           b.model = {
             icon: 'fa-solid fa-play fa-lg',
             label: '',
-            action: () => alert('123')
+            action: () => {
+              const editor = app.getEditor()
+              if (editor?.getValue() !== undefined){
+                let code = app.compileArtel(editor.getValue())
+                if (code !== undefined){
+                  alert(eval(code))
+                }
+              }
+            }
           }
           base()
         },
