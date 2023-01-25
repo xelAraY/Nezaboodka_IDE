@@ -1,38 +1,16 @@
 import { css } from "@emotion/css"
 import { Grid, BlockBody, Block, PlainText, HtmlText, lineFeed, line, Align, VBlock } from "verstak"
 import { COLUMN_COUNT, ROW_COUNT } from "models/App"
+import { Markdown } from "verstak-markdown"
+import { Div } from "verstak"
 
-export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
+export const WorkArea = (coordinates: string, message: string, body?: BlockBody<HTMLElement, void, void>) => (
   Grid(body, {reaction: true,
       initialize(b){
         b.contentAlignment = Align.Stretch
         b.frameAlignment = Align.Default
       },
       render(b) {
-        // //Draw grid
-        // for (var i = 0; i < ROW_COUNT; i++){
-          // for (var j = 0; j < COLUMN_COUNT; j++){
-
-          //   // Block({
-          //   //   initialize(b){
-          //   //     b.contentAlignment = Align.Stretch
-          //   //     b.frameAlignment = Align.Default
-          //   //   },
-          //   //   render(b) {
-          //   //     const theme = $theme.value as AppTheme
-          //   //     // b.style(theme.panel)
-          //   //     b.style( css`margin: 0 rem ;
-          //   //       padding: 0 ;
-          //   //       border: 1px solid ;
-          //   //       border-radius: 0 rem;
-          //   //       border-color: #655c3f;
-          //   //       background-color: #fdf1ce;`)
-          //   //     b.cells = {down : i, right : j}
-          //   //   }
-          //   // })
-          // }
-        //}
-
         let xPositionString = 'A'
         for (let i = 0; i < COLUMN_COUNT + 2; i++){
 
@@ -47,28 +25,36 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
           }
         }
 
+        const row = parseInt(coordinates.substr(1,1), 10)
+        const column = coordinates.substr(0,1).charCodeAt(0)-"A".charCodeAt(0)
         let yNumber : number = 1
         for (let i = yNumber - 1; i < ROW_COUNT + 1; i++) {
           lineFeed()
           if (i != ROW_COUNT + 1 - 1){
             Ruler(String(yNumber++), Align.Center, false)
             for (var j = 0; j < COLUMN_COUNT; j++){
+              if (message !== '' && row-1 == i && column == j){
+                //Markdown(message)
+                //Div()
+              }
+              else {
+                Block({
+                  initialize(b){
+                    b.contentAlignment = Align.Stretch
+                    b.frameAlignment = Align.Default
+                  },
+                  render(b) {
+                    b.style( css`margin: 0 rem ;
+                      padding: 0 ;
+                      border: 1px solid ;
+                      border-radius: 0 rem;
+                      border-color: #655c3f;
+                      background-color: #fdf1ce;`)
 
-              Block({
-                initialize(b){
-                  b.contentAlignment = Align.Stretch
-                  b.frameAlignment = Align.Default
-                },
-                render(b) {
-                  b.style( css`margin: 0 rem ;
-                    padding: 0 ;
-                    border: 1px solid ;
-                    border-radius: 0 rem;
-                    border-color: #655c3f;
-                    background-color: #fdf1ce;`)
-                  // b.cells = {down : i, right : j}
-                }
-              })
+
+                  }
+                })
+              }
             }
           }
           else {

@@ -2,3 +2,6 @@
 	path = artel
 	url = https://lab.nz.by/art/artel
 	branch = stable
+[submodule "library/verstak-markdown"]
+	path = library/verstak-markdown
+	url = https://github.com/nezaboodka/verstak-markdown

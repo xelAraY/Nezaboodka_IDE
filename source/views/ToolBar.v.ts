@@ -14,13 +14,15 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
             icon: 'fa-solid fa-play fa-lg',
             label: '',
             action: () => {
-              const editor = app.getEditor()
-              if (editor?.getValue() !== undefined){
-                let code = app.compileArtel(editor.getValue())
-                if (code !== undefined){
-                  alert(eval(code))
-                }
-              }
+              // const editor = app.getEditor()
+              // if (editor?.getValue() !== undefined){
+              //   let code = app.compileArtel(editor.getValue())
+              //   alert(code)
+              //   if (code !== undefined){
+              //     alert(eval(code))
+              //   }
+              // }
+              app.написать('F6', 'adc')
             }
           }
           base()

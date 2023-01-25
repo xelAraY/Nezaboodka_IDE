@@ -5,6 +5,9 @@ import { Loader } from "./Loader"
 import { editor } from "monaco-editor"
 import Worker from "../../library/artel/packages/monaco-client/source/worker?worker"
 import { Uri, Parser, Compilation, ArtelMonacoClient } from "./ArtelClasses"
+import { WorkArea } from "../views/WorkArea.v"
+import { $theme} from "gost-pi"
+
 
 export class App extends ObservableObject {
   version: string
@@ -46,8 +49,25 @@ export class App extends ObservableObject {
     this.textModelArtel = await client.getModel(new Worker())
   }
 
+  написать(coordinates: string, message: string): void {
+    alert(123)
+    const theme = this.theme
+    $theme.value = theme
+
+    WorkArea(coordinates, message, {
+      render(b, base) {
+        base()
+        b.style(theme.RightPanel)
+        b.style(theme.accent)
+        b.widthGrowth = 3
+        b.heightGrowth = 1
+      }
+    })
+  }
+
   @transactional
   compileArtel(code: string): string {
+
     const compilation = new Compilation(new Uri(['project']), [
       {
         uri: new Uri(['project', 'module']),
@@ -85,7 +105,7 @@ export class App extends ObservableObject {
       //   code: '',
       //   errors: [{ kind: 'semantic', message: 'Emitter error', span: { start: 0, length: 1 } }]
       // }
-      compilationResult = ''
+      compilationResult = 'bad'
     }
     return compilationResult
   }
@@ -124,60 +144,6 @@ export class App extends ObservableObject {
   }
 }
 
-/*
-export function compileArtel(code: string): CompilationResult {
-  const compilation = new Compilation(new Uri(['project']), [
-    {
-      uri: new Uri(['project', 'module']),
-      sourceFiles: [
-        {
-          uri: new Uri(['project', 'module', 'system-blocks.a']),
-          syntax: new Parser(systemBlocks).parse(),
-        },
-        {
-          uri: new Uri(['project', 'module', 'sheet.a']),
-          syntax: new Parser(code).parse(),
-        }
-      ]
-    },
-    {
-      uri: new Uri(['project', 'table-builder']),
-      sourceFiles: [
-        {
-          uri: new Uri(['project', 'table-builder', 'table-builder.a']),
-          syntax: new Parser(tableConfigurator).parse(),
-        }
-      ]
-    }
-  ])
-  let compilationResult: CompilationResult
-  try {
-    const emitterResult = compilation.emitWithDiagnostics()
-    const codeWithHelperFunction = helperArtelFunctions + emitterResult.code
-    const mainFileDiagnostics = emitterResult.diagnostics[1]
-    const syntaxErrors = mainFileDiagnostics.syntax.items.map<LanguageError>(d => ({
-      kind: 'syntax',
-      message: d.message,
-      span: { start: d.range.start, length: d.range.length }
-    }))
-    const semanticErrors = mainFileDiagnostics.semantic.items.map<LanguageError>(d => ({
-      kind: 'semantic',
-      message: d.message,
-      span: { start: d.range.start, length: d.range.length }
-    }))
-    compilationResult = {
-      code: codeWithHelperFunction,
-      errors: [...syntaxErrors, ...semanticErrors]
-    }
-  } catch (_) {
-    compilationResult = {
-      code: '',
-      errors: [{ kind: 'semantic', message: 'Emitter error', span: { start: 0, length: 1 } }]
-    }
-  }
-  return compilationResult
-}
-*/
 export const $app = new ContextVariable<App>()
 
 export const ROW_COUNT = 10

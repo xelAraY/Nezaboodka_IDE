@@ -26,11 +26,11 @@ export const MainWindow = () => (
 
       let splitterMouseMove = (_: MouseEvent) => {
         if (isResize && codeEditor && grid) {
-          
+
           let editorWidth: number = codeEditor.native.offsetWidth
           let gridWindowWidth: number = grid.native.offsetWidth
 
-          let offsetX: number = _.clientX - (codeEditor.native.offsetLeft + editorWidth) 
+          let offsetX: number = _.clientX - (codeEditor.native.offsetLeft + editorWidth)
 
           editorWidth += offsetX
           gridWindowWidth -= offsetX
@@ -73,7 +73,7 @@ export const MainWindow = () => (
             if (app.textModelArtel){
               app.editor?.setModel(app.textModelArtel)
             }
-            
+
           }
         })
 
@@ -95,7 +95,7 @@ export const MainWindow = () => (
         })
 
 
-        grid = WorkArea({
+        grid = WorkArea('', '', {
           render(b, base) {
             base()
             b.style(theme.RightPanel)
