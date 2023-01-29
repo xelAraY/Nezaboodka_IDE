@@ -1,6 +1,6 @@
 
 export interface IOutputBlock {
     
-    drawBlock(): void;
-    
+    drawBlock(): void
+
 }
