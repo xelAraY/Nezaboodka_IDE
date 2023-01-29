@@ -1,5 +1,5 @@
 import { raw, ObservableObject, reactive, transactional } from "reactronic"
-import { BaseHtmlDriver, BlockBody, ContextVariable, HtmlSensors, I } from "verstak"
+import { BaseHtmlDriver, ContextVariable, HtmlSensors, I, Output } from "verstak"
 import { AppTheme } from "themes/AppTheme"
 import { Loader } from "./Loader"
 import { editor } from "monaco-editor"
@@ -7,7 +7,8 @@ import Worker from "../../library/artel/packages/monaco-client/source/worker?wor
 import { Uri, Parser, Compilation, ArtelMonacoClient } from "./ArtelClasses"
 import { WorkArea } from "../views/WorkArea.v"
 import { $theme} from "gost-pi"
-import { VBlock } from "verstak"
+import { IOutputBlock } from "./OutputBlock"
+
 
 export class App extends ObservableObject {
   version: string
@@ -20,6 +21,7 @@ export class App extends ObservableObject {
   monacoThemes: string[]
   activeMonacoThemeIndex: number
   textModelArtel: editor.ITextModel | undefined
+  outputBlocks: Array<IOutputBlock>
 
   @raw
   editor: editor.IStandaloneCodeEditor | undefined
@@ -37,6 +39,7 @@ export class App extends ObservableObject {
     this.monacoThemes = ['vs', 'vs-dark', 'hc-black', 'hc-light']
     this.activeMonacoThemeIndex = 0
     this.textModelArtel = undefined
+    this.outputBlocks = []
   }
 
   get theme(): AppTheme {
