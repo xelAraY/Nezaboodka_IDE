@@ -52,8 +52,34 @@ export class App extends ObservableObject {
     this.textModelArtel = await client.getModel(new Worker())
   }
 
-  написать(coordinates: string, message: string): void {
+  parseColumns(coordinates: string, isFristColumn: boolean): number {
+    if (isFristColumn){
+      return coordinates.substr(0,1).charCodeAt(0)-"A".charCodeAt(0)
+    }
+    else {
+      return coordinates.substr(3,1).charCodeAt(0)-"A".charCodeAt(0)
+    }
+  }
 
+  parseRows(coordinates: string): number[] {
+    let rows: number[] = []
+    rows.push(parseInt(coordinates.substr(1,1), 10)-1)
+    rows.push(parseInt(coordinates.substr(4,1), 10)-1)
+    return rows
+  }
+
+  написать(coordinates: string, message: string): void {
+    let rows = this.parseRows(coordinates)
+    let firstColumn = this.parseColumns(coordinates, true)
+    let lastColumn = this.parseColumns(coordinates, false)
+    // создание экземпляра класса TextBlock
+  }
+
+  прямоугольник(coordinates: string): void {
+    let rows = this.parseRows(coordinates)
+    let firstColumn = this.parseColumns(coordinates, true)
+    let lastColumn = this.parseColumns(coordinates, false)
+    // создание экземпляра класса Rectangle
   }
 
   @transactional
