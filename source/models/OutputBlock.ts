@@ -1,6 +1,8 @@
-
 export interface IOutputBlock {
-    
-    drawBlock(): void;
-    
+
+    firstColumn: number
+    lastColumn: number
+    rows: number[]
+    drawBlock(): void
+
 }

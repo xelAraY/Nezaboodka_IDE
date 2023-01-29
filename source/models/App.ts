@@ -1,5 +1,5 @@
 import { raw, ObservableObject, reactive, transactional } from "reactronic"
-import { BaseHtmlDriver, ContextVariable, HtmlSensors, I } from "verstak"
+import { BaseHtmlDriver, BlockBody, ContextVariable, HtmlSensors, I } from "verstak"
 import { AppTheme } from "themes/AppTheme"
 import { Loader } from "./Loader"
 import { editor } from "monaco-editor"
@@ -7,7 +7,7 @@ import Worker from "../../library/artel/packages/monaco-client/source/worker?wor
 import { Uri, Parser, Compilation, ArtelMonacoClient } from "./ArtelClasses"
 import { WorkArea } from "../views/WorkArea.v"
 import { $theme} from "gost-pi"
-
+import { VBlock } from "verstak"
 
 export class App extends ObservableObject {
   version: string
@@ -50,19 +50,7 @@ export class App extends ObservableObject {
   }
 
   написать(coordinates: string, message: string): void {
-    alert(123)
-    const theme = this.theme
-    $theme.value = theme
 
-    WorkArea(coordinates, message, {
-      render(b, base) {
-        base()
-        b.style(theme.RightPanel)
-        b.style(theme.accent)
-        b.widthGrowth = 3
-        b.heightGrowth = 1
-      }
-    })
   }
 
   @transactional

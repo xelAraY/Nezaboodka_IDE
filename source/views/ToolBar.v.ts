@@ -22,7 +22,7 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
               //     alert(eval(code))
               //   }
               // }
-              app.написать('F6', 'adc')
+              app.написать('C3:G3', '')
             }
           }
           base()
