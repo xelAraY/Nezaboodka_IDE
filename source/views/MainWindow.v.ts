@@ -95,7 +95,7 @@ export const MainWindow = () => (
         })
 
 
-        grid = WorkArea('', '', {
+        grid = WorkArea({
           render(b, base) {
             base()
             b.style(theme.RightPanel)
