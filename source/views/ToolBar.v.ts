@@ -1,6 +1,7 @@
 import { Block, BlockBody} from "verstak"
 import { Button, createFieldModel} from "gost-pi"
 import { $app } from "models/App"
+import * as ts from 'typescript'  
 
 export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
   Block(body, {
@@ -14,15 +15,24 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
             icon: 'fa-solid fa-play fa-lg',
             label: '',
             action: () => {
-              // const editor = app.getEditor()
-              // if (editor?.getValue() !== undefined){
-              //   let code = app.compileArtel(editor.getValue())
-              //   alert(code)
-              //   if (code !== undefined){
-              //     alert(eval(code))
-              //   }
-              // }
-              app.написать("A1:C2", "Текст")
+              const editor = app.getEditor()
+              if (editor?.getValue() !== undefined){
+                let code = app.compileArtel(editor.getValue())
+                
+                let functions = 'function написать(coordinates: string, message: string): void\{\n' +
+                                '  app.написать(coordinates, message)\n' +
+                                '}\n' + 
+                                '\n' +
+                                'function прямоугольник(coordinates: string): void \{\n' +
+                                '  app.прямоугольник(coordinates)\n' +
+                                '}\n'
+                
+                if (code !== undefined){
+                  let resultTsCompile = ts.transpile(functions + code)
+                  app.outputBlocks = []
+                  eval(resultTsCompile)
+                }
+              }
             }
           }
           base()
