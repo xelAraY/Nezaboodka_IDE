@@ -8,6 +8,8 @@ import { Uri, Parser, Compilation, ArtelMonacoClient } from "./ArtelClasses"
 import { WorkArea } from "../views/WorkArea.v"
 import { $theme} from "gost-pi"
 import { IOutputBlock } from "./OutputBlock"
+import { Rectangle } from "./Rectangle"
+import { TextBlock } from "./TextBlock"
 
 
 export class App extends ObservableObject {
@@ -52,34 +54,28 @@ export class App extends ObservableObject {
     this.textModelArtel = await client.getModel(new Worker())
   }
 
-  parseColumns(coordinates: string, isFristColumn: boolean): number {
-    if (isFristColumn){
-      return coordinates.substr(0,1).charCodeAt(0)-"A".charCodeAt(0)
-    }
-    else {
-      return coordinates.substr(3,1).charCodeAt(0)-"A".charCodeAt(0)
-    }
+  parseSecondPoint(coordinates: string): string {
+    let colonPos = coordinates.indexOf(":")
+    return coordinates.substring(colonPos+1)
   }
 
-  parseRows(coordinates: string): number[] {
-    let rows: number[] = []
-    rows.push(parseInt(coordinates.substr(1,1), 10)-1)
-    rows.push(parseInt(coordinates.substr(4,1), 10)-1)
-    return rows
+  parseFirstPoint(coordinates: string): string {
+    let colonPos = coordinates.indexOf(":")
+    return coordinates.substring(0, colonPos)
   }
 
   написать(coordinates: string, message: string): void {
-    let rows = this.parseRows(coordinates)
-    let firstColumn = this.parseColumns(coordinates, true)
-    let lastColumn = this.parseColumns(coordinates, false)
-    // создание экземпляра класса TextBlock
+    const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable()
+    let firstPoint = this.parseFirstPoint(coordinates)
+    let secondPoint = this.parseSecondPoint(coordinates)
+    outputBlocks.push(new TextBlock(firstPoint, secondPoint, message))
   }
 
   прямоугольник(coordinates: string): void {
-    let rows = this.parseRows(coordinates)
-    let firstColumn = this.parseColumns(coordinates, true)
-    let lastColumn = this.parseColumns(coordinates, false)
-    // создание экземпляра класса Rectangle
+    const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable()
+    let firstPoint = this.parseFirstPoint(coordinates)
+    let secondPoint = this.parseSecondPoint(coordinates)
+    outputBlocks.push(new Rectangle(firstPoint, secondPoint))
   }
 
   @transactional

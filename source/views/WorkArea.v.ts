@@ -1,6 +1,7 @@
 import { css } from "@emotion/css"
 import { Grid, BlockBody, Block, PlainText, HtmlText, lineFeed, line, Align, VBlock, P } from "verstak"
 import { $app, COLUMN_COUNT, ROW_COUNT } from "models/App"
+import { Rectangle } from "models/Rectangle"
 
 export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
   Grid(body, {reaction: true,
@@ -48,15 +49,15 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
                 }
               })
             }
-          } 
+          }
           else {
             Ruler("", Align.Center)
           }
         }
-        
-        const blocks = $app.value.outputBlocks
+        const app = $app.value
+        const blocks = app.outputBlocks
         blocks.forEach(element => {
-          element.drawBlock()          
+          element.drawBlock()
         });
       }
     }

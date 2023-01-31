@@ -1,5 +1,4 @@
 import { IOutputBlock, parseCordinate } from "./OutputBlock"
-import { COLUMN_COUNT, ROW_COUNT } from "./App"
 import { Block } from "verstak"
 import { css } from "@emotion/css"
 
@@ -20,8 +19,8 @@ export class Rectangle implements IOutputBlock {
 			  border-radius: 0 rem;
 			  border-color: #655c3f;
 			  background-color: #000000;`)
-			  b.cells = cell 
-			} 			
+			  b.cells = cell
+			}
 		  })
 	}
 }
