@@ -1,17 +1,27 @@
-import { IOutputBlock } from "./OutputBlock"
+import { IOutputBlock, parseCordinate } from "./OutputBlock"
+import { COLUMN_COUNT, ROW_COUNT } from "./App"
+import { Block } from "verstak"
+import { css } from "@emotion/css"
 
 export class Rectangle implements IOutputBlock {
-  firstColumn: number
-  lastColumn:number
-  rows: number[]
+	cell: string
 
-  constructor(fColumn: number, lColumn: number, lines: number[]){
-    this.firstColumn = fColumn
-    this.lastColumn = lColumn
-    this.rows = lines
-  }
+	constructor(firstPoint: string, secondPoint: string){
+		this.cell = parseCordinate(firstPoint) + ':' + parseCordinate(secondPoint)
+	}
 
-  drawBlock(): void {
-
-  }
+	drawBlock(): void {
+		const cell = this.cell
+		Block({
+			render(b){
+			  b.style( css`margin: 0 rem ;
+			  padding: 0 ;
+			  border: 1px solid ;
+			  border-radius: 0 rem;
+			  border-color: #655c3f;
+			  background-color: #000000;`)
+			  b.cells = cell 
+			} 			
+		  })
+	}
 }

@@ -1,8 +1,70 @@
+import { COLUMN_COUNT, ROW_COUNT } from "./App"
+
 export interface IOutputBlock {
 
-    firstColumn: number
-    lastColumn: number
-    rows: number[]
     drawBlock(): void
+
+}
+
+export function parseCordinate(point: string) : string{
+    
+    let res = ''
+
+    res = point.toUpperCase().trim()
+    
+    if (res.length < 2){
+        res = 'A1'
+    }
+
+
+    let columnToken = parseColumns(res.charAt(0))
+    let rowToken = parseRows(res.substring(1))
+    
+    return columnToken + rowToken
+}
+
+function parseColumns(columnToken: string): string {
+		
+    const minimalLetter = 'A'
+    const maxLetter = String.fromCharCode('A'.charCodeAt(0) + COLUMN_COUNT - 1)
+
+    if (columnToken.match(/[A-Z]/i)){
+
+        if (columnToken > maxLetter){
+            columnToken = maxLetter
+        }
+
+    } 
+    else{
+        columnToken = minimalLetter
+    }
+
+    columnToken = String.fromCharCode(columnToken.charCodeAt(0) + 1)
+    return columnToken
+}
+
+function parseRows(rowToken: string): string {
+
+    let rowNumber = parseInt(rowToken, 10)
+
+    if (isNaN(rowNumber)){
+        
+        rowNumber = 1
+
+    } 
+    else if (rowNumber < 1) {
+
+        rowNumber = 1
+
+    }
+    else if (rowNumber > ROW_COUNT){
+
+        rowNumber = ROW_COUNT
+
+    }
+    
+    rowNumber++
+
+    return rowNumber.toString()
 
 }

@@ -1,5 +1,5 @@
 import { css } from "@emotion/css"
-import { Grid, BlockBody, Block, PlainText, HtmlText, lineFeed, line, Align, VBlock } from "verstak"
+import { Grid, BlockBody, Block, PlainText, HtmlText, lineFeed, line, Align, VBlock, P } from "verstak"
 import { $app, COLUMN_COUNT, ROW_COUNT } from "models/App"
 
 export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
