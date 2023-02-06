@@ -1,6 +1,6 @@
 import { Block, BlockBody} from "verstak"
 import { Button, createFieldModel} from "gost-pi"
-import { $app } from "models/App"
+import { $app, CellInfo } from "models/App"
 import * as ts from 'typescript'  
 
 export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
@@ -19,7 +19,8 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
               if (editor?.getValue() !== undefined){
                 let code = app.compileArtel(editor.getValue())
                 
-                let functions = 'function написать(coordinates: string, message: string): void\{\n' +
+                let functions = 'let cетка : CellInfo = app.cellsInfo\n' +
+                                'function написать(coordinates: string, message: string): void\{\n' +
                                 '  app.написать(coordinates, message)\n' +
                                 '}\n' + 
                                 '\n' +
@@ -30,6 +31,7 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                 if (code !== undefined){
                   let resultTsCompile = ts.transpile(functions + code)
                   app.outputBlocks = []
+                  console.log(resultTsCompile)
                   eval(resultTsCompile)
                 }
               }

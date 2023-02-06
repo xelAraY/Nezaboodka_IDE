@@ -39,13 +39,17 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
                   b.frameAlignment = Align.Default
                 },
                 render(b) {
-                  b.style( css`margin: 0 rem ;
-                    padding: 0 ;
-                    border: 1px solid ;
-                    border-radius: 0 rem;
-                    border-color: #655c3f;
-                    background-color: #fdf1ce;`)
+                  let cssStyle = `margin: 0 rem ;
+                  padding: 0 ;
+                  border: 1px solid ;
+                  border-radius: 0 rem;
+                  border-color: #655c3f;
+                  background-color: #fdf1ce;
+                  ${$app.value.cellsInfo.размер ? $app.value.cellsInfo.размер + `px`: ``}`
+                  console.log($app.value.cellsInfo.размер)
+                  b.style( css`${cssStyle}`
                   // b.cells = {down : i, right : j}
+                  )
                 }
               })
             }

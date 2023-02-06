@@ -11,6 +11,16 @@ import { IOutputBlock } from "./OutputBlock"
 import { Rectangle } from "./Rectangle"
 import { TextBlock } from "./TextBlock"
 
+const defaultRowCount : number = 10
+const defaultColumnCount : number = 10
+
+export interface CellInfo {
+
+  размер: number | undefined  
+  ширина: number
+	высота: number
+
+}
 
 export class App extends ObservableObject {
   version: string
@@ -24,6 +34,7 @@ export class App extends ObservableObject {
   activeMonacoThemeIndex: number
   textModelArtel: editor.ITextModel | undefined
   outputBlocks: Array<IOutputBlock>
+  cellsInfo: CellInfo
 
   @raw
   editor: editor.IStandaloneCodeEditor | undefined
@@ -42,6 +53,7 @@ export class App extends ObservableObject {
     this.activeMonacoThemeIndex = 0
     this.textModelArtel = undefined
     this.outputBlocks = []
+	  this.cellsInfo = {высота : defaultRowCount, ширина : defaultColumnCount, размер : undefined}
   }
 
   get theme(): AppTheme {
@@ -144,6 +156,12 @@ export class App extends ObservableObject {
     BaseHtmlDriver.blinkingEffect = this.blinkingEffect ? "verstak-blinking-effect" : undefined
   }
 
+  @reactive
+  protected updateVariables(): void {
+    ROW_COUNT = this.cellsInfo.высота
+    COLUMN_COUNT = this.cellsInfo.ширина
+  }
+
   public getWidthGrowth():Number{
     return this.widthGrowthCount
   }
@@ -159,6 +177,6 @@ export class App extends ObservableObject {
 
 export const $app = new ContextVariable<App>()
 
-export const ROW_COUNT = 10
+export let ROW_COUNT : number = $app.valueOrUndefined ? $app.value.cellsInfo.высота : defaultRowCount
 
-export const COLUMN_COUNT = 10
+export let COLUMN_COUNT : number =  $app.valueOrUndefined? $app.value.cellsInfo.ширина : defaultColumnCount
