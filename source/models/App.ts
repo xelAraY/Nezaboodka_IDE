@@ -53,7 +53,7 @@ export class App extends ObservableObject {
     this.activeMonacoThemeIndex = 0
     this.textModelArtel = undefined
     this.outputBlocks = []
-	  this.cellsInfo = {высота : defaultRowCount, ширина : defaultColumnCount, размер : undefined}
+    this.cellsInfo = this.getDefaultCellsInfo()
   }
 
   get theme(): AppTheme {
@@ -156,10 +156,13 @@ export class App extends ObservableObject {
     BaseHtmlDriver.blinkingEffect = this.blinkingEffect ? "verstak-blinking-effect" : undefined
   }
 
-  @reactive
-  protected updateVariables(): void {
+  updateVariables(): void {
     ROW_COUNT = this.cellsInfo.высота
     COLUMN_COUNT = this.cellsInfo.ширина
+  }
+
+  getDefaultCellsInfo(): CellInfo{
+    return {высота : defaultRowCount, ширина : defaultColumnCount, размер : undefined}
   }
 
   public getWidthGrowth():Number{

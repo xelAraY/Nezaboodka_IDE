@@ -19,8 +19,9 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
               if (editor?.getValue() !== undefined){
                 let code = app.compileArtel(editor.getValue())
                 
-                let functions = 'let cетка : CellInfo = app.cellsInfo\n' +
-                                'function написать(coordinates: string, message: string): void\{\n' +
+                let сетка : CellInfo = app.getDefaultCellsInfo()
+
+                let functions = 'function написать(coordinates: string, message: string): void\{\n' +
                                 '  app.написать(coordinates, message)\n' +
                                 '}\n' + 
                                 '\n' +
@@ -31,8 +32,10 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                 if (code !== undefined){
                   let resultTsCompile = ts.transpile(functions + code)
                   app.outputBlocks = []
-                  console.log(resultTsCompile)
+                  // console.log(resultTsCompile)
                   eval(resultTsCompile)
+                  app.cellsInfo = сетка
+                  app.updateVariables()
                 }
               }
             }

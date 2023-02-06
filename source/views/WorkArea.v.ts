@@ -1,5 +1,5 @@
 import { css } from "@emotion/css"
-import { Grid, BlockBody, Block, PlainText, HtmlText, lineFeed, line, Align, VBlock, P } from "verstak"
+import { Grid, BlockBody, Block, PlainText, HtmlText, lineFeed, line, Align, VBlock, P, Group } from "verstak"
 import { $app, COLUMN_COUNT, ROW_COUNT } from "models/App"
 import { Rectangle } from "models/Rectangle"
 
@@ -11,28 +11,32 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
       },
       render(b) {
 
-        let xPositionString = 'A'
-        for (let i = 0; i < COLUMN_COUNT + 2; i++){
+        line( (b) => {
+          let xPositionString = 'A'
+          for (let i = 0; i < COLUMN_COUNT + 2; i++){
 
-          if (i != 0 && i != COLUMN_COUNT + 2 - 1){
-            Ruler(xPositionString, Align.Center)
+            if (i != 0 && i != COLUMN_COUNT + 2 - 1){
+              Ruler(xPositionString, Align.Center)
 
-            xPositionString = xPositionString.substring(0, xPositionString.length - 1)
-                     + String.fromCharCode(xPositionString.charCodeAt(xPositionString.length - 1) + 1)
+              xPositionString = xPositionString.substring(0, xPositionString.length - 1)
+                      + String.fromCharCode(xPositionString.charCodeAt(xPositionString.length - 1) + 1)
+            }
+            else{
+              Ruler("", Align.Center)
+            }
+
           }
-          else{
-            Ruler("", Align.Center)
-          }
-
-        }
+        })
+        
 
         let yNumber : number = 1
         for (let i = yNumber - 1; i < ROW_COUNT + 1; i++) {
-          lineFeed()
+          lineFeed(false)
+          console.log(COLUMN_COUNT)
+          line((b) => {
           if (i != ROW_COUNT + 1 - 1){
             Ruler(String(yNumber++), Align.Center, false)
             for (var j = 0; j < COLUMN_COUNT; j++){
-
               Block({
                 initialize(b){
                   b.contentAlignment = Align.Stretch
@@ -45,8 +49,8 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
                   border-radius: 0 rem;
                   border-color: #655c3f;
                   background-color: #fdf1ce;
-                  ${$app.value.cellsInfo.размер ? $app.value.cellsInfo.размер + `px`: ``}`
-                  console.log($app.value.cellsInfo.размер)
+                  ${$app.value.cellsInfo.размер ? `width: ` + $app.value.cellsInfo.размер + `px`: ``}`
+                  console.log(cssStyle)
                   b.style( css`${cssStyle}`
                   // b.cells = {down : i, right : j}
                   )
@@ -56,8 +60,9 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
           }
           else {
             Ruler("", Align.Center)
-          }
-        }
+          }  
+        })
+
         const app = $app.value
         const blocks = app.outputBlocks
         blocks.forEach(element => {
@@ -65,7 +70,7 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
         });
       }
     }
-  )
+  })
 )
 
 const Ruler = (title: string, frameAlignment: Align, overlap?: boolean) => (
@@ -75,6 +80,9 @@ const Ruler = (title: string, frameAlignment: Align, overlap?: boolean) => (
       b.cells = { horizontalOverlap: overlap }
       b.native.style.fontSize = 'smaller'
       b.native.style.color = 'black'
+      if ($app.value.cellsInfo.размер){
+         b.native.style.width = $app.value.cellsInfo.размер?.toString() + 'px'
+      }
       HtmlText(`&nbsp;${title}`)
     }
   })
