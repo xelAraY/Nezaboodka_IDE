@@ -8,6 +8,7 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
       initialize(b){
         b.contentAlignment = Align.Stretch
         b.frameAlignment = Align.Default
+        b.native.style.overflow = 'scroll';
       },
       render(b) {
 
@@ -25,7 +26,7 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
 
           }
         })
-        
+
 
         let yNumber : number = 1
         for (let i = yNumber - 1; i < ROW_COUNT + 1; i++) {
@@ -58,7 +59,7 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
           }
           else {
             Ruler("", Align.Center)
-          }  
+          }
         })
 
         const app = $app.value
