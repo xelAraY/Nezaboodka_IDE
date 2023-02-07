@@ -1,4 +1,4 @@
-import { COLUMN_COUNT, ROW_COUNT } from "./App"
+import { COLUMN_COUNT, incrementLetterInCoordinate, ROW_COUNT } from "./App"
 
 export interface IOutputBlock {
 
@@ -26,7 +26,7 @@ export function parseCordinate(point: string) : string{
 function parseColumns(columnToken: string): string {
 		
     const minimalLetter = 'A'
-    const maxLetter = String.fromCharCode('A'.charCodeAt(0) + COLUMN_COUNT - 1)
+    const maxLetter = findMaxLetter()
 
     if (columnToken.match(/[A-Z]/i)){
 
@@ -67,4 +67,14 @@ function parseRows(rowToken: string): string {
 
     return rowNumber.toString()
 
+}
+
+function findMaxLetter(): string {
+    let res = 'A'
+
+    for (let i = 0; i < COLUMN_COUNT; i++){
+        res = incrementLetterInCoordinate(res)
+    }
+
+    return res
 }

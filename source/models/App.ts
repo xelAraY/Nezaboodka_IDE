@@ -183,3 +183,25 @@ export const $app = new ContextVariable<App>()
 export let ROW_COUNT : number = $app.valueOrUndefined ? $app.value.cellsInfo.высота : defaultRowCount
 
 export let COLUMN_COUNT : number =  $app.valueOrUndefined? $app.value.cellsInfo.ширина : defaultColumnCount
+
+export function incrementLetterInCoordinate(text: string): string {
+
+  let i: number = text.length
+  let isExit: boolean = false
+  while (i > 0 && !isExit){
+    let lastChar
+    if (text.charCodeAt(i - 1) < 'Z'.charCodeAt(0)){
+      lastChar = String.fromCharCode(text.charCodeAt(i - 1) + 1)
+      isExit = true
+    }
+    else{
+      lastChar = 'A'
+    }
+
+    text = text.substring(0, i - 1) + lastChar + text.substring(i)
+    i--
+  }
+
+  text = text + (!isExit ? 'A' : '')
+  return text
+}

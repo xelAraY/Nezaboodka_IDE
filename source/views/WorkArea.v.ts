@@ -1,6 +1,6 @@
 import { css } from "@emotion/css"
 import { Grid, BlockBody, Block, PlainText, HtmlText, lineFeed, line, Align, VBlock, P, Group } from "verstak"
-import { $app, COLUMN_COUNT, ROW_COUNT } from "models/App"
+import { $app, COLUMN_COUNT, incrementLetterInCoordinate, ROW_COUNT } from "models/App"
 import { Rectangle } from "models/Rectangle"
 
 export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
@@ -17,9 +17,7 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
 
             if (i != 0 && i != COLUMN_COUNT + 2 - 1){
               Ruler(xPositionString, Align.Center)
-
-              xPositionString = xPositionString.substring(0, xPositionString.length - 1)
-                      + String.fromCharCode(xPositionString.charCodeAt(xPositionString.length - 1) + 1)
+              xPositionString = incrementLetterInCoordinate(xPositionString)
             }
             else{
               Ruler("", Align.Center)
