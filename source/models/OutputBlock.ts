@@ -17,7 +17,7 @@ export function parseCordinate(point: string) : string{
     }
 
 
-    let columnToken = parseColumns(res.charAt(0))
+    let columnToken = parseColumns(res.match(/[A-Z]+/i)[0] ?? '')
     let rowToken = parseRows(res.substring(1))
     
     return columnToken + rowToken
@@ -28,9 +28,9 @@ function parseColumns(columnToken: string): string {
     const minimalLetter = 'A'
     const maxLetter = findMaxLetter()
 
-    if (columnToken.match(/[A-Z]/i)){
+    if (columnToken.match(/[A-Z]+/i)){
 
-        if (columnToken > maxLetter){
+        if (columnToken > maxLetter && columnToken.length == maxLetter.length){
             columnToken = maxLetter
         }
 
@@ -39,8 +39,7 @@ function parseColumns(columnToken: string): string {
         columnToken = minimalLetter
     }
 
-    columnToken = String.fromCharCode(columnToken.charCodeAt(0) + 1)
-    return columnToken
+    return incrementLetterInCoordinate(columnToken)
 }
 
 function parseRows(rowToken: string): string {
@@ -70,9 +69,10 @@ function parseRows(rowToken: string): string {
 }
 
 function findMaxLetter(): string {
+    
     let res = 'A'
 
-    for (let i = 0; i < COLUMN_COUNT; i++){
+    for (let i = 0; i < COLUMN_COUNT - 1; i++){
         res = incrementLetterInCoordinate(res)
     }
 
