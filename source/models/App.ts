@@ -156,6 +156,7 @@ export class App extends ObservableObject {
     BaseHtmlDriver.blinkingEffect = this.blinkingEffect ? "verstak-blinking-effect" : undefined
   }
 
+  @reactive
   updateVariables(): void {
     ROW_COUNT = this.cellsInfo.высота
     COLUMN_COUNT = this.cellsInfo.ширина

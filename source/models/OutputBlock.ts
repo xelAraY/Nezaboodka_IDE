@@ -18,7 +18,7 @@ export function parseCordinate(point: string) : string{
 
 
     let columnToken = parseColumns(res.match(/[A-Z]+/i)[0] ?? '')
-    let rowToken = parseRows(res.substring(1))
+    let rowToken = parseRows(res.match(/[0-9]+/i)[0] ?? '')
     
     return columnToken + rowToken
 }
@@ -30,8 +30,10 @@ function parseColumns(columnToken: string): string {
 
     if (columnToken.match(/[A-Z]+/i)){
 
-        if (columnToken > maxLetter && columnToken.length == maxLetter.length){
-            columnToken = maxLetter
+        if (columnToken.length >= maxLetter.length){
+            
+            if (columnToken > maxLetter && columnToken.length == maxLetter.length || columnToken.length > maxLetter.length)
+                columnToken = maxLetter
         }
 
     } 
