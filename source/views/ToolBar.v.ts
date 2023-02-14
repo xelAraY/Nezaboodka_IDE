@@ -67,10 +67,6 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
             icon: 'fa-solid fa-eraser fa-lg',
             label: '',
             action: () => {
-              let editor = app.getEditor()
-              if (editor !== undefined){
-                editor?.setValue('')
-              }
               app.outputBlocks = []
               app.outputBlocks.toMutable()
             }
