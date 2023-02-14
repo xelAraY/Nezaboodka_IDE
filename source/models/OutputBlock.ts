@@ -1,12 +1,12 @@
-import { COLUMN_COUNT, incrementLetterInCoordinate, ROW_COUNT } from "./App"
+import { $app, CellInfo, incrementLetterInCoordinate } from "./App"
 
 export interface IOutputBlock {
 
-    drawBlock(): void
+    drawBlock(cellsInfo: CellInfo): void
 
 }
 
-export function parseCordinate(point: string) : string{
+export function parseCordinate(point: string, cellsInfo: CellInfo) : string{
     
     let res = ''
 
@@ -17,16 +17,16 @@ export function parseCordinate(point: string) : string{
     }
 
 
-    let columnToken = parseColumns(res.match(/[A-Z]+/i)[0] ?? '')
-    let rowToken = parseRows(res.match(/[0-9]+/i)[0] ?? '')
+    let columnToken = parseColumns(res.match(/[A-Z]+/i)[0] ?? '', cellsInfo)
+    let rowToken = parseRows(res.match(/[0-9]+/i)[0] ?? '', cellsInfo)
     
     return columnToken + rowToken
 }
 
-function parseColumns(columnToken: string): string {
+function parseColumns(columnToken: string, cellsInfo: CellInfo): string {
 		
     const minimalLetter = 'A'
-    const maxLetter = findMaxLetter()
+    const maxLetter = findMaxLetter(cellsInfo)
 
     if (columnToken.match(/[A-Z]+/i)){
 
@@ -44,9 +44,10 @@ function parseColumns(columnToken: string): string {
     return incrementLetterInCoordinate(columnToken)
 }
 
-function parseRows(rowToken: string): string {
+function parseRows(rowToken: string, cellsInfo: CellInfo): string {
 
     let rowNumber = parseInt(rowToken, 10)
+    const ROW_COUNT = cellsInfo.высота
 
     if (isNaN(rowNumber)){
         
@@ -70,9 +71,10 @@ function parseRows(rowToken: string): string {
 
 }
 
-function findMaxLetter(): string {
+function findMaxLetter(cellsInfo: CellInfo): string {
     
     let res = 'A'
+    const COLUMN_COUNT = cellsInfo.ширина
 
     for (let i = 0; i < COLUMN_COUNT - 1; i++){
         res = incrementLetterInCoordinate(res)

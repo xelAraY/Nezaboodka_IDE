@@ -1,16 +1,19 @@
 import { IOutputBlock, parseCordinate } from "./OutputBlock"
 import { Block } from "verstak"
 import { css } from "@emotion/css"
+import { CellInfo } from "./App"
 
 export class Rectangle implements IOutputBlock {
-	cell: string
+	firstPoint: string
+	secondPoint: string
 
 	constructor(firstPoint: string, secondPoint: string){
-		this.cell = parseCordinate(firstPoint) + ':' + parseCordinate(secondPoint)
+		this.firstPoint = firstPoint
+		this.secondPoint = secondPoint
 	}
 
-	drawBlock(): void {
-		const cell = this.cell
+	drawBlock(cellsInfo: CellInfo): void {
+		const cell = parseCordinate(this.firstPoint, cellsInfo) + ':' + parseCordinate(this.secondPoint, cellsInfo)
 		Block({
 			render(b){
 			  b.style( css`margin: 0 rem ;

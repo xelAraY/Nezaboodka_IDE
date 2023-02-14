@@ -19,23 +19,21 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
               if (editor?.getValue() !== undefined){
                 let code = app.compileArtel(editor.getValue())
 
-                let сетка : CellInfo = app.getDefaultCellsInfo()
-
-                let functions = 'function написать(coordinates: string, message: string): void\{\n' +
-                                '  app.написать(coordinates, message)\n' +
+                let functions = 'let сетка = app.cellsInfo\n'+
+                                'function написать(coordinates, message)\{\n' +
+                                '  app.writeFunction(coordinates, message)\n' +
                                 '}\n' +
                                 '\n' +
-                                'function прямоугольник(coordinates: string): void \{\n' +
-                                '  app.прямоугольник(coordinates)\n' +
+                                'function прямоугольник(coordinates)\{\n' +
+                                '  app.rectangleFunction(coordinates)\n' +
                                 '}\n'
 
                 if (code !== undefined){
-                  let resultTsCompile = ts.transpile(functions + code)
+                  // let resultTsCompile = ts.transpile(functions + code)
+                  let resultTsCompile = functions + code
                   app.outputBlocks = []
                   // console.log(resultTsCompile)
                   eval(resultTsCompile)
-                  app.cellsInfo = сетка
-                  app.updateVariables()
                 }
               }
             }

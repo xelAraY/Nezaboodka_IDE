@@ -1,18 +1,21 @@
 import { IOutputBlock, parseCordinate } from "./OutputBlock"
 import { Block, HtmlText } from "verstak"
 import { css } from "@emotion/css"
+import { CellInfo } from "./App"
 
 export class TextBlock implements IOutputBlock {
-  cell: string
+  firstPoint: string
+	secondPoint: string
   text: string
 
 	constructor(firstPoint: string, secondPoint: string, text: string){
-		this.cell = parseCordinate(firstPoint) + ':' + parseCordinate(secondPoint)
+		this.firstPoint = firstPoint
+		this.secondPoint = secondPoint
     this.text = text
 	}
 
-	drawBlock(): void {
-		const cell = this.cell
+	drawBlock(cellsInfo: CellInfo): void {
+		const cell = parseCordinate(this.firstPoint, cellsInfo) + ':' + parseCordinate(this.secondPoint, cellsInfo)
     const text = this.text
 		Block({
 			render(b){

@@ -76,14 +76,14 @@ export class App extends ObservableObject {
     return coordinates.substring(0, colonPos)
   }
 
-  написать(coordinates: string, message: string): void {
+  writeFunction(coordinates: string, message: string): void {
     const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable()
     let firstPoint = this.parseFirstPoint(coordinates)
     let secondPoint = this.parseSecondPoint(coordinates)
     outputBlocks.push(new TextBlock(firstPoint, secondPoint, message))
   }
 
-  прямоугольник(coordinates: string): void {
+  rectangleFunction(coordinates: string): void {
     const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable()
     let firstPoint = this.parseFirstPoint(coordinates)
     let secondPoint = this.parseSecondPoint(coordinates)
@@ -156,12 +156,6 @@ export class App extends ObservableObject {
     BaseHtmlDriver.blinkingEffect = this.blinkingEffect ? "verstak-blinking-effect" : undefined
   }
 
-  @reactive
-  updateVariables(): void {
-    ROW_COUNT = this.cellsInfo.высота
-    COLUMN_COUNT = this.cellsInfo.ширина
-  }
-
   getDefaultCellsInfo(): CellInfo{
     return {высота : defaultRowCount, ширина : defaultColumnCount, размер : undefined}
   }
@@ -180,10 +174,6 @@ export class App extends ObservableObject {
 }
 
 export const $app = new ContextVariable<App>()
-
-export let ROW_COUNT : number = $app.valueOrUndefined ? $app.value.cellsInfo.высота : defaultRowCount
-
-export let COLUMN_COUNT : number =  $app.valueOrUndefined? $app.value.cellsInfo.ширина : defaultColumnCount
 
 export function incrementLetterInCoordinate(text: string): string {
 

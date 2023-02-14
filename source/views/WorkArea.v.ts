@@ -1,6 +1,6 @@
 import { css } from "@emotion/css"
 import { Grid, BlockBody, Block, PlainText, HtmlText, lineFeed, line, Align, VBlock, P, Group } from "verstak"
-import { $app, COLUMN_COUNT, incrementLetterInCoordinate, ROW_COUNT } from "models/App"
+import { $app, incrementLetterInCoordinate} from "models/App"
 import { Rectangle } from "models/Rectangle"
 
 export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
@@ -12,8 +12,12 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
       },
       render(b) {
 
+        const COLUMN_COUNT = $app.value.cellsInfo.ширина
+        const ROW_COUNT = $app.value.cellsInfo.высота
+
         line( (b) => {
           let xPositionString = 'A'
+          
           for (let i = 0; i < COLUMN_COUNT + 2; i++){
 
             if (i != 0 && i != COLUMN_COUNT + 2 - 1){
@@ -51,7 +55,6 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
                   ${$app.value.cellsInfo.размер ? `width: ` + $app.value.cellsInfo.размер + `px`: ``}`
                   console.log(cssStyle)
                   b.style( css`${cssStyle}`
-                  // b.cells = {down : i, right : j}
                   )
                 }
               })
@@ -65,7 +68,7 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
         const app = $app.value
         const blocks = app.outputBlocks
         blocks.forEach(element => {
-          element.drawBlock()
+          element.drawBlock(app.cellsInfo)
         });
       }
     }
