@@ -6,24 +6,28 @@ import { CellInfo } from "./App"
 export class Rectangle implements IOutputBlock {
 	firstPoint: string
 	secondPoint: string
+	color: string
+	borderStyles: string
 
-	constructor(firstPoint: string, secondPoint: string){
+	constructor(firstPoint: string, secondPoint: string, color: string, borderStyles: string){
 		this.firstPoint = firstPoint
 		this.secondPoint = secondPoint
+		this.color = color
+		this.borderStyles = borderStyles
 	}
 
 	drawBlock(cellsInfo: CellInfo): void {
 		const cell = parseCordinate(this.firstPoint, cellsInfo) + ':' + parseCordinate(this.secondPoint, cellsInfo)
+		const color = this.color
+		const borderStyles = this.borderStyles
 		Block({
 			render(b){
 			  b.style( css`margin: 0 rem ;
-			  padding: 0 ;
-			  border: 1px solid ;
-			  border-radius: 0 rem;
-			  border-color: #655c3f;
-			  background-color: #000000;`)
+			  padding: 0 ;`)
 			  b.cells = cell
+				b.native.style.backgroundColor = color
+				b.native.style.border = borderStyles
 			}
-		  })
+		})
 	}
 }

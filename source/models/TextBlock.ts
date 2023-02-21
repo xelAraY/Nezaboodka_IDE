@@ -24,11 +24,12 @@ export class TextBlock implements IOutputBlock {
 			  border: 1px solid;
 			  border-radius: 0 rem;
 			  border-color: #655c3f;
-			  background: rgba(253, 241, 206, 0);
-        align-items: center;`)
+			  background: rgba(253, 241, 206, 0);`)
 			  b.cells = cell
+				b.native.style.alignItems = 'end'
+				b.native.style.color = 'red'
         HtmlText(text)
 			}
-		  })
+		})
 	}
 }

@@ -24,8 +24,8 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                                 '  app.writeFunction(coordinates, message)\n' +
                                 '}\n' +
                                 '\n' +
-                                'function прямоугольник(coordinates)\{\n' +
-                                '  app.rectangleFunction(coordinates)\n' +
+                                'function прямоугольник(coordinates, color="black", border = "1px solid")\{\n' +
+                                '  app.rectangleFunction(coordinates, color, border)\n' +
                                 '}\n'
 
                 if (code !== undefined){

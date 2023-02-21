@@ -16,7 +16,7 @@ const defaultColumnCount : number = 10
 
 export interface CellInfo {
 
-  размер: number | undefined  
+  размер: number | undefined
   ширина: number
 	высота: number
 
@@ -76,6 +76,61 @@ export class App extends ObservableObject {
     return coordinates.substring(0, colonPos)
   }
 
+  parseColor(color: string): string {
+    switch(color){
+      case 'желтый':
+        return 'yellow'
+      case 'красный':
+        return 'red'
+      case 'зеленый':
+        return 'green'
+      case 'белый':
+        return 'white'
+      case 'синий':
+        return 'blue'
+      case 'фиолетовый':
+        return 'purple'
+      default:
+        return 'unknown'
+    }
+  }
+
+  parseBorder(border: string): string {
+    switch(border){
+      case 'сплошной':
+        return 'solid'
+      case 'пунктирный':
+        return 'dashed'
+      case 'точечный':
+        return 'dotted'
+      default:
+        return 'unknown'
+    }
+  }
+
+  parseBorderStyles(borderStyles: string): string {
+    let index = 0
+    let startIndex = 0
+    let result = ''
+    while (index < borderStyles.length){
+      while (index < borderStyles.length && borderStyles[index+1] !== ' ') {
+        index++
+      }
+      index++
+      const style = borderStyles.substring(startIndex, index)
+      let newStyle = this.parseColor(style.trim())
+      if (newStyle === 'unknown'){
+        newStyle = this.parseBorder(style.trim())
+        if (newStyle === 'unknown'){
+          newStyle = style
+        }
+      }
+      result+= newStyle+' '
+      startIndex = index
+    }
+    return result
+  }
+
   writeFunction(coordinates: string, message: string): void {
     const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable()
     let firstPoint = this.parseFirstPoint(coordinates)
@@ -83,11 +138,13 @@ export class App extends ObservableObject {
     outputBlocks.push(new TextBlock(firstPoint, secondPoint, message))
   }
 
-  rectangleFunction(coordinates: string): void {
+  rectangleFunction(coordinates: string, color: string, borderStyles: string): void {
     const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable()
     let firstPoint = this.parseFirstPoint(coordinates)
     let secondPoint = this.parseSecondPoint(coordinates)
-    outputBlocks.push(new Rectangle(firstPoint, secondPoint))
+    const enColor = this.parseColor(color)
+    const border = this.parseBorderStyles(borderStyles)
+    outputBlocks.push(new Rectangle(firstPoint, secondPoint, enColor, border))
   }
 
   @transactional
