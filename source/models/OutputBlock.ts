@@ -71,7 +71,7 @@ function parseRows(rowToken: string, cellsInfo: CellInfo): string {
 
 }
 
-function findMaxLetter(cellsInfo: CellInfo): string {
+export function findMaxLetter(cellsInfo: CellInfo): string {
     
     let res = 'A'
     const COLUMN_COUNT = cellsInfo.ширина
