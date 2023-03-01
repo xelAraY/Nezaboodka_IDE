@@ -1,5 +1,5 @@
 import { IOutputBlock, parseCordinate } from "./OutputBlock"
-import { Block, HtmlText } from "verstak"
+import { Align, Block, HtmlText } from "verstak"
 import { css } from "@emotion/css"
 import { CellInfo } from "./App"
 
@@ -22,12 +22,14 @@ export class TextBlock implements IOutputBlock {
 			  b.style( css`margin: 0 rem;
 			  padding: 0;
 			  border: 1px solid;
+				border-width: 1px 0px 0px 1px;
 			  border-radius: 0 rem;
 			  border-color: #655c3f;
 			  background: rgba(253, 241, 206, 0);`)
 			  b.cells = cell
-				b.native.style.alignItems = 'end'
+				// b.native.style.alignItems = 'mid'
 				b.native.style.color = 'red'
+				b.contentAlignment = Align.CenterV | Align.Center
         HtmlText(text)
 			}
 		})

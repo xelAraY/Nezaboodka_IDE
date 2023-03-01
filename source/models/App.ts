@@ -62,7 +62,25 @@ export class App extends ObservableObject {
 
   @reactive
   async updateTextModel(): Promise<void> {
-    const client = new ArtelMonacoClient()
+    const client = new ArtelMonacoClient([{
+      name: 'работа-с-сеткой',
+      sourceFiles: [{name: 'main.a', text: `
+      используется артель
+
+      тип ИнформацияОСетке = набор
+      {
+          размер: Число?
+          высота: Число
+          ширина: Число
+      }
+      
+      внешняя сетка: ИнформацияОСетке
+      
+      внешняя операция прямоугольник(координаты: Текст, цвет: Текст = 'чёрный', граница: Текст = '1px')
+
+      внешняя операция написать(координаты: Текст, текст: Текст)
+      `}]
+    }])
     this.textModelArtel = await client.getModel(new Worker())
   }
 
