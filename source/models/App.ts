@@ -109,7 +109,7 @@ export class App extends ObservableObject {
       case 'фиолетовый':
         return 'purple'
       default:
-        return 'unknown'
+        return 'black'
     }
   }
 

@@ -4,6 +4,7 @@ import { $app } from "models/App"
 import { ToolBar } from "./ToolBar.v"
 import { WorkArea } from "./WorkArea.v"
 import { editor } from "monaco-editor"
+import { css } from "@emotion/css"
 
 export const MainWindow = () => (
   Block({ reaction: true,
@@ -95,15 +96,45 @@ export const MainWindow = () => (
         })
 
 
-        grid = WorkArea({
+        //Draw telephone
+        grid = Block({
+          initialize(b) {
+            
+          },
           render(b, base) {
             base()
             b.style(theme.RightPanel)
             b.style(theme.accent)
             b.widthGrowth = 3
             b.heightGrowth = 1
+
+            WorkArea({
+              render(b, base) {
+                base()
+                b.style(theme.RightPanel)
+                b.style(theme.accent)
+                b.widthGrowth = 3
+                b.heightGrowth = 1
+              }
+            })
+
+            const style = css`
+              border: 1px solid black;`
+
+
+            b.style(style)
           }
         })
+
+        // grid = WorkArea({
+        //   render(b, base) {
+        //     base()
+        //     b.style(theme.RightPanel)
+        //     b.style(theme.accent)
+        //     b.widthGrowth = 3
+        //     b.heightGrowth = 1
+        //   }
+        // })
       })
 
       line(l => {
