@@ -4,7 +4,7 @@ import { Block, BlockBody } from "verstak";
 import { WorkArea } from "./WorkArea.v";
 
 
-export const Smartphone = (theme: AppTheme, body?: BlockBody<HTMLElement, void, void>) => {
+export const Smartphone = (theme: AppTheme, body?: BlockBody<HTMLElement, void, void>) => (
   
   Block(body, {
     initialize(b) {
@@ -36,4 +36,4 @@ export const Smartphone = (theme: AppTheme, body?: BlockBody<HTMLElement, void, 
     }
   })
 
-}
+)
