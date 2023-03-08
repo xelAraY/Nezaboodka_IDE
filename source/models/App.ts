@@ -73,9 +73,9 @@ export class App extends ObservableObject {
           высота: Число
           ширина: Число
       }
-      
+
       внешняя сетка: ИнформацияОСетке
-      
+
       внешняя операция прямоугольник(координаты: Текст, цвет: Текст = 'чёрный', граница: Текст = '1px')
 
       внешняя операция написать(координаты: Текст, текст: Текст)
@@ -111,8 +111,15 @@ export class App extends ObservableObject {
       case 'чёрный':
         return 'black'
       default:
-        return 'unknown'
+        return this.parseAnotherColorView(color)
     }
+  }
+
+  parseAnotherColorView(color: string): string {
+    if (color.startsWith('rgb') || color.startsWith('rgba') || (color.startsWith('#') && color.length === 7)){
+      return color
+    }
+    return 'unknown'
   }
 
   parseBorder(border: string): string {
@@ -151,19 +158,64 @@ export class App extends ObservableObject {
     return result
   }
 
-  writeFunction(coordinates: string, message: string): void {
+  parseLocation(text: string): string {
+    switch(text){
+      case 'центр':
+        return 'center'
+      case 'слева':
+        return 'flex-start'
+      case 'справа':
+        return 'flex-end'
+      default:
+        return 'unknown'
+    }
+  }
+
+  parseTextStyles(textStyles: string) {
+    let index = 0
+    let startIndex = 0
+    let result = { color: 'black', location: 'center' }
+    while (index < textStyles.length){
+      while (index < textStyles.length && textStyles[index+1] !== ' ') {
+        index++
+      }
+      index++
+      const style = textStyles.substring(startIndex, index)
+      let newStyle = this.parseColor(style.trim())
+      if (newStyle === 'unknown'){
+        newStyle = this.parseLocation(style.trim())
+        if (newStyle === 'unknown'){
+          alert('Unknown style for text!')
+        }
+        else {
+          result.location = newStyle
+        }
+      }
+      else {
+        result.color = newStyle
+      }
+
+      startIndex = index
+    }
+    return result
+  }
+
+  writeFunction(coordinates: string, message: string, color: string, borderStyles: string, textStyles: string): void {
     const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable()
     let firstPoint = this.parseFirstPoint(coordinates)
     let secondPoint = this.parseSecondPoint(coordinates)
-    outputBlocks.push(new TextBlock(firstPoint, secondPoint, message))
+    const enColor = this.parseColor(color.trim())
+    const border = this.parseBorderStyles(borderStyles.trim())
+    const textSt = this.parseTextStyles(textStyles.trim())
+    outputBlocks.push(new TextBlock(firstPoint, secondPoint, message, enColor, border, textSt))
   }
 
   rectangleFunction(coordinates: string, color: string, borderStyles: string): void {
     const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable()
     let firstPoint = this.parseFirstPoint(coordinates)
     let secondPoint = this.parseSecondPoint(coordinates)
-    const enColor = this.parseColor(color)
-    const border = this.parseBorderStyles(borderStyles)
+    const enColor = this.parseColor(color.trim())
+    const border = this.parseBorderStyles(borderStyles.trim())
     outputBlocks.push(new Rectangle(firstPoint, secondPoint, enColor, border))
   }
 

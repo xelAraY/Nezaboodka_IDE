@@ -20,11 +20,11 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                 let code = app.compileArtel(editor.getValue())
 
                 let functions = 'let сетка = app.cellsInfo\n'+
-                                'function написать(coordinates, message)\{\n' +
-                                '  app.writeFunction(coordinates, message)\n' +
+                                'function написать(coordinates, message, color="красный", border = "1px solid", textStyles = "black center")\{\n' +
+                                '  app.writeFunction(coordinates, message, color, border, textStyles)\n' +
                                 '}\n' +
                                 '\n' +
-                                'function прямоугольник(coordinates, color="black", border = "1px solid")\{\n' +
+                                'function прямоугольник(coordinates, color = "красный", border = "1px solid")\{\n' +
                                 '  app.rectangleFunction(coordinates, color, border)\n' +
                                 '}\n'
 

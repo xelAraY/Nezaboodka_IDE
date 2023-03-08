@@ -20,7 +20,6 @@ export class Rectangle implements IOutputBlock {
 		const cell = parseCordinate(this.firstPoint, cellsInfo) + ':' + parseCordinate(this.secondPoint, cellsInfo)
 		const color = this.color
 		const borderStyles = this.borderStyles
-		alert(borderStyles)
 		Block({
 			render(b){
 			  b.style( css`margin: 0 rem ;
