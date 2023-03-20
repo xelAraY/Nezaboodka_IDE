@@ -16,9 +16,9 @@ const defaultColumnCount : number = 10
 
 export interface CellInfo {
 
-  размер: number | undefined
-  ширина: number
-	высота: number
+  size: number | undefined
+  heightCellCount: number
+	widthCellCount: number
 
 }
 
@@ -70,8 +70,8 @@ export class App extends ObservableObject {
       тип ИнформацияОСетке = набор
       {
           размер: Число?
-          высота: Число
-          ширина: Число
+          количество_клеток_высота: Число
+          количество_клеток_ширина: Число
       }
 
       внешняя сетка: ИнформацияОСетке
@@ -286,7 +286,7 @@ export class App extends ObservableObject {
   }
 
   getDefaultCellsInfo(): CellInfo{
-    return {высота : defaultRowCount, ширина : defaultColumnCount, размер : undefined}
+    return {heightCellCount : defaultRowCount, widthCellCount : defaultColumnCount, size : undefined}
   }
 
   public getWidthGrowth():Number{

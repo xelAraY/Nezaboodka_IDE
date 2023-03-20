@@ -17,7 +17,7 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
             action: () => {
               const editor = app.getEditor()
               if (editor?.getValue() !== undefined){
-                let code = app.compileArtel(editor.getValue())
+                let code = translateCellInfoOnLatin(app.compileArtel(editor.getValue()))
 
                 let functions = 'let сетка = app.cellsInfo\n'+
                                 'function написать(coordinates, message, color="красный", border = "1px solid", textStyles = "black center")\{\n' +
@@ -28,11 +28,11 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                                 '  app.rectangleFunction(coordinates, color, border)\n' +
                                 '}\n'
 
+
                 if (code !== undefined){
-                  // let resultTsCompile = ts.transpile(functions + code)
                   let resultTsCompile = functions + code
+                  console.log(resultTsCompile)
                   app.outputBlocks = []
-                  // console.log(resultTsCompile)
                   eval(resultTsCompile)
                 }
               }
@@ -113,3 +113,12 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
     }},
   )
 )
+
+
+function translateCellInfoOnLatin (code: string): string {
+  
+  let result = code.replace(/размер/, 'size')
+  result = result.replace(/количество_клеток_высота/, 'heightCellCount')
+  return result.replace(/количество_клеток_ширина/, 'widthCellCount')
+
+}

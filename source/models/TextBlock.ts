@@ -1,4 +1,4 @@
-import { IOutputBlock, parseCordinate } from "./OutputBlock"
+import { IOutputBlock, parseCoordinate } from "./OutputBlock"
 import { Align, Block, HtmlText } from "verstak"
 import { css } from "@emotion/css"
 import { CellInfo } from "./App"
@@ -21,7 +21,7 @@ export class TextBlock implements IOutputBlock {
 	}
 
 	drawBlock(cellsInfo: CellInfo): void {
-		const cell = parseCordinate(this.firstPoint, cellsInfo) + ':' + parseCordinate(this.secondPoint, cellsInfo)
+		const cell = parseCoordinate(this.firstPoint, cellsInfo) + ':' + parseCoordinate(this.secondPoint, cellsInfo)
     const text = this.text
 		const color = this.color
 		const borderStyles = this.borderStyles

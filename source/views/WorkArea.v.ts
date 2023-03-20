@@ -13,8 +13,8 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
       },
       render(b) {
         const app = $app.value
-        const columns = app.cellsInfo.ширина
-        const rows = app.cellsInfo.высота
+        const columns = app.cellsInfo.widthCellCount
+        const rows = app.cellsInfo.heightCellCount
 
         b.native.style.gridTemplateColumns = `repeat(${columns + 2}, 1fr)`
         b.native.style.gridTemplateRows = `repeat(${rows + 2}, 1fr)`
@@ -60,8 +60,8 @@ const Ruler = (title: string, frameAlignment: Align, overlap?: boolean) => (
       b.cells = { horizontalOverlap: overlap }
       b.native.style.fontSize = 'smaller'
       b.native.style.color = 'black'
-      if ($app.value.cellsInfo.размер){
-         b.native.style.width = $app.value.cellsInfo.размер?.toString() + 'px'
+      if ($app.value.cellsInfo.size){
+         b.native.style.width = $app.value.cellsInfo.size?.toString() + 'px'
       }
       HtmlText(`&nbsp;${title}`)
     }

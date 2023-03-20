@@ -6,7 +6,7 @@ export interface IOutputBlock {
 
 }
 
-export function parseCordinate(point: string, cellsInfo: CellInfo) : string{
+export function parseCoordinate(point: string, cellsInfo: CellInfo) : string{
     
     let res = ''
 
@@ -47,7 +47,7 @@ function parseColumns(columnToken: string, cellsInfo: CellInfo): string {
 function parseRows(rowToken: string, cellsInfo: CellInfo): string {
 
     let rowNumber = parseInt(rowToken, 10)
-    const ROW_COUNT = cellsInfo.высота
+    const ROW_COUNT = cellsInfo.heightCellCount
 
     if (isNaN(rowNumber)){
         
@@ -74,7 +74,7 @@ function parseRows(rowToken: string, cellsInfo: CellInfo): string {
 export function findMaxLetter(cellsInfo: CellInfo): string {
     
     let res = 'A'
-    const COLUMN_COUNT = cellsInfo.ширина
+    const COLUMN_COUNT = cellsInfo.widthCellCount
 
     for (let i = 0; i < COLUMN_COUNT - 1; i++){
         res = incrementLetterInCoordinate(res)
