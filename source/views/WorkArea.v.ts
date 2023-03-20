@@ -7,9 +7,9 @@ import { findMaxLetter } from "models/OutputBlock"
 export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
   Grid(body, {reaction: true,
       initialize(b){
-        b.contentAlignment = Align.Stretch
-        b.frameAlignment = Align.Default
-        b.native.style.overflow = 'scroll';
+        // b.contentAlignment = Align.Stretch
+        // b.frameAlignment = Align.Default
+        // b.native.style.overflow = 'scroll';
       },
       render(b) {
         const app = $app.value
@@ -19,6 +19,12 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
         b.native.style.gridTemplateColumns = `repeat(${columns + 2}, 1fr)`
         b.native.style.gridTemplateRows = `repeat(${rows + 2}, 1fr)`
         
+        b.style(css`
+          height: 600px;
+
+        `);
+
+
         const startSymb : string = 'B'
         const endSymb : string = incrementLetterInCoordinate(findMaxLetter(app.cellsInfo))
       

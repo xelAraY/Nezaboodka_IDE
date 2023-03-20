@@ -20,7 +20,6 @@ export class AppTheme extends DefaultGostTheme {
   @cached
   get LeftPanel(): string { return css`
     margin: 0.5rem 0rem 0.5rem 0.5rem;
-    padding: 0rem;
     box-shadow: ${this.shadow};
     border-radius: ${this.borderRadius};
     background-color: ${this.fillColor};
@@ -30,7 +29,6 @@ export class AppTheme extends DefaultGostTheme {
   @cached
   get RightPanel(): string { return css`
     margin: 0.5rem 0.5rem 0.5rem 0rem;
-    padding: 0rem;
     box-shadow: ${this.shadow};
     border-radius: ${this.borderRadius};
     background-color: ${this.fillColor};
@@ -71,11 +69,19 @@ export class AppTheme extends DefaultGostTheme {
   `}
 
   @cached
-  get spliter(): string { return css`
+  get splitter(): string { return css`
     border: 0px solid black;
     background-color: white;
     width: 3px;
     opacity: 0.0;
     margin: 5px 0px 10px 0px;
+  `}
+
+  @cached
+  get gridField(): string { return css`
+    margin: 0.5rem 0.5rem 0.5rem 0rem;
+    box-shadow: ${this.shadow};
+    border-radius: ${this.borderRadius};
+    background-color: ${this.fillColor};
   `}
 }

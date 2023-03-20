@@ -81,7 +81,7 @@ export const MainWindow = () => (
 
         Block({
           render(b) {
-            b.style(theme.spliter)
+            b.style(theme.splitter)
             b.heightGrowth = 1
             b.native.addEventListener('mousemove', _ => {
               b.native.style.cursor = 'col-resize'
