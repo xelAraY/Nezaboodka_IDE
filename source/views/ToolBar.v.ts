@@ -118,7 +118,7 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
 function translateCellInfoOnLatin (code: string): string {
   
   let result = code.replace(/размер/, 'size')
-  result = result.replace(/количество_клеток_высота/, 'heightCellCount')
-  return result.replace(/количество_клеток_ширина/, 'widthCellCount')
+  result = result.replace(/количество_строк/, 'heightCellCount')
+  return result.replace(/количество_столбцов/, 'widthCellCount')
 
 }
