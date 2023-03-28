@@ -45,10 +45,16 @@ export class InputBlock implements IOutputBlock {
 
     }})
 
-    return new Promise<string>(function(res, rej) {
+    const context = this;
+
+    return new Promise<string>(function(resolve, reject) {
       
       inputBlock.native.addEventListener('keydown', e => {
-        
+        if (e.key == 'Enter') {
+          context.text = inputBlock.native.value
+          resolve(context.text)
+          inputBlock.native.remove()
+        }
       })
     })
 
