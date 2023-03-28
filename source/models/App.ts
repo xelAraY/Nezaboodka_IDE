@@ -117,7 +117,7 @@ export class App extends ObservableObject {
 
   parseAnotherColorView(color: string): string {
     if (color.startsWith('rgb') || color.startsWith('rgba') || (color.startsWith('#') && color.length === 7)){
-      return color
+      return 'anotherColorStyle'
     }
     return 'unknown'
   }
@@ -139,6 +139,7 @@ export class App extends ObservableObject {
     let index = 0
     let startIndex = 0
     let result = ''
+    let isRGBColor: boolean = false
     while (index < borderStyles.length){
       while (index < borderStyles.length && borderStyles[index+1] !== ' ') {
         index++
@@ -151,6 +152,16 @@ export class App extends ObservableObject {
         if (newStyle === 'unknown'){
           newStyle = style
         }
+      }
+      else if(newStyle === 'anotherColorStyle') {
+        if (style.trim().indexOf(')') === -1){
+          while (borderStyles[index] !== ')' && index < borderStyles.length){
+            index++
+          }
+          index++
+        }
+
+        newStyle = borderStyles.substring(startIndex, index)
       }
       result+= newStyle+' '
       startIndex = index
@@ -191,6 +202,16 @@ export class App extends ObservableObject {
           result.location = newStyle
         }
       }
+      else if(newStyle === 'anotherColorStyle') {
+        if (style.trim().indexOf(')') === -1){
+          while (textStyles[index] !== ')' && index < textStyles.length){
+            index++
+          }
+          index++
+        }
+
+        result.color = textStyles.substring(startIndex, index)
+      }
       else {
         result.color = newStyle
       }
@@ -204,7 +225,10 @@ export class App extends ObservableObject {
     const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable()
     let firstPoint = this.parseFirstPoint(coordinates)
     let secondPoint = this.parseSecondPoint(coordinates)
-    const enColor = this.parseColor(color.trim())
+    let enColor = this.parseColor(color.trim())
+    if (enColor === 'anotherColorStyle'){
+      enColor = color.trim()
+    }
     const border = this.parseBorderStyles(borderStyles.trim())
     const textSt = this.parseTextStyles(textStyles.trim())
     outputBlocks.push(new TextBlock(firstPoint, secondPoint, message, enColor, border, textSt))
@@ -214,7 +238,10 @@ export class App extends ObservableObject {
     const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable()
     let firstPoint = this.parseFirstPoint(coordinates)
     let secondPoint = this.parseSecondPoint(coordinates)
-    const enColor = this.parseColor(color.trim())
+    let enColor = this.parseColor(color.trim())
+    if (enColor === 'anotherColorStyle'){
+      enColor = color.trim()
+    }
     const border = this.parseBorderStyles(borderStyles.trim())
     outputBlocks.push(new Rectangle(firstPoint, secondPoint, enColor, border))
   }
