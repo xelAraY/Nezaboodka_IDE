@@ -14,7 +14,7 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
           b.model = {
             icon: 'fa-solid fa-play fa-lg',
             label: '',
-            action: () => {
+            action: async () => {
               const editor = app.getEditor()
               if (editor?.getValue() !== undefined){
                 let code = translateCellInfoOnLatin(app.compileArtel(editor.getValue()))
@@ -33,7 +33,7 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                   let resultTsCompile = functions + code
                   console.log(resultTsCompile)
                   app.outputBlocks = []
-                  eval(resultTsCompile)
+                  await eval(resultTsCompile)
                 }
               }
             }
