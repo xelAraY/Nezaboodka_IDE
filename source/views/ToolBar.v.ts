@@ -18,8 +18,8 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
               const editor = app.getEditor()
               if (editor?.getValue() !== undefined){
                 let code = translateCellInfoOnLatin(app.compileArtel(editor.getValue()))
-
-                let functions = 'let сетка = app.cellsInfo\n'+
+                console.log(code)
+                let functions = 'сетка = app.cellsInfo\n'+
                                 'function написать(coordinates, message, color="красный", border = "1px solid", textStyles = "black center")\{\n' +
                                 '  app.writeFunction(coordinates, message, color, border, textStyles)\n' +
                                 '}\n' +
@@ -29,11 +29,11 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                                 '}\n'+
                                 'async function ввести(coordinates, color="красный", border = "1px solid", textStyles = "black center"){\n' +
                                 '  return await app.inputFunction(coordinates, color, border, textStyles)\n' +
-                                '}'
+                                '}\n'
 
 
                 if (code !== undefined){
-                  let resultTsCompile = functions + code
+                  let resultTsCompile = code.replace('(async () => {__artel__run__0();})()', functions + '(async () => {__artel__run__0();})()')
                   console.log(resultTsCompile)
                   app.outputBlocks = []
                   await eval(resultTsCompile)
@@ -120,8 +120,8 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
 
 function translateCellInfoOnLatin (code: string): string {
   
-  let result = code.replace(/размер/, 'size')
-  result = result.replace(/количество_строк/, 'heightCellCount')
-  return result.replace(/количество_столбцов/, 'widthCellCount')
+  let result = code.replace(/размер/g, 'size')
+  result = result.replace(/количество_строк/g, 'heightCellCount')
+  return result.replace(/количество_столбцов/g, 'widthCellCount')
 
 }
