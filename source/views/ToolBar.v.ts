@@ -26,7 +26,10 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                                 '\n' +
                                 'function прямоугольник(coordinates, color = "красный", border = "1px solid")\{\n' +
                                 '  app.rectangleFunction(coordinates, color, border)\n' +
-                                '}\n'
+                                '}\n'+
+                                'async function ввести(coordinates, color="красный", border = "1px solid", textStyles = "black center"){\n' +
+                                '  return await app.inputFunction(coordinates, color, border, textStyles)\n' +
+                                '}'
 
 
                 if (code !== undefined){

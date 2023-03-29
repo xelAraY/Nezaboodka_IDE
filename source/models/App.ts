@@ -10,6 +10,7 @@ import { $theme} from "gost-pi"
 import { IOutputBlock } from "./OutputBlock"
 import { Rectangle } from "./Rectangle"
 import { TextBlock } from "./TextBlock"
+import { InputBlock } from "./InputBlock"
 
 const defaultRowCount : number = 10
 const defaultColumnCount : number = 10
@@ -78,9 +79,9 @@ export class App extends ObservableObject {
 
       внешняя операция прямоугольник(координаты: Текст, цвет: Текст = 'чёрный', граница: Текст = '1px')
 
-      внешняя операция написать(координаты: Текст, текст: Текст, цвет: Текст = 'чёрный', граница: Текст = '1px')
+      внешняя операция написать(координаты: Текст, текст: Текст, цвет: Текст = 'чёрный', граница: Текст = '1px', стиль: Текст = "black center")
 
-      внешняя операция ввести(координаты: Текст,)
+      внешняя операция ввести(координаты: Текст, цвет: Текст = 'чёрный', граница: Текст = '1px', стиль: Текст = "black center")
       `}]
     }])
     this.textModelArtel = await client.getModel(new Worker())
@@ -234,6 +235,30 @@ export class App extends ObservableObject {
     const border = this.parseBorderStyles(borderStyles.trim())
     const textSt = this.parseTextStyles(textStyles.trim())
     outputBlocks.push(new TextBlock(firstPoint, secondPoint, message, enColor, border, textSt))
+  }
+
+  async inputFunction(coordinates: string, color: string, borderStyles: string, textStyles: string): Promise<string> {
+    
+    const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable()
+
+    let firstPoint = this.parseFirstPoint(coordinates)
+    let secondPoint = this.parseSecondPoint(coordinates)
+    let enColor = this.parseColor(color)
+    if (enColor === 'anotherColorStyle'){
+      enColor = color.trim()
+    }
+    
+    const border = this.parseBorderStyles(borderStyles.trim())
+    const textSt = this.parseTextStyles(textStyles.trim())
+    
+
+    const inputBlock = new InputBlock(firstPoint, secondPoint, enColor, border, textSt)
+
+    const text: string = await inputBlock.getUserInput()
+
+    outputBlocks.push(inputBlock)
+    return Promise.resolve<string>(text)
+
   }
 
   rectangleFunction(coordinates: string, color: string, borderStyles: string): void {

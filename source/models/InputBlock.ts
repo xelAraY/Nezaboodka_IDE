@@ -30,34 +30,47 @@ export class InputBlock implements IOutputBlock {
 
 
   drawBlock(cellsInfo: CellInfo): void {
+    
+    if (this.isItInputProcess) {
+      console.log('sad')
+      const cell = parseCoordinate(this.firstPoint, cellsInfo) + ':' + parseCoordinate(this.secondPoint, cellsInfo)
+      const inputBlock = Input({render(b) {
+        
+        b.cells = cell
+        b.native.type = 'text'
   
-    new TextBlock(this.firstPoint, this.secondPoint, this.text, this.color, this.borderStyles, this.textStyles).drawBlock(cellsInfo)
-      
-  }
-
-  async getUserInput(cellsInfo: CellInfo): Promise<string> {
-
-    const cell = parseCoordinate(this.firstPoint, cellsInfo) + ':' + parseCoordinate(this.secondPoint, cellsInfo)
-    const inputBlock = Input({render(b) {
-      
-      b.cells = cell
-      b.native.type = 'text'
-
-    }})
-
-    const context = this;
-
-    return new Promise<string>(function(resolve, reject) {
-      
+      }})
+  
+      const context = this;        
       inputBlock.native.addEventListener('keydown', e => {
         if (e.key == 'Enter') {
           context.text = inputBlock.native.value
-          resolve(context.text)
+          context.isItInputProcess = false
           inputBlock.native.remove()
         }
       })
-    })
 
+
+    }else {
+
+      new TextBlock(this.firstPoint, this.secondPoint, this.text, this.color, this.borderStyles, this.textStyles).drawBlock(cellsInfo)
+      
+    }
+  
+  }
+
+  async getUserInput(): Promise<string> {
+
+    const context = this
+    return new Promise<string>(resolve => {
+      const interval = setInterval(() => {
+        if (!context.isItInputProcess) {
+          clearInterval(interval)
+          resolve(context.text)
+        }
+
+      })
+    })
   }
 
 }
