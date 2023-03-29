@@ -4,13 +4,15 @@ import { AppTheme } from "themes/AppTheme"
 import { Loader } from "./Loader"
 import { editor } from "monaco-editor"
 import Worker from "../../library/artel/packages/monaco-client/source/worker?worker"
-import { Uri, Parser, Compilation, ArtelMonacoClient } from "./ArtelClasses"
-import { WorkArea } from "../views/WorkArea.v"
-import { $theme} from "gost-pi"
 import { IOutputBlock } from "./OutputBlock"
 import { Rectangle } from "./Rectangle"
 import { TextBlock } from "./TextBlock"
 import { InputBlock } from "./InputBlock"
+import { ArtelMonacoClient } from "../../library/artel/packages/monaco-client/source" 
+import { DirectoryNode, FileNode, SourceFileState, Workspace } from "../../library/artel/packages/compiler/source/project"
+import { Uri } from "../../library/artel/packages/compiler/source/common"
+import { Emitter } from "../../library/artel/packages/compiler/source/compilation/Emitter"
+
 
 const defaultRowCount : number = 10
 const defaultColumnCount : number = 10
@@ -65,7 +67,7 @@ export class App extends ObservableObject {
   async updateTextModel(): Promise<void> {
     const client = new ArtelMonacoClient([{
       name: 'работа-с-сеткой',
-      sourceFiles: [{name: 'main.a', text: `
+      sourceFiles: [{name: 'main.art', text: `
       используется артель
 
       тип ИнформацияОСетке = набор
@@ -275,47 +277,29 @@ export class App extends ObservableObject {
 
   @transactional
   compileArtel(code: string): string {
+ 
+    const fileSystemTree = 
+      new DirectoryNode( 
+        new Uri(['project']), 
+        [ 
+          new FileNode( 
+            new Uri(['project', 'main.art']), 
+            new SourceFileState(code, 0) 
+          ), 
+          new FileNode( 
+            new Uri(['project', 'artel.project']), 
+            new SourceFileState('', 0) 
+          ), 
+        ] 
+      ) 
+    const workspace = new Workspace([fileSystemTree]) 
+    const project = workspace.projects[0] 
+    if (project.kind !== 'standard') 
+      throw new Error('Internal error') 
+    const emitter = new Emitter(project) 
+    const compiledCode = emitter.emitToString()
 
-    const compilation = new Compilation(new Uri(['project']), [
-      {
-        uri: new Uri(['project', 'module']),
-        sourceFiles: [
-          {
-            uri: new Uri(['project', 'module', 'sheet.a']),
-            syntax: new Parser(code).parse(),
-          }
-        ]
-      }
-    ])
-    let compilationResult: string
-    try {
-      const emitterResult = compilation.emitWithDiagnostics()
-      //const codeWithHelperFunction = helperArtelFunctions + emitterResult.code
-      const codeWithHelperFunction = emitterResult.code
-      compilationResult = codeWithHelperFunction
-      // const mainFileDiagnostics = emitterResult.diagnostics[1]
-      // const syntaxErrors = mainFileDiagnostics.syntax.items.map<LanguageError>((d: { message: any; range: { start: any; length: any } }) => ({
-      //   kind: 'syntax',
-      //   message: d.message,
-      //   span: { start: d.range.start, length: d.range.length }
-      // }))
-      // const semanticErrors = mainFileDiagnostics.semantic.items.map<LanguageError>((d: { message: any; range: { start: any; length: any } }) => ({
-      //   kind: 'semantic',
-      //   message: d.message,
-      //   span: { start: d.range.start, length: d.range.length }
-      // }))
-      // compilationResult = {
-      //   code: codeWithHelperFunction,
-      //   errors: [...syntaxErrors, ...semanticErrors]
-      // }
-    } catch (_) {
-      // compilationResult = {
-      //   code: '',
-      //   errors: [{ kind: 'semantic', message: 'Emitter error', span: { start: 0, length: 1 } }]
-      // }
-      compilationResult = 'bad'
-    }
-    return compilationResult
+    return compiledCode
   }
 
   @transactional
