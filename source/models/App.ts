@@ -296,10 +296,10 @@ export class App extends ObservableObject {
             new SourceFileState('', 0) 
           ),
           new DirectoryNode(
-            new Uri(['работа-с-сеткой']),
+            new Uri(['project', 'работа-с-сеткой']),
             [
               new FileNode(
-                new Uri(['работа-с-сеткой', 'grid.art']),
+                new Uri(['project', 'работа-с-сеткой', 'grid.art']),
                 new SourceFileState(this.gridModuleSourceCode, 0)
               ),
             ]
