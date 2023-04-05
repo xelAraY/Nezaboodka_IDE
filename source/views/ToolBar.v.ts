@@ -18,7 +18,6 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
               const editor = app.getEditor()
               if (editor?.getValue() !== undefined){
                 let code = translateCellInfoOnLatin(app.compileArtel(editor.getValue()))
-                console.log(code)
                 let functions = 'сетка = app.cellsInfo\n'+
                                 'function написать(coordinates, message, color="красный", border = "1px solid", textStyles = "black center")\{\n' +
                                 '  app.writeFunction(coordinates, message, color, border, textStyles)\n' +
@@ -34,9 +33,9 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
 
                 if (code !== undefined){
                   let resultTsCompile = code.replace('(async () => {__artel__run__0();})()', functions + '(async () => {__artel__run__0();})()')
-                  console.log(resultTsCompile)
                   app.outputBlocks = []
                   await eval(resultTsCompile)
+                  console.log(app.cellsInfo)
                 }
               }
             }
