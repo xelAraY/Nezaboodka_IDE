@@ -1,7 +1,9 @@
 import { css } from "@emotion/css";
 import { AppTheme } from "themes/AppTheme";
-import { Block, BlockBody } from "verstak";
-import { WorkArea } from "./WorkArea.v";
+import { Align, Block, BlockBody, Grid } from "verstak";
+import { GridCordText, GridRectangle, WorkArea } from "./WorkArea.v";
+import { $app, incrementLetterInCoordinate } from "models/App";
+import { findMaxLetter } from "models/OutputBlock";
 
 
 export const Smartphone = (theme: AppTheme, body?: BlockBody<HTMLElement, void, void>) => (
@@ -18,36 +20,22 @@ export const Smartphone = (theme: AppTheme, body?: BlockBody<HTMLElement, void, 
       b.widthGrowth = 3
       b.heightGrowth = 1
 
-      Block({
-        initialize(b){
+      b.contentAlignment = Align.Center | Align.CenterV
 
-          const telephoneCorpusStyle: string = css`
-            
-            margin: auto;
-            height: 600px;
-            width: 400px;
-            padding: 50px 30px 100px 30px;
-            border: 1px solid black;
-            border-radius: 10%;
-            background-color: black;`
+      Block({initialize(b){
+        b.style(css`
+          height: 630px;
+          width: 430px;
+        `)
+      },
+      render(){
 
-          b.style(telephoneCorpusStyle)
-
-        },
-        render(b) {
-          WorkArea({
-            render(b, base) {
-              base()
-              b.style(theme.gridField)
-              b.style(theme.accent)
-              b.widthGrowth = 3
-              b.heightGrowth = 1
-            }
-          })
-
-        }
-      })
+        WorkArea({render(b, base) {
+          base()
+        }})
       
+      }})
+     
     }
   })
 

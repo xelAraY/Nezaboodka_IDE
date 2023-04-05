@@ -1,4 +1,4 @@
-[submodule "artel"]
-	path = artel
-	url = https://lab.nz.by/art/artel
+[submodule "library/artel"]
+	path = library/artel
+	url = https://lab.nz.by/art/artel.git
 	branch = stable
