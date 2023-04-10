@@ -17,8 +17,22 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
             action: async () => {
               const editor = app.getEditor()
               if (editor?.getValue() !== undefined){
-                let code = translateCellInfoOnLatin(app.compileArtel(editor.getValue()))
-                let functions = 'сетка = app.cellsInfo\n'+
+                let code = app.compileArtel(editor.getValue())
+
+                let functions = `сетка = {  
+                                    get количество_строк() {
+                                      return app.cellsInfo.heightCellCount;
+                                    },
+                                    set количество_строк(value) {
+                                      app.cellsInfo = {...app.cellsInfo, heightCellCount: value}
+                                    },
+                                    get количество_столбцов() {
+                                      return app.cellsInfo.widthCellCount
+                                    },
+                                    set количество_столбцов(value) {
+                                      app.cellsInfo = {...app.cellsInfo, widthCellCount: value}
+                                    } 
+                                  }\n`+
                                 'function написать(coordinates, message, color="красный", border = "1px solid", textStyles = "black center")\{\n' +
                                 '  app.writeFunction(coordinates, message, color, border, textStyles)\n' +
                                 '}\n' +
@@ -34,7 +48,7 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                 if (code !== undefined){
                   let resultTsCompile = code.replace('(async () => {__artel__run__0();})()', functions + '(async () => {__artel__run__0();})()')
                   app.outputBlocks = []
-                  await eval(resultTsCompile)
+                  eval(resultTsCompile)
                   console.log(app.cellsInfo)
                 }
               }
