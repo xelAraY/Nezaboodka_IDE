@@ -66,7 +66,8 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
 
       }
 
-
+      const block = app.outputBlocks;
+      block.forEach(b => b.drawBlock(app.cellsInfo));
 
 
     }})

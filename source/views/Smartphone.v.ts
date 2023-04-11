@@ -4,11 +4,12 @@ import { Align, Block, BlockBody, Grid } from "verstak";
 import { GridCordText, GridRectangle, WorkArea } from "./WorkArea.v";
 import { $app, incrementLetterInCoordinate } from "models/App";
 import { findMaxLetter } from "models/OutputBlock";
+import { reactive } from "reactronic";
 
 
 export const Smartphone = (theme: AppTheme, body?: BlockBody<HTMLElement, void, void>) => (
   
-  Block(body, {
+  Block(body, {reaction: true, 
     initialize(b) {
       
     },

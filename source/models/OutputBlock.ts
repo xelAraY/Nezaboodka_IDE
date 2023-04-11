@@ -17,8 +17,8 @@ export function parseCoordinate(point: string, cellsInfo: CellInfo) : string{
     }
 
 
-    let columnToken = parseColumns(res.match(/[A-Z]+/i)[0] ?? '', cellsInfo)
-    let rowToken = parseRows(res.match(/[0-9]+/i)[0] ?? '', cellsInfo)
+    let columnToken = incrementLetterInCoordinate(parseColumns(res.match(/[A-Z]+/i)[0] ?? '', cellsInfo))
+    let rowToken = Number(parseRows(res.match(/[0-9]+/i)[0] ?? '', cellsInfo)) + 1
     
     return columnToken + rowToken
 }
