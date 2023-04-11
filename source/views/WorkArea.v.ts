@@ -16,6 +16,7 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
     render(b){
 
       const app = $app.value
+      console.log(app.cellsInfo.backgroundColor)
       const columns = app.cellsInfo.widthCellCount
       const rows = app.cellsInfo.heightCellCount
       console.log(columns)
@@ -27,30 +28,30 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
       const startSymb : string = 'C'
       const endSymb : string = incrementLetterInCoordinate(incrementLetterInCoordinate(findMaxLetter(app.cellsInfo)))
       const phoneEndSymb: string = incrementLetterInCoordinate(endSymb)
-    
+
       Block({
           initialize(b){
-  
+
             const telephoneCorpusStyle: string = css`
-              
+
               margin: 0 rem;
               border: 1px solid black;
               border-radius: 10%;
               background-color: black;`
-  
+
             b.style(telephoneCorpusStyle)
             b.contentAlignment = Align.Stretch
             b.frameAlignment = Align.Default
-  
+
           },
           render(b) {
-            b.cells = `B2:${phoneEndSymb}${rows + 3}`      
+            b.cells = `B2:${phoneEndSymb}${rows + 3}`
           }
         })
 
       for(let i = 0; i < rows; i++) {
 
-        GridRectangle(`${startSymb + (i + 3)}:${endSymb + (i + 3)}`, false, i + 1 == rows, true)
+        GridRectangle(`${startSymb + (i + 3)}:${endSymb + (i + 3)}`, false, i + 1 == rows, true, app.cellsInfo.backgroundColor)
         GridCordText((i + 1).toString(),'A' + (i + 3))
       }
 
@@ -59,7 +60,7 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
       for(let i = 0; i < columns; i++) {
 
         let nextSymb = incrementLetterInCoordinate(prevSymb)
-        GridRectangle(`${nextSymb + 3}:${nextSymb + (rows + 2)}`, true, false, false)
+        GridRectangle(`${nextSymb + 3}:${nextSymb + (rows + 2)}`, true, false, false, app.cellsInfo.backgroundColor)
         GridCordText(cordSymb, nextSymb + 1)
         cordSymb = incrementLetterInCoordinate(cordSymb)
         prevSymb = nextSymb
@@ -100,8 +101,8 @@ export const GridCordText = (title: string, coordinate: string) => (
   })
 )
 
-export const GridRectangle = (coordinate: string, isTransparent: boolean, isNeedBottomBorder: boolean, isNeedRightBorder: boolean) => (
-  
+export const GridRectangle = (coordinate: string, isTransparent: boolean, isNeedBottomBorder: boolean, isNeedRightBorder: boolean, backgroundColor: string) => (
+
   Block({
     initialize(b){
       b.contentAlignment = Align.Stretch
@@ -114,8 +115,8 @@ export const GridRectangle = (coordinate: string, isTransparent: boolean, isNeed
       border-radius: 0 rem;
       border-color: '#655c3f';
       border-style: solid;
-      background-color: ${isTransparent ? 'transparent' : '#fdf1ce;'}`
-      
+      background-color: ${isTransparent ? 'transparent' : backgroundColor}`
+
       console.log(cssStyle)
       b.style( css`${cssStyle}`)
       b.cells = coordinate

@@ -8,7 +8,7 @@ import { IOutputBlock } from "./OutputBlock"
 import { Rectangle } from "./Rectangle"
 import { TextBlock } from "./TextBlock"
 import { InputBlock } from "./InputBlock"
-import { ArtelMonacoClient } from "../../library/artel/packages/monaco-client/source" 
+import { ArtelMonacoClient } from "../../library/artel/packages/monaco-client/source"
 import { DirectoryNode, FileNode, ProjectGraph, ProjectTreeCursor, SourceFileState, Workspace } from "../../library/artel/packages/compiler/source/project"
 import { Uri } from "../../library/artel/packages/compiler/source/common"
 import { Emitter } from "../../library/artel/packages/compiler/source/compilation/Emitter"
@@ -18,12 +18,14 @@ import { collectDiagnostics } from "../../library/artel/packages/compiler/source
 
 const defaultRowCount : number = 10
 const defaultColumnCount : number = 10
+const defaultBackgroundCOlor : string = 'white'
 
 export interface CellInfo {
 
   size: number | undefined
   heightCellCount: number
 	widthCellCount: number
+  backgroundColor: string
 
 }
 
@@ -74,13 +76,14 @@ export class App extends ObservableObject {
     размер: Число?
     количество_строк: Число
     количество_столбцов: Число
+    цвет_фона: Текст
 }
 
 сетка: ИнформацияОСетке
 
 внешняя операция прямоугольник(координаты: Текст, цвет: Текст = "чёрный", граница: Текст = "1px")
 
-внешняя операция написать(координаты: Текст, сообщение: Текст, цвет: Текст = "чёрный", граница: Текст = "1px", стиль: Текст = "black center")
+внешняя операция вписать(координаты: Текст, сообщение: Текст, цвет: Текст = "чёрный", граница: Текст = "1px", стиль: Текст = "black center")
 
 внешняя операция ввести(координаты: Текст, цвет: Текст = "чёрный", граница: Текст = "1px", стиль: Текст = "black center")
   `
@@ -245,7 +248,7 @@ export class App extends ObservableObject {
   }
 
   async inputFunction(coordinates: string, color: string, borderStyles: string, textStyles: string): Promise<string> {
-    
+
     const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable()
 
     let firstPoint = this.parseFirstPoint(coordinates)
@@ -254,10 +257,10 @@ export class App extends ObservableObject {
     if (enColor === 'anotherColorStyle'){
       enColor = color.trim()
     }
-    
+
     const border = this.parseBorderStyles(borderStyles.trim())
     const textSt = this.parseTextStyles(textStyles.trim())
-    
+
 
     const inputBlock = new InputBlock(firstPoint, secondPoint, enColor, border, textSt)
 
@@ -282,18 +285,18 @@ export class App extends ObservableObject {
 
   @transactional
   compileArtel(code: string): string {
- 
-    const fileSystemTree = 
+
+    const fileSystemTree =
       new DirectoryNode(
         new Uri(['project']),
-        [ 
-          new FileNode( 
-            new Uri(['project', 'main.art']), 
-            new SourceFileState(code, 0) 
+        [
+          new FileNode(
+            new Uri(['project', 'main.art']),
+            new SourceFileState(code, 0)
           ),
-          new FileNode( 
-            new Uri(['project', 'artel.project']), 
-            new SourceFileState('', 0) 
+          new FileNode(
+            new Uri(['project', 'artel.project']),
+            new SourceFileState('', 0)
           ),
           new DirectoryNode(
             new Uri(['project', 'работа-с-сеткой']),
@@ -304,26 +307,26 @@ export class App extends ObservableObject {
               ),
             ]
           )
-        ] 
-      ) 
-      
+        ]
+      )
 
-    const workspace = new Workspace([fileSystemTree]) 
-    const project = workspace.projects[0] 
-    if (project.kind !== 'standard') 
-      throw new Error('Internal error') 
-    const emitter = new Emitter(project) 
 
-    function collectProjectDiagnostics(project: ProjectGraph) { 
-      const diagnosticsByFileUri = new Map<string, Diagnostic[]>() 
-      const cursor = ProjectTreeCursor.fromProject(project, false) 
-      for (const sourceFile of cursor.enumerateSourceFiles()) { 
-        const diagnostics = [...sourceFile.syntax.diagnostics.items] 
-        const semanticDiagnostics = collectDiagnostics(project.ctx, sourceFile.syntax) 
-        diagnostics.push(...semanticDiagnostics) 
-        diagnosticsByFileUri.set(sourceFile.uri.toString(), diagnostics) 
-      } 
-      return diagnosticsByFileUri 
+    const workspace = new Workspace([fileSystemTree])
+    const project = workspace.projects[0]
+    if (project.kind !== 'standard')
+      throw new Error('Internal error')
+    const emitter = new Emitter(project)
+
+    function collectProjectDiagnostics(project: ProjectGraph) {
+      const diagnosticsByFileUri = new Map<string, Diagnostic[]>()
+      const cursor = ProjectTreeCursor.fromProject(project, false)
+      for (const sourceFile of cursor.enumerateSourceFiles()) {
+        const diagnostics = [...sourceFile.syntax.diagnostics.items]
+        const semanticDiagnostics = collectDiagnostics(project.ctx, sourceFile.syntax)
+        diagnostics.push(...semanticDiagnostics)
+        diagnosticsByFileUri.set(sourceFile.uri.toString(), diagnostics)
+      }
+      return diagnosticsByFileUri
     }
     console.log(collectProjectDiagnostics(project))
     const compiledCode = emitter.emitToString()
@@ -353,7 +356,7 @@ export class App extends ObservableObject {
   }
 
   getDefaultCellsInfo(): CellInfo{
-    return {heightCellCount : defaultRowCount, widthCellCount : defaultColumnCount, size : undefined}
+    return {heightCellCount : defaultRowCount, widthCellCount : defaultColumnCount, size : undefined, backgroundColor: defaultBackgroundCOlor}
   }
 
   public getWidthGrowth():Number{

@@ -19,7 +19,7 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
               if (editor?.getValue() !== undefined){
                 let code = app.compileArtel(editor.getValue())
 
-                let functions = `сетка = {  
+                let functions = `сетка = {
                                     get количество_строк() {
                                       return app.cellsInfo.heightCellCount;
                                     },
@@ -31,9 +31,20 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                                     },
                                     set количество_столбцов(value) {
                                       app.cellsInfo = {...app.cellsInfo, widthCellCount: value}
-                                    } 
+                                    },
+                                    get цвет_фона() {
+                                      return app.cellsInfo.backgroundColor
+                                    },
+                                    set цвет_фона(value) {
+                                      let color = app.parseColor(value)
+                                      if (color == 'anotherColorStyle'){
+                                        color = value
+                                      }
+                                      console.log(color)
+                                      app.cellsInfo = {...app.cellsInfo, backgroundColor: color}
+                                    }
                                   }\n`+
-                                'function написать(coordinates, message, color="красный", border = "1px solid", textStyles = "black center")\{\n' +
+                                'function вписать(coordinates, message, color="красный", border = "1px solid", textStyles = "black center")\{\n' +
                                 '  app.writeFunction(coordinates, message, color, border, textStyles)\n' +
                                 '}\n' +
                                 '\n' +
@@ -132,7 +143,7 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
 
 
 function translateCellInfoOnLatin (code: string): string {
-  
+
   let result = code.replace(/размер/g, 'size')
   result = result.replace(/количество_строк/g, 'heightCellCount')
   return result.replace(/количество_столбцов/g, 'widthCellCount')
