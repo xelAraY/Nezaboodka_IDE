@@ -35,10 +35,10 @@ export class AppTheme extends DefaultGostTheme {
     height: 87vh;
   `}
 
-  @cached
-  get accent(): string { return css`
-    border: 1px solid ${this.accentColor};
-  `}
+  // @cached
+  // get accent(): string { return css`
+  //   border: 1px solid ${this.accentColor};
+  // `}
 
   @cached
   get toolbarButtonRun(): string { return css`

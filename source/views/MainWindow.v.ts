@@ -61,7 +61,7 @@ export const MainWindow = () => (
           render(b) {
 
             b.style(theme.LeftPanel)
-            b.style(theme.accent)
+            //b.style(theme.accent)
             b.contentAlignment = Align.Top
             b.widthGrowth = 3
             b.heightGrowth = 1
@@ -98,10 +98,10 @@ export const MainWindow = () => (
 
 
         //Draw telephone
-        grid = Smartphone(theme) 
+        grid = Smartphone(theme)
         // Block({
         //   initialize(b) {
-            
+
         //   },
         //   render(b, base) {
         //     base()
