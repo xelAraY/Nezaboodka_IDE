@@ -2,22 +2,18 @@ import { IOutputBlock, parseCoordinate } from "./OutputBlock"
 import { Align, Block, HtmlText } from "verstak"
 import { css } from "@emotion/css"
 import { CellInfo } from "./App"
+import { BaseBlock } from "./BaseBlock"
 
-export class TextBlock implements IOutputBlock {
-  firstPoint: string
-	secondPoint: string
-  text: string
-	color: string
+export class TextBlock extends BaseBlock implements IOutputBlock {
 	borderStyles: string
+  text: string
 	textStyles: { color: string, location: string}
 
 	constructor(firstPoint: string, secondPoint: string, text: string, color: string, borderStyles: string, textStyles: { color: string, location: string}){
-		this.firstPoint = firstPoint
-		this.secondPoint = secondPoint
+		super(firstPoint, secondPoint, color)
     this.text = text
-		this.color = color
-		this.borderStyles = borderStyles
 		this.textStyles = textStyles
+		this.borderStyles = borderStyles
 	}
 
 	drawBlock(cellsInfo: CellInfo): void {

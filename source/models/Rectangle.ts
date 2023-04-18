@@ -2,17 +2,13 @@ import { IOutputBlock, parseCoordinate } from "./OutputBlock"
 import { Block } from "verstak"
 import { css } from "@emotion/css"
 import { CellInfo } from "./App"
+import { BaseBlock } from "./BaseBlock"
 
-export class Rectangle implements IOutputBlock {
-	firstPoint: string
-	secondPoint: string
-	color: string
+export class Rectangle extends BaseBlock implements IOutputBlock {
 	borderStyles: string
 
 	constructor(firstPoint: string, secondPoint: string, color: string, borderStyles: string){
-		this.firstPoint = firstPoint
-		this.secondPoint = secondPoint
-		this.color = color
+		super(firstPoint, secondPoint, color)
 		this.borderStyles = borderStyles
 	}
 
