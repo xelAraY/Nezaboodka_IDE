@@ -2,7 +2,7 @@ import { $app, CellInfo, incrementLetterInCoordinate } from "./App"
 
 export interface IOutputBlock {
 
-    drawBlock(cellsInfo: CellInfo): void
+    drawBlock(cellsInfo: CellInfo, addRender?: () => void): void
 
 }
 
