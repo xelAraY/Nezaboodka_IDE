@@ -55,7 +55,6 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                                 '  return await app.inputFunction(coordinates, color, border, textStyles)\n' +
                                 '}\n'
 
-
                 if (code !== undefined){
                   let resultTsCompile = code.replace('(async () => {__artel__run__0();})()', functions + '(async () => {__artel__run__0();})()')
                   app.outputBlocks = []

@@ -14,6 +14,7 @@ import { Uri } from "../../library/artel/packages/compiler/source/common"
 import { Emitter } from "../../library/artel/packages/compiler/source/compilation/Emitter"
 import { Diagnostic } from "../../library/artel/packages/compiler/source/diagnostic/Diagnostic"
 import { collectDiagnostics } from "../../library/artel/packages/compiler/source/analysis/collect-diagnostics"
+import { ITextBlock } from "interfaces/ITextBlock"
 
 
 const defaultRowCount : number = 10
@@ -78,7 +79,7 @@ export class App extends ObservableObject {
     цвет_фона: Текст
   }
 
-  тип Прямоугольник = объект
+  тип Прямоугольник_блок = объект
   {
     координаты: Текст
     цвет_фона: Текст
@@ -94,6 +95,8 @@ export class App extends ObservableObject {
     стили_текста: Текст
   }
 
+  тип ФункцияРендера<T> = операция(блок: T): Ничего
+
   сетка: ИнформацияОСетке
 
   внешняя операция прямоугольник(координаты: Текст, цвет: Текст = "чёрный", граница: Текст = "1px")
@@ -101,6 +104,10 @@ export class App extends ObservableObject {
   внешняя операция вписать(координаты: Текст, сообщение: Текст, цвет: Текст = "чёрный", граница: Текст = "1px", стиль: Текст = "black center")
 
   внешняя операция ввести(координаты: Текст, цвет: Текст = "чёрный", граница: Текст = "1px", стиль: Текст = "black center")
+
+  внешняя операция Текст(рендер: ФункцияРендера<Текстовый_блок>)
+
+  внешняя операция Прямоугольник(рендер: ФункцияРендера<Прямоугольник_блок>)
   `
 
   @reactive
@@ -385,6 +392,8 @@ export class App extends ObservableObject {
   public getEditor(): editor.IStandaloneCodeEditor | undefined{
     return this.editor
   }
+
+
 }
 
 export const $app = new ContextVariable<App>()
