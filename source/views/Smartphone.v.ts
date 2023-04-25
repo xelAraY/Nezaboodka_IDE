@@ -17,7 +17,7 @@ export const Smartphone = (theme: AppTheme, body?: BlockBody<HTMLElement, void, 
       
       base()
       b.style(theme.RightPanel)
-      b.style(theme.accent)
+      b.style(theme.accentColor)
       b.widthGrowth = 3
       b.heightGrowth = 1
 
