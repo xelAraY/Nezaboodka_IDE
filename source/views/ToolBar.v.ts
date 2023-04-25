@@ -53,6 +53,12 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                                 '}\n'+
                                 'async function ввести(coordinates, color="красный", border = "1px solid", textStyles = "black center"){\n' +
                                 '  return await app.inputFunction(coordinates, color, border, textStyles)\n' +
+                                '}\n'+
+                                'function Текст(render)\{\n' +
+                                '  app.textBlockFunction(render)\n' +
+                                '}\n'+
+                                'function Прямоугольник(render)\{\n' +
+                                '  app.rectangleBlockFunction(render)\n' +
                                 '}\n'
 
                 if (code !== undefined){

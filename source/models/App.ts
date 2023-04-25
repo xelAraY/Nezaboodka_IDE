@@ -15,6 +15,7 @@ import { Emitter } from "../../library/artel/packages/compiler/source/compilatio
 import { Diagnostic } from "../../library/artel/packages/compiler/source/diagnostic/Diagnostic"
 import { collectDiagnostics } from "../../library/artel/packages/compiler/source/analysis/collect-diagnostics"
 import { ITextBlock } from "interfaces/ITextBlock"
+import { IRectangle } from "interfaces/IRectangle"
 
 
 const defaultRowCount : number = 10
@@ -254,6 +255,18 @@ export class App extends ObservableObject {
       startIndex = index
     }
     return result
+  }
+
+  textBlockFunction(operation: (block: ITextBlock) => void): void {
+    let block: ITextBlock = { firstPoint:'',  secondPoint:'', color:'', text:'', borderStyles:'', textStyles:{ color: '', location:''}}
+    operation(block)
+    // пуш элемента в массив outputBlocks
+  }
+
+  rectangleBlockFunction(operation: (block: IRectangle) => void): void {
+    let block: IRectangle = { firstPoint:'',  secondPoint:'', color:'', borderStyles:''}
+    operation(block)
+    // пуш элемента в массив outputBlocks
   }
 
   writeFunction(coordinates: string, message: string, color: string, borderStyles: string, textStyles: string): void {
