@@ -1,7 +1,6 @@
-export interface ITextBlock {
-  firstPoint: string
-	secondPoint: string
-	color: string
+import { IBaseBlock } from "./IBaseBlock"
+
+export interface ITextBlock extends IBaseBlock{
 	borderStyles: string
   text: string
 	textStyles: { color: string, location: string}

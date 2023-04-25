@@ -1,6 +1,5 @@
-export interface IRectangle {
-  firstPoint: string
-	secondPoint: string
-	color: string
+import {IBaseBlock} from './IBaseBlock'
+
+export interface IRectangle extends IBaseBlock {
   borderStyles: string
 }
