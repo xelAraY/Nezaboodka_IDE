@@ -1,6 +1,5 @@
 
 export interface IBaseBlock {
-	firstPoint: string
-	secondPoint: string
+	coordinates: string
 	color: string
 }

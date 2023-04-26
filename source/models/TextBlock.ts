@@ -20,7 +20,7 @@ export class TextBlock implements IOutputBlock {
 		this.borderStyles = borderStyles
 	}
 
-	drawBlock(cellsInfo: CellInfo): void {
+	drawBlock(cellsInfo: CellInfo, addRender?: () => void): void {
 		const cell = parseCoordinate(this.firstPoint, cellsInfo) + ':' + parseCoordinate(this.secondPoint, cellsInfo)
     const text = this.text
 		const color = this.color
@@ -38,6 +38,7 @@ export class TextBlock implements IOutputBlock {
 				b.native.style.alignItems = textStyles.location
 				b.native.style.color = textStyles.color
         HtmlText(text)
+				addRender?.()
 			}
 		})
 	}

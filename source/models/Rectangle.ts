@@ -16,7 +16,7 @@ export class Rectangle implements IOutputBlock {
 		this.borderStyles = borderStyles
 	}
 
-	drawBlock(cellsInfo: CellInfo): void {
+	drawBlock(cellsInfo: CellInfo, addRender?: () => void): void {
 		const cell = parseCoordinate(this.firstPoint, cellsInfo) + ':' + parseCoordinate(this.secondPoint, cellsInfo)
 		const color = this.color
 		const borderStyles = this.borderStyles
@@ -27,6 +27,7 @@ export class Rectangle implements IOutputBlock {
 			  b.cells = cell
 				b.native.style.backgroundColor = color
 				b.native.style.border = borderStyles
+				addRender?.();
 			}
 		})
 	}

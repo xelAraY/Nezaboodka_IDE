@@ -3,10 +3,10 @@ import { IOutputBlock } from "./OutputBlock"
 import { CellInfo } from "./App";
 
 
-type RenderFunction<T extends IBaseBlock> = (block: T, innerOperations?: RenderFunction<any>) => void;
+type RenderFunction<T extends IBaseBlock> = (block: T, innerOperations?: () => void) => void;
 
 
-class BlockNode<T extends IBaseBlock> {
+export class BlockNode<T extends IBaseBlock> {
 
   private renderFunction: RenderFunction<T>;
   private children: BlockNode<any>[] = [];
@@ -14,33 +14,28 @@ class BlockNode<T extends IBaseBlock> {
 
   parent: BlockNode<any> | null;
 
-  constructor(renderFunction: RenderFunction<T>, parent: BlockNode<T>, block: T) {
-
+  constructor(renderFunction: RenderFunction<T>, parent: BlockNode<any> | null, block: T) {
     this.renderFunction = renderFunction;
     this.parent = parent;
     this.block = block;
-
   }
 
   addChild(blockNode: BlockNode<any>): void{
-    
     this.children.push(blockNode);
-  
   }
 
-  public get renderChain(): RenderFunction<T> {
-
+  public get renderChain(): () => void {
     return () => {
-
       this.renderFunction(this.block, () => {
         this.children.forEach(child => {
-          child.renderChain(child.block);
+          child.renderChain();
         })
       })
-
     }
-
   }
-  
+
+  public get lastChild(): BlockNode<any> {
+    return this.children[this.children.length - 1];
+  }
 
 }

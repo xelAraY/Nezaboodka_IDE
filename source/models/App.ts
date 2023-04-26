@@ -16,6 +16,8 @@ import { Diagnostic } from "../../library/artel/packages/compiler/source/diagnos
 import { collectDiagnostics } from "../../library/artel/packages/compiler/source/analysis/collect-diagnostics"
 import { ITextBlock } from "interfaces/ITextBlock"
 import { IRectangle } from "interfaces/IRectangle"
+import { BlockNode } from "./Tree"
+import { IBaseBlock } from "interfaces/IBaseBlock"
 
 
 const defaultRowCount : number = 10
@@ -96,7 +98,7 @@ export class App extends ObservableObject {
     стили_текста: Текст
   }
 
-  тип ФункцияРендера<T> = операция(блок: T): Ничего
+  тип ФункцияРендера<T> = операция(блок: T)
 
   сетка: ИнформацияОСетке
 
@@ -106,7 +108,7 @@ export class App extends ObservableObject {
 
   внешняя операция ввести(координаты: Текст, цвет: Текст = "чёрный", граница: Текст = "1px", стиль: Текст = "black center")
 
-  внешняя операция Текст(рендер: ФункцияРендера<Текстовый_блок>)
+  внешняя операция Текст_блок(рендер: ФункцияРендера<Текстовый_блок>)
 
   внешняя операция Прямоугольник(рендер: ФункцияРендера<Прямоугольник_блок>)
   `
@@ -257,16 +259,91 @@ export class App extends ObservableObject {
     return result
   }
 
+  @raw
+  renderTree: BlockNode<any> | null = null;
+
   textBlockFunction(operation: (block: ITextBlock) => void): void {
-    let block: ITextBlock = { firstPoint:'',  secondPoint:'', color:'', text:'', borderStyles:'', textStyles:{ color: '', location:''}}
+    
+    let block: ITextBlock = { coordinates: '', color:'', text:'', borderStyles:'', textStyles:{ color: '', location:''}}
+    
+    if (this.renderTree) {
+      this.renderTree.addChild(new BlockNode<ITextBlock>((b, innerOperations) => {
+        new TextBlock(
+          this.parseFirstPoint(b.coordinates),
+          this.parseSecondPoint(b.coordinates), 
+          b.text, 
+          this.parseColor(b.color.trim()), 
+          this.parseBorderStyles(b.borderStyles.trim()), 
+          b.textStyles
+        ).drawBlock(this.cellsInfo, innerOperations)
+      }, this.renderTree, block))
+      this.renderTree = this.renderTree.lastChild;
+    }
+    else {
+      this.renderTree = new BlockNode<ITextBlock>((b, innerOperations) => {
+        new TextBlock(this.parseFirstPoint(b.coordinates),this.parseSecondPoint(b.coordinates), b.text, b.color, b.borderStyles, b.textStyles).drawBlock(this.cellsInfo, innerOperations)
+      }, null, block)
+
+    }
+    
     operation(block)
+    translateFromCyrillicTextBlock(block, this)
     // пуш элемента в массив outputBlocks
+    if (this.renderTree.parent != null) {
+      this.renderTree = this.renderTree.parent;
+    }
+    else {
+      const parent = this.renderTree
+      const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable();
+      outputBlocks.push({drawBlock: (info) => {
+        parent?.renderChain();
+      }})
+      this.renderTree = null;
+    }
+
   }
 
   rectangleBlockFunction(operation: (block: IRectangle) => void): void {
-    let block: IRectangle = { firstPoint:'',  secondPoint:'', color:'', borderStyles:''}
+    let block: IRectangle = { coordinates: '', color:'', borderStyles:''}
+
+    if (this.renderTree) {
+      this.renderTree.addChild(new BlockNode<IRectangle>((b, innerOperations) => {
+        new Rectangle(
+          this.parseFirstPoint(b.coordinates),
+          this.parseSecondPoint(b.coordinates), 
+          this.parseColor(b.color.trim()), 
+          this.parseBorderStyles(b.borderStyles.trim())
+        ).drawBlock(this.cellsInfo, innerOperations)
+      }, this.renderTree, block))
+      this.renderTree = this.renderTree.lastChild;
+    }
+    else {
+      this.renderTree = new BlockNode<IRectangle>((b, innerOperations) => {
+        new Rectangle(
+          this.parseFirstPoint(b.coordinates),
+          this.parseSecondPoint(b.coordinates), 
+          this.parseColor(b.color.trim()), 
+          this.parseBorderStyles(b.borderStyles.trim())
+        ).drawBlock(this.cellsInfo, innerOperations)
+      }, null, block)
+
+    }
+
     operation(block)
     // пуш элемента в массив outputBlocks
+    translateFromCyrillicRectangleBlock(block)
+    if (this.renderTree.parent != null) {
+      this.renderTree = this.renderTree.parent;
+    }
+    else {
+      const parent = this.renderTree
+      const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable();
+      outputBlocks.push({drawBlock: (info) => {
+        parent?.renderChain();
+      }})
+      this.renderTree = null;
+    }
+
   }
 
   writeFunction(coordinates: string, message: string, color: string, borderStyles: string, textStyles: string): void {
@@ -406,7 +483,6 @@ export class App extends ObservableObject {
     return this.editor
   }
 
-
 }
 
 export const $app = new ContextVariable<App>()
@@ -431,4 +507,25 @@ export function incrementLetterInCoordinate(text: string): string {
 
   text = text + (!isExit ? 'A' : '')
   return text
+}
+
+
+function translateFromCyrillicTextBlock(b: ITextBlock, app: App){
+  translateFromCyrillicBaseBlock(b)
+  let res = b as any
+  b.borderStyles = res.стили_границы || ""
+  b.text = res.текст || ""
+  b.textStyles = app.parseTextStyles(res.стили_текста?.trim() ?? "") || {color: "", location: ""}
+}
+
+function translateFromCyrillicBaseBlock(b: IBaseBlock) {
+  let res = b as any
+  b.color = res.цвет_фона || ""
+  b.coordinates = res.координаты || ""
+}
+
+function translateFromCyrillicRectangleBlock(b: IRectangle){
+  translateFromCyrillicBaseBlock(b);
+  let res = b as any || ""
+  b.borderStyles = res.стили_границы || ""
 }
