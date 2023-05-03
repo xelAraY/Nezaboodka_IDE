@@ -59,6 +59,9 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                                 '}\n'+
                                 'function Прямоугольник(render)\{\n' +
                                 '  app.rectangleBlockFunction(render)\n' +
+                                '}\n'+
+                                'function Очистить()\{\n' +
+                                '  app.clearFunction()\n' +
                                 '}\n'
 
                 if (code !== undefined){

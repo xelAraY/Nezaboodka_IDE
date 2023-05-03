@@ -1,4 +1,4 @@
-import { raw, ObservableObject, reactive, transactional } from "reactronic"
+import { raw, ObservableObject, reactive, transactional, Transaction } from "reactronic"
 import { BaseHtmlDriver, ContextVariable, HtmlSensors, I, Output } from "verstak"
 import { AppTheme } from "themes/AppTheme"
 import { Loader } from "./Loader"
@@ -82,14 +82,14 @@ export class App extends ObservableObject {
     цвет_фона: Текст
   }
 
-  тип Прямоугольник_блок = объект
+  тип Прямоугольник_Блок = объект
   {
     координаты: Текст
     цвет_фона: Текст
     стили_границы: Текст
   }
 
-  тип Текстовый_блок = объект
+  тип Текстовый_Блок = объект
   {
     координаты: Текст
     цвет_фона: Текст
@@ -108,9 +108,11 @@ export class App extends ObservableObject {
 
   внешняя операция ввести(координаты: Текст, цвет: Текст = "чёрный", граница: Текст = "1px", стиль: Текст = "black center")
 
-  внешняя операция Текст_блок(рендер: ФункцияРендера<Текстовый_блок>)
+  внешняя операция Текст_блок(рендер: ФункцияРендера<Текстовый_Блок>)
 
-  внешняя операция Прямоугольник(рендер: ФункцияРендера<Прямоугольник_блок>)
+  внешняя операция Прямоугольник(рендер: ФункцияРендера<Прямоугольник_Блок>)
+
+  внешняя операция Очистить()
   `
 
   @reactive
@@ -263,17 +265,17 @@ export class App extends ObservableObject {
   renderTree: BlockNode<any> | null = null;
 
   textBlockFunction(operation: (block: ITextBlock) => void): void {
-    
+
     let block: ITextBlock = { coordinates: '', color:'', text:'', borderStyles:'', textStyles:{ color: '', location:''}}
-    
+
     if (this.renderTree) {
       this.renderTree.addChild(new BlockNode<ITextBlock>((b, innerOperations) => {
         new TextBlock(
           this.parseFirstPoint(b.coordinates),
-          this.parseSecondPoint(b.coordinates), 
-          b.text, 
-          this.parseColor(b.color.trim()), 
-          this.parseBorderStyles(b.borderStyles.trim()), 
+          this.parseSecondPoint(b.coordinates),
+          b.text,
+          this.parseColor(b.color.trim()),
+          this.parseBorderStyles(b.borderStyles.trim()),
           b.textStyles
         ).drawBlock(this.cellsInfo, innerOperations)
       }, this.renderTree, block))
@@ -285,7 +287,7 @@ export class App extends ObservableObject {
       }, null, block)
 
     }
-    
+
     operation(block)
     translateFromCyrillicTextBlock(block, this)
     // пуш элемента в массив outputBlocks
@@ -310,8 +312,8 @@ export class App extends ObservableObject {
       this.renderTree.addChild(new BlockNode<IRectangle>((b, innerOperations) => {
         new Rectangle(
           this.parseFirstPoint(b.coordinates),
-          this.parseSecondPoint(b.coordinates), 
-          this.parseColor(b.color.trim()), 
+          this.parseSecondPoint(b.coordinates),
+          this.parseColor(b.color.trim()),
           this.parseBorderStyles(b.borderStyles.trim())
         ).drawBlock(this.cellsInfo, innerOperations)
       }, this.renderTree, block))
@@ -321,8 +323,8 @@ export class App extends ObservableObject {
       this.renderTree = new BlockNode<IRectangle>((b, innerOperations) => {
         new Rectangle(
           this.parseFirstPoint(b.coordinates),
-          this.parseSecondPoint(b.coordinates), 
-          this.parseColor(b.color.trim()), 
+          this.parseSecondPoint(b.coordinates),
+          this.parseColor(b.color.trim()),
           this.parseBorderStyles(b.borderStyles.trim())
         ).drawBlock(this.cellsInfo, innerOperations)
       }, null, block)
@@ -393,6 +395,11 @@ export class App extends ObservableObject {
     }
     const border = this.parseBorderStyles(borderStyles.trim())
     outputBlocks.push(new Rectangle(firstPoint, secondPoint, enColor, border))
+  }
+
+  clearFunction(): void {
+    this.outputBlocks = []
+    this.outputBlocks.toMutable()
   }
 
   @transactional

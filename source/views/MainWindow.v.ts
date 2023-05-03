@@ -7,6 +7,16 @@ import { editor } from "monaco-editor"
 import { css } from "@emotion/css"
 import { Smartphone } from "./Smartphone.v"
 
+const template = `используется артель
+используется работа-с-сеткой
+
+выполнить
+{
+    прямоугольник("D3:H4", "красный", "5px желтый пунктирный")
+    Очистить()
+}
+`
+
 export const MainWindow = () => (
   Block({ reaction: true,
     initialize(b) {
@@ -75,6 +85,8 @@ export const MainWindow = () => (
             if (app.textModelArtel){
               app.editor?.setModel(app.textModelArtel)
             }
+            const codeEditor = app.getEditor()
+              codeEditor?.setValue(template)
 
           }
         })
