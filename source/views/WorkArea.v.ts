@@ -1,7 +1,6 @@
 import { css } from "@emotion/css"
 import { Grid, BlockBody, Block, PlainText, HtmlText, lineFeed, line, Align, VBlock, P, Group } from "verstak"
 import { $app, incrementLetterInCoordinate} from "models/App"
-import { Rectangle } from "models/Rectangle"
 import { findMaxLetter } from "models/OutputBlock"
 
 export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
@@ -22,8 +21,8 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
       console.log(columns)
       console.log(rows)
 
-      b.native.style.gridTemplateColumns = `30px 30px repeat(${columns}, 1fr) 30px`
-      b.native.style.gridTemplateRows = `30px 50px repeat(${rows}, 1fr) 100px`
+      b.native.style.gridTemplateColumns = `30px 30px repeat(${columns}, ${app.cellsInfo.cellSize.toString()+'px'}) 30px`
+      b.native.style.gridTemplateRows = `30px 50px repeat(${rows}, ${app.cellsInfo.cellSize.toString()+'px'}) 100px`
 
       const startSymb : string = 'C'
       const endSymb : string = incrementLetterInCoordinate(incrementLetterInCoordinate(findMaxLetter(app.cellsInfo)))
@@ -74,20 +73,20 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
     }})
 )
 
-const Ruler = (title: string, frameAlignment: Align, overlap?: boolean) => (
-  Block({
-    render(b) {
-      b.frameAlignment = frameAlignment
-      b.cells = { horizontalOverlap: overlap }
-      b.native.style.fontSize = 'smaller'
-      b.native.style.color = 'black'
-      if ($app.value.cellsInfo.size){
-         b.native.style.width = $app.value.cellsInfo.size?.toString() + 'px'
-      }
-      HtmlText(`&nbsp;${title}`)
-    }
-  })
-)
+// const Ruler = (title: string, frameAlignment: Align, overlap?: boolean) => (
+//   Block({
+//     render(b) {
+//       b.frameAlignment = frameAlignment
+//       b.cells = { horizontalOverlap: overlap }
+//       b.native.style.fontSize = 'smaller'
+//       b.native.style.color = 'black'
+//       if ($app.value.cellsInfo.size){
+//          b.native.style.width = $app.value.cellsInfo.size?.toString() + 'px'
+//       }
+//       HtmlText(`&nbsp;${title}`)
+//     }
+//   })
+// )
 
 export const GridCordText = (title: string, coordinate: string) => (
   Block({

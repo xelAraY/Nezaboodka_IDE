@@ -8,13 +8,13 @@ import { reactive } from "reactronic";
 
 
 export const Smartphone = (theme: AppTheme, body?: BlockBody<HTMLElement, void, void>) => (
-  
-  Block(body, {reaction: true, 
+
+  Block(body, {reaction: true,
     initialize(b) {
-      
+
     },
     render(b, base) {
-      
+
       base()
       b.style(theme.RightPanel)
       b.style(theme.accentColor)
@@ -34,9 +34,9 @@ export const Smartphone = (theme: AppTheme, body?: BlockBody<HTMLElement, void, 
         WorkArea({render(b, base) {
           base()
         }})
-      
+
       }})
-     
+
     }
   })
 

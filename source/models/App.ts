@@ -23,10 +23,11 @@ import { IBaseBlock } from "interfaces/IBaseBlock"
 const defaultRowCount : number = 10
 const defaultColumnCount : number = 10
 const defaultBackgroundCOlor : string = 'white'
+const defaultCellSize : number = 35
 
 export interface CellInfo {
 
-  size: number | undefined
+  cellSize: number
   heightCellCount: number
 	widthCellCount: number
   backgroundColor: string
@@ -76,7 +77,7 @@ export class App extends ObservableObject {
 
   тип ИнформацияОСетке = объект
   {
-    размер: Число?
+    размер_ячейки: Число?
     количество_строк: Число
     количество_столбцов: Число
     цвет_фона: Текст
@@ -475,7 +476,7 @@ export class App extends ObservableObject {
   }
 
   getDefaultCellsInfo(): CellInfo{
-    return {heightCellCount : defaultRowCount, widthCellCount : defaultColumnCount, size : undefined, backgroundColor: defaultBackgroundCOlor}
+    return {heightCellCount : defaultRowCount, widthCellCount : defaultColumnCount, cellSize : defaultCellSize, backgroundColor: defaultBackgroundCOlor}
   }
 
   public getWidthGrowth():Number{

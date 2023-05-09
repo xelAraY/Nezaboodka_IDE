@@ -1,7 +1,8 @@
 import { Block, BlockBody} from "verstak"
 import { Button, createFieldModel} from "gost-pi"
 import { $app, CellInfo } from "models/App"
-import * as ts from 'typescript'
+
+const defaultCellSize : number = 35
 
 export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
   Block(body, {
@@ -20,6 +21,19 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                 let code = app.compileArtel(editor.getValue())
 
                 let functions = `сетка = {
+                                    get размер_ячейки() {
+                                      return app.cellsInfo.cellSize;
+                                    },
+                                    set размер_ячейки(value) {
+                                      const newHeight = 180+app.cellsInfo.heightCellCount*value
+                                      const newWidth = 90 + app.cellsInfo.widthCellCount*value
+                                      console.log(newHeight)
+                                      console.log(newWidth)
+                                      if (!(newHeight > 600 || newWidth > 400) && !(newHeight < 300 || newWidth < 200))
+                                        app.cellsInfo = {...app.cellsInfo, cellSize: value}
+                                      else
+                                        app.cellsInfo = {...app.cellsInfo, cellSize: defaultCellSize}
+                                    },
                                     get количество_строк() {
                                       return app.cellsInfo.heightCellCount;
                                     },
@@ -40,7 +54,6 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                                       if (color == 'anotherColorStyle'){
                                         color = value
                                       }
-                                      console.log(color)
                                       app.cellsInfo = {...app.cellsInfo, backgroundColor: color}
                                     }
                                   }\n`+
