@@ -1,6 +1,7 @@
 import { Block, BlockBody} from "verstak"
 import { Button, createFieldModel} from "gost-pi"
 import { $app, CellInfo } from "models/App"
+import { Transaction } from "reactronic"
 
 const defaultCellSize : number = 35
 
@@ -8,6 +9,7 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
   Block(body, {
     render(b) {
       const app = $app.value
+      const transactionRun = Transaction.run;
       const theme = app.theme
       b.style(theme.panel)
       Button({ key: 'Run',
@@ -17,6 +19,7 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
             label: '',
             action: async () => {
               const editor = app.getEditor()
+              app.cellsInfo = app.getDefaultCellsInfo();
               if (editor?.getValue() !== undefined){
                 let code = app.compileArtel(editor.getValue())
 
@@ -30,21 +33,21 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                                       console.log(newHeight)
                                       console.log(newWidth)
                                       if (!(newHeight > 600 || newWidth > 400) && !(newHeight < 300 || newWidth < 200))
-                                        app.cellsInfo = {...app.cellsInfo, cellSize: value}
+                                        transactionRun(null, () => app.cellsInfo = {...app.cellsInfo, cellSize: value})
                                       else
-                                        app.cellsInfo = {...app.cellsInfo, cellSize: defaultCellSize}
+                                        transactionRun(null, () => app.cellsInfo = {...app.cellsInfo, cellSize: defaultCellSize})
                                     },
                                     get количество_строк() {
                                       return app.cellsInfo.heightCellCount;
                                     },
                                     set количество_строк(value) {
-                                      app.cellsInfo = {...app.cellsInfo, heightCellCount: value}
+                                      transactionRun(null, () => app.cellsInfo = {...app.cellsInfo, heightCellCount: value})
                                     },
                                     get количество_столбцов() {
                                       return app.cellsInfo.widthCellCount
                                     },
                                     set количество_столбцов(value) {
-                                      app.cellsInfo = {...app.cellsInfo, widthCellCount: value}
+                                      transactionRun(null, () => app.cellsInfo = {...app.cellsInfo, widthCellCount: value})
                                     },
                                     get цвет_фона() {
                                       return app.cellsInfo.backgroundColor
@@ -54,31 +57,35 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                                       if (color == 'anotherColorStyle'){
                                         color = value
                                       }
-                                      app.cellsInfo = {...app.cellsInfo, backgroundColor: color}
+                                      transactionRun(null, () => app.cellsInfo = {...app.cellsInfo, backgroundColor: color})
                                     }
                                   }\n`+
                                 'function вписать(coordinates, message, color="красный", border = "1px solid", textStyles = "black center")\{\n' +
-                                '  app.writeFunction(coordinates, message, color, border, textStyles)\n' +
+                                '  transactionRun(null, () => app.writeFunction(coordinates, message, color, border, textStyles))\n' +
                                 '}\n' +
                                 '\n' +
                                 'function прямоугольник(coordinates, color = "красный", border = "1px solid")\{\n' +
-                                '  app.rectangleFunction(coordinates, color, border)\n' +
+                                '  transactionRun(null, () => app.rectangleFunction(coordinates, color, border))\n' +
                                 '}\n'+
                                 'async function ввести(coordinates, color="красный", border = "1px solid", textStyles = "black center"){\n' +
                                 '  return await app.inputFunction(coordinates, color, border, textStyles)\n' +
                                 '}\n'+
                                 'function Текст_блок(render)\{\n' +
-                                '  app.textBlockFunction(render)\n' +
+                                '  transactionRun(null, () => app.textBlockFunction(render))\n' +
                                 '}\n'+
-                                'function Прямоугольник(render)\{\n' +
-                                '  app.rectangleBlockFunction(render)\n' +
+                                'function Прямоугольник_блок(render)\{\n' +
+                                '  transactionRun(null, () => app.rectangleBlockFunction(render))\n' +
                                 '}\n'+
-                                'function Очистить()\{\n' +
-                                '  app.clearFunction()\n' +
+                                'async function очистить(time)\{\n' +
+                                ' return app.clearFunction(time)\n' +
                                 '}\n'
 
                 if (code !== undefined){
-                  let resultTsCompile = code.replace('(async () => {__artel__run__0();})()', functions + '(async () => {__artel__run__0();})()')
+                  let resultTsCompile = code.includes('(async () => {__artel__run__0();})()') ? 
+                                          code.replace('(async () => {__artel__run__0();})()', functions + '(async () => {__artel__run__0();})()') :
+                                          code.replace('(async () => {await __artel__run__0();})()', functions + '(async () => {await __artel__run__0();})()')
+
+                  console.log(resultTsCompile)
                   app.outputBlocks = []
                   eval(resultTsCompile)
                   console.log(app.cellsInfo)

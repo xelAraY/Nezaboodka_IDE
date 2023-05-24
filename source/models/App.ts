@@ -1,4 +1,4 @@
-import { raw, ObservableObject, reactive, transactional, Transaction } from "reactronic"
+import { raw, ObservableObject, reactive, transactional, Transaction, options } from "reactronic"
 import { BaseHtmlDriver, ContextVariable, HtmlSensors, I, Output } from "verstak"
 import { AppTheme } from "themes/AppTheme"
 import { Loader } from "./Loader"
@@ -50,6 +50,8 @@ export class App extends ObservableObject {
 
   @raw
   editor: editor.IStandaloneCodeEditor | undefined
+
+  private readonly newProperty = this
 
   constructor(version: string, ...themes: Array<AppTheme>) {
     super()
@@ -109,11 +111,11 @@ export class App extends ObservableObject {
 
   внешняя операция ввести(координаты: Текст, цвет: Текст = "чёрный", граница: Текст = "1px", стиль: Текст = "black center")
 
-  внешняя операция Текст_блок(рендер: ФункцияРендера<Текстовый_Блок>)
+  внешняя операция Текст-блок(рендер: ФункцияРендера<Текстовый_Блок>)
 
-  внешняя операция Прямоугольник(рендер: ФункцияРендера<Прямоугольник_Блок>)
+  внешняя операция Прямоугольник_блок(рендер: ФункцияРендера<Прямоугольник_Блок>)
 
-  внешняя операция Очистить()
+  внешняя параллельная операция очистить(время: Число = 0)
   `
 
   @reactive
@@ -398,12 +400,21 @@ export class App extends ObservableObject {
     outputBlocks.push(new Rectangle(firstPoint, secondPoint, enColor, border))
   }
 
-  clearFunction(): void {
+  clearBlocks() {
+    this.outputBlocks = this.outputBlocks.toMutable();
     this.outputBlocks = []
-    this.outputBlocks.toMutable()
   }
 
-  @transactional
+  clearFunction(time: number = 0) {
+    return new Promise<void>(resolve => {
+      setTimeout(() => {
+        resolve(Transaction.run(null, () => this.newProperty.clearBlocks()))
+      }, time)
+    });
+    
+  }
+
+  
   compileArtel(code: string): string {
 
     const fileSystemTree =
