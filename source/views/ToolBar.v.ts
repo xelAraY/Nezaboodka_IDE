@@ -67,6 +67,9 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                                 'function прямоугольник(coordinates, color = "красный", border = "1px solid")\{\n' +
                                 '  transactionRun(null, () => app.rectangleFunction(coordinates, color, border))\n' +
                                 '}\n'+
+                                'function изображение(coordinates, url)\{\n' +
+                                '  transactionRun(null, () => app.drawImageFunction(coordinates, url))\n' +
+                                '}\n'+
                                 'async function ввести(coordinates, color="красный", border = "1px solid", textStyles = "black center"){\n' +
                                 '  return await app.inputFunction(coordinates, color, border, textStyles)\n' +
                                 '}\n'+
@@ -81,7 +84,7 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                                 '}\n'
 
                 if (code !== undefined){
-                  let resultTsCompile = code.includes('(async () => {__artel__run__0();})()') ? 
+                  let resultTsCompile = code.includes('(async () => {__artel__run__0();})()') ?
                                           code.replace('(async () => {__artel__run__0();})()', functions + '(async () => {__artel__run__0();})()') :
                                           code.replace('(async () => {await __artel__run__0();})()', functions + '(async () => {await __artel__run__0();})()')
 

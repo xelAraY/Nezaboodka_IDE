@@ -8,6 +8,7 @@ import { IOutputBlock } from "./OutputBlock"
 import { Rectangle } from "./Rectangle"
 import { TextBlock } from "./TextBlock"
 import { InputBlock } from "./InputBlock"
+import { ImageBlock } from "./ImageBlock"
 import { ArtelMonacoClient } from "../../library/artel/packages/monaco-client/source"
 import { DirectoryNode, FileNode, ProjectGraph, ProjectTreeCursor, SourceFileState, Workspace } from "../../library/artel/packages/compiler/source/project"
 import { Uri } from "../../library/artel/packages/compiler/source/common"
@@ -104,6 +105,8 @@ export class App extends ObservableObject {
   тип ФункцияРендера<T> = операция(блок: T)
 
   сетка: ИнформацияОСетке
+
+  внешняя операция изображение(координаты: Текст, путь: Текст)
 
   внешняя операция прямоугольник(координаты: Текст, цвет: Текст = "чёрный", граница: Текст = "1px")
 
@@ -364,6 +367,13 @@ export class App extends ObservableObject {
     outputBlocks.push(new TextBlock(firstPoint, secondPoint, message, enColor, border, textSt))
   }
 
+  drawImageFunction(coordinates: string, url: string): void {
+    const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable()
+    let firstPoint = this.parseFirstPoint(coordinates)
+    let secondPoint = this.parseSecondPoint(coordinates)
+    outputBlocks.push(new ImageBlock(firstPoint, secondPoint, url))
+  }
+
   async inputFunction(coordinates: string, color: string, borderStyles: string, textStyles: string): Promise<string> {
 
     const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable()
@@ -411,10 +421,10 @@ export class App extends ObservableObject {
         resolve(Transaction.run(null, () => this.newProperty.clearBlocks()))
       }, time)
     });
-    
+
   }
 
-  
+
   compileArtel(code: string): string {
 
     const fileSystemTree =
