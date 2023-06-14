@@ -41,13 +41,25 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                                       return app.cellsInfo.heightCellCount;
                                     },
                                     set количество_строк(value) {
-                                      transactionRun(null, () => app.cellsInfo = {...app.cellsInfo, heightCellCount: value})
+                                      transactionRun(null, () => {
+                                        for (let i = app.cellsInfo.heightCellCount; i < value; i++){
+                                          this.размер_строк[i] = '';   
+                                        }
+                                        
+                                        app.cellsInfo = {...app.cellsInfo, heightCellCount: value}
+                                      })
                                     },
                                     get количество_столбцов() {
                                       return app.cellsInfo.widthCellCount
                                     },
                                     set количество_столбцов(value) {
-                                      transactionRun(null, () => app.cellsInfo = {...app.cellsInfo, widthCellCount: value})
+                                      transactionRun(null, () => {
+                                        for (let i = app.cellsInfo.widthCellCount; i < value; i++){
+                                          this.размер_столбцов[i] = '';   
+                                        }
+
+                                        app.cellsInfo = {...app.cellsInfo, widthCellCount: value}
+                                      })
                                     },
                                     get цвет_фона() {
                                       return app.cellsInfo.backgroundColor
@@ -58,7 +70,31 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                                         color = value
                                       }
                                       transactionRun(null, () => app.cellsInfo = {...app.cellsInfo, backgroundColor: color})
-                                    }
+                                    },
+                                    размер_строк: new Proxy(app.cellsInfo.rowsSize, {
+                                      get(target, property){
+                                        return target[property]
+                                      },
+                                      set(target, property, value){
+                                        target = target.toMutable();
+                                        if (typeof value == 'string'){
+                                            target[property] = value;   
+                                        }
+                                        return true;
+                                      }
+                                    }),
+                                    размер_столбцов: new Proxy(app.cellsInfo.columnsSize, {
+                                      get(target, property){
+                                        return target[property]
+                                      },
+                                      set(target, property, value){
+                                        target = target.toMutable();
+                                        if (typeof value == 'string'){
+                                          target[property] = value;   
+                                        }
+                                        return true;
+                                      }
+                                    }),
                                   }\n`+
                                 'function вписать(coordinates, message, color="красный", border = "1px solid", textStyles = "black center")\{\n' +
                                 '  transactionRun(null, () => app.writeFunction(coordinates, message, color, border, textStyles))\n' +
@@ -81,7 +117,15 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                                 '}\n'+
                                 'async function очистить(time)\{\n' +
                                 ' return app.clearFunction(time)\n' +
-                                '}\n'
+                                '}\n' +
+                                `for (let i = 0; i < app.cellsInfo.heightCellCount; i++){
+                                   сетка.размер_строк[i.toString()] = '';
+                                  };
+
+                                 for (let i = 0; i < app.cellsInfo.widthCellCount; i++){
+                                   сетка.размер_столбцов[i.toString()] = '';
+                                 }
+                                `
 
                 if (code !== undefined){
                   let resultTsCompile = code.includes('(async () => {__artel__run__0();})()') ?

@@ -23,7 +23,7 @@ import { IBaseBlock } from "interfaces/IBaseBlock"
 
 const defaultRowCount : number = 10
 const defaultColumnCount : number = 10
-const defaultBackgroundCOlor : string = 'white'
+const defaultBackgroundColor : string = 'white'
 const defaultCellSize : number = 35
 
 export interface CellInfo {
@@ -32,7 +32,8 @@ export interface CellInfo {
   heightCellCount: number
 	widthCellCount: number
   backgroundColor: string
-
+  rowsSize: Array<string>;
+  columnsSize: Array<string>;
 }
 
 export class App extends ObservableObject {
@@ -84,6 +85,9 @@ export class App extends ObservableObject {
     количество_строк: Число
     количество_столбцов: Число
     цвет_фона: Текст
+
+    размер_строк: Массив<Текст>
+    размер_столбцов: Массив<Текст>
   }
 
   тип Прямоугольник_Блок = объект
@@ -242,7 +246,7 @@ export class App extends ObservableObject {
       if (newStyle === 'unknown'){
         newStyle = this.parseLocation(style.trim())
         if (newStyle === 'unknown'){
-          alert('Unknown style for text!')
+          // alert('Unknown style for text!')
         }
         else {
           result.location = newStyle
@@ -497,7 +501,7 @@ export class App extends ObservableObject {
   }
 
   getDefaultCellsInfo(): CellInfo{
-    return {heightCellCount : defaultRowCount, widthCellCount : defaultColumnCount, cellSize : defaultCellSize, backgroundColor: defaultBackgroundCOlor}
+    return {heightCellCount : defaultRowCount, widthCellCount : defaultColumnCount, cellSize : defaultCellSize, backgroundColor: defaultBackgroundColor, columnsSize: [], rowsSize: []}
   }
 
   public getWidthGrowth():Number{
