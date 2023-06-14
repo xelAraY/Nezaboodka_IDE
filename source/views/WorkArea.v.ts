@@ -1,6 +1,6 @@
 import { css } from "@emotion/css"
 import { Grid, BlockBody, Block, PlainText, HtmlText, lineFeed, line, Align, VBlock, P, Group } from "verstak"
-import { $app, incrementLetterInCoordinate} from "models/App"
+import { $app, incrementLetterInCoordinate, CellInfo, DEFAULT_CELL_SIZE} from "models/App"
 import { findMaxLetter } from "models/OutputBlock"
 
 export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
@@ -21,8 +21,8 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
       console.log(columns)
       console.log(rows)
 
-      b.native.style.gridTemplateColumns = `30px 30px repeat(${columns}, ${app.cellsInfo.cellSize.toString()+'px'}) 30px`
-      b.native.style.gridTemplateRows = `30px 50px repeat(${rows}, ${app.cellsInfo.cellSize.toString()+'px'}) 100px`
+      b.native.style.gridTemplateColumns = getGridTemplateColumns(app.cellsInfo); //`30px 30px repeat(${columns}, ${app.cellsInfo.cellSize.toString()+'px'}) 30px`
+      b.native.style.gridTemplateRows = getGridTemplateRows(app.cellsInfo); //`30px 50px repeat(${rows}, ${app.cellsInfo.cellSize.toString()+'px'}) 100px`
 
       const startSymb : string = 'C'
       const endSymb : string = incrementLetterInCoordinate(incrementLetterInCoordinate(findMaxLetter(app.cellsInfo)))
@@ -68,8 +68,6 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
 
       const block = app.outputBlocks;
       block.forEach(b => b.drawBlock(app.cellsInfo));
-
-
     }})
 )
 
@@ -123,3 +121,51 @@ export const GridRectangle = (coordinate: string, isTransparent: boolean, isNeed
   })
 
 )
+
+function getGridTemplateColumns(cellInfo: CellInfo): string {
+  let result = '30px 30px';
+  let countEmpty = 0;
+  
+  for (let i = 0; i < cellInfo.widthCellCount; i++){
+    if (!cellInfo.columnsSize[i]){
+      countEmpty++;
+    } else {
+      if (countEmpty) {
+        result += ` repeat(${countEmpty}, ${DEFAULT_CELL_SIZE + 'px'})`;
+        countEmpty = 0;
+      }
+      
+      result += ' ' + cellInfo.columnsSize[i];
+    }
+  }
+
+  if (countEmpty) {
+    result += ` repeat(${countEmpty}, ${DEFAULT_CELL_SIZE + 'px'})`;
+  }
+
+  return result + ' 30px';
+}
+
+function getGridTemplateRows(cellInfo: CellInfo): string {
+  let result = '30px 50px';
+  let countEmpty = 0;
+
+  for (let i = 0; i < cellInfo.heightCellCount; i++){
+    if (!cellInfo.rowsSize[i]){
+      countEmpty++;
+    } else {
+      if (countEmpty){
+        result += ` repeat(${countEmpty}, ${DEFAULT_CELL_SIZE + 'px'})`;
+        countEmpty = 0;
+      }
+
+      result += ' ' + cellInfo.rowsSize[i];
+    }
+  }
+
+  if (countEmpty){
+    result += ` repeat(${countEmpty}, ${DEFAULT_CELL_SIZE + 'px'})`;
+  }
+
+  return result + ' 100px';
+}

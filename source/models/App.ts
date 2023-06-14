@@ -20,11 +20,10 @@ import { IRectangle } from "interfaces/IRectangle"
 import { BlockNode } from "./Tree"
 import { IBaseBlock } from "interfaces/IBaseBlock"
 
-
-const defaultRowCount : number = 10
-const defaultColumnCount : number = 10
-const defaultBackgroundColor : string = 'white'
-const defaultCellSize : number = 35
+const DEFAULT_ROWS_COUNT : number = 10
+const DEFAULT_COLUMNS_COUNT : number = 10
+const DEFAULT_BACKGROUND_COLOR : string = 'white'
+export const DEFAULT_CELL_SIZE : number = 35
 
 export interface CellInfo {
 
@@ -501,7 +500,7 @@ export class App extends ObservableObject {
   }
 
   getDefaultCellsInfo(): CellInfo{
-    return {heightCellCount : defaultRowCount, widthCellCount : defaultColumnCount, cellSize : defaultCellSize, backgroundColor: defaultBackgroundColor, columnsSize: [], rowsSize: []}
+    return {heightCellCount : DEFAULT_ROWS_COUNT, widthCellCount : DEFAULT_COLUMNS_COUNT, cellSize : DEFAULT_CELL_SIZE, backgroundColor: DEFAULT_BACKGROUND_COLOR, columnsSize: [], rowsSize: []}
   }
 
   public getWidthGrowth():Number{
