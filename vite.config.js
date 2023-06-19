@@ -34,5 +34,9 @@ export default defineConfig({
   esbuild: {
     target: 'es2016',
   },
+  define: {
+    'process.env': {}, 
+    'Buffer.isBuffer': {} 
+  }, 
   plugins: [tsconfigPaths()]
 })

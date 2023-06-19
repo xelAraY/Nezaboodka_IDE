@@ -3,18 +3,17 @@ import { BaseHtmlDriver, ContextVariable, HtmlSensors, I, Output } from "verstak
 import { AppTheme } from "themes/AppTheme"
 import { Loader } from "./Loader"
 import { editor } from "monaco-editor"
-import Worker from "../../library/artel/packages/monaco-client/source/worker?worker"
 import { IOutputBlock } from "./OutputBlock"
 import { Rectangle } from "./Rectangle"
 import { TextBlock } from "./TextBlock"
 import { InputBlock } from "./InputBlock"
 import { ImageBlock } from "./ImageBlock"
-import { ArtelMonacoClient } from "../../library/artel/packages/monaco-client/source"
-import { DirectoryNode, FileNode, ProjectGraph, ProjectTreeCursor, SourceFileState, Workspace } from "../../library/artel/packages/compiler/source/project"
-import { Uri } from "../../library/artel/packages/compiler/source/common"
-import { Emitter } from "../../library/artel/packages/compiler/source/compilation/Emitter"
-import { Diagnostic } from "../../library/artel/packages/compiler/source/diagnostic/Diagnostic"
-import { collectDiagnostics } from "../../library/artel/packages/compiler/source/analysis/collect-diagnostics"
+import { ArtelMonacoClient } from "../../library/artel/projects/monaco-client/source"
+import { DirectoryNode, FileNode, ProjectGraph, ProjectCursor, SourceFileState, Workspace } from "../../library/artel/projects/compiler/source/project"
+import { Uri } from "../../library/artel/projects/compiler/source/common"
+import { Emitter } from "../../library/artel/projects/compiler/source/emitter"
+import { Diagnostic } from "../../library/artel/projects/compiler/source/diagnostic/Diagnostic"
+import { collectDiagnostics } from "../../library/artel/projects/compiler/source/analysis/collect-diagnostics"
 import { ITextBlock } from "interfaces/ITextBlock"
 import { IRectangle } from "interfaces/IRectangle"
 import { BlockNode } from "./Tree"
@@ -130,7 +129,7 @@ export class App extends ObservableObject {
       name: 'работа-с-сеткой',
       sourceFiles: [{name: 'grid.art', text: this.gridModuleSourceCode}]
     }])
-    this.textModelArtel = await client.getModel(new Worker())
+    this.textModelArtel = await client.getModel(new Worker("../../library/artel/projects/monaco-client/source/worker" ))
   }
 
   parseSecondPoint(coordinates: string): string {
@@ -456,19 +455,19 @@ export class App extends ObservableObject {
 
 
     const workspace = new Workspace([fileSystemTree])
-    const project = workspace.projects[0]
-    if (project.kind !== 'standard')
+    const project = workspace.projectGraphs[0]
+    if (project.mainProject.role !== 'main')
       throw new Error('Internal error')
     const emitter = new Emitter(project)
 
     function collectProjectDiagnostics(project: ProjectGraph) {
       const diagnosticsByFileUri = new Map<string, Diagnostic[]>()
-      const cursor = ProjectTreeCursor.fromProject(project, false)
+      const cursor = ProjectCursor.fromProjectGraph(project)
       for (const sourceFile of cursor.enumerateSourceFiles()) {
-        const diagnostics = [...sourceFile.syntax.diagnostics.items]
-        const semanticDiagnostics = collectDiagnostics(project.ctx, sourceFile.syntax)
-        diagnostics.push(...semanticDiagnostics)
-        diagnosticsByFileUri.set(sourceFile.uri.toString(), diagnostics)
+        // const diagnostics = [...sourceFile.syntax.diagnostics.items]
+        // const semanticDiagnostics = collectDiagnostics(project.ctx, sourceFile.syntax)
+        // diagnostics.push(...semanticDiagnostics)
+        // diagnosticsByFileUri.set(sourceFile.uri.toString(), diagnostics)
       }
       return diagnosticsByFileUri
     }
