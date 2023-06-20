@@ -27,8 +27,8 @@ export class ImageBlock implements IOutputBlock {
         b.native.style.display = 'flex'
         b.native.style.justifyContent = 'center'
 				b.contentAlignment = Align.CenterV | Align.Center
-        b.native.style.backgroundImage = 'url(https://wallpapershome.ru/images/pages/pic_v/21485.jpg)'
-        b.native.style.backgroundSize = 'contain'
+        b.native.style.backgroundImage = `url(${url})`
+        b.native.style.backgroundSize = '100% 100%'
         b.native.style.backgroundRepeat = 'no-repeat'
 				addRender?.()
 			}

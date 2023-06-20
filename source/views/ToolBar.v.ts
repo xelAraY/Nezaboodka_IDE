@@ -76,9 +76,12 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                                         return target[property]
                                       },
                                       set(target, property, value){
-                                        target = target.toMutable();
+                                        // target = target.toMutable();
                                         if (typeof value == 'string'){
-                                            target[property] = value;   
+                                          // transactionRun(null, () => {
+                                            target[property] = value;
+                                            console.log('set ' + value + ' for index ' + property);
+                                          // });   
                                         }
                                         return true;
                                       }
@@ -88,9 +91,12 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                                         return target[property]
                                       },
                                       set(target, property, value){
-                                        target = target.toMutable();
+                                        // target = target.toMutable();
                                         if (typeof value == 'string'){
-                                          target[property] = value;   
+                                          // transactionRun(null, () => {
+                                            target[property] = value
+                                            console.log('set ' + value + ' for index ' + property)
+                                          // });   
                                         }
                                         return true;
                                       }
@@ -124,14 +130,11 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
 
                                  for (let i = 0; i < app.cellsInfo.widthCellCount; i++){
                                    сетка.размер_столбцов[i.toString()] = '';
-                                 }
+                                 };
                                 `
 
                 if (code !== undefined){
-                  let resultTsCompile = code.includes('(async () => {__artel__run__0();})()') ?
-                                          code.replace('(async () => {__artel__run__0();})()', functions + '(async () => {__artel__run__0();})()') :
-                                          code.replace('(async () => {await __artel__run__0();})()', functions + '(async () => {await __artel__run__0();})()')
-
+                  let resultTsCompile = code.replace('let сетка;', 'let сетка;' + functions );
                   console.log(resultTsCompile)
                   app.outputBlocks = []
                   eval(resultTsCompile)

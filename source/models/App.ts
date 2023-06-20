@@ -2,6 +2,7 @@ import { raw, ObservableObject, reactive, transactional, Transaction, options } 
 import { BaseHtmlDriver, ContextVariable, HtmlSensors, I, Output } from "verstak"
 import { AppTheme } from "themes/AppTheme"
 import { Loader } from "./Loader"
+import Worker from "../../library/artel/projects/monaco-client/source/worker?worker"
 import { editor } from "monaco-editor"
 import { IOutputBlock } from "./OutputBlock"
 import { Rectangle } from "./Rectangle"
@@ -50,8 +51,6 @@ export class App extends ObservableObject {
 
   @raw
   editor: editor.IStandaloneCodeEditor | undefined
-
-  private readonly newProperty = this
 
   constructor(version: string, ...themes: Array<AppTheme>) {
     super()
@@ -129,7 +128,7 @@ export class App extends ObservableObject {
       name: 'работа-с-сеткой',
       sourceFiles: [{name: 'grid.art', text: this.gridModuleSourceCode}]
     }])
-    this.textModelArtel = await client.getModel(new Worker("../../library/artel/projects/monaco-client/source/worker" ))
+    this.textModelArtel = await client.getModel(new Worker())
   }
 
   parseSecondPoint(coordinates: string): string {
@@ -420,7 +419,7 @@ export class App extends ObservableObject {
   clearFunction(time: number = 0) {
     return new Promise<void>(resolve => {
       setTimeout(() => {
-        resolve(Transaction.run(null, () => this.newProperty.clearBlocks()))
+        resolve(Transaction.run(null, () => this.clearBlocks()))
       }, time)
     });
 
