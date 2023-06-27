@@ -19,6 +19,7 @@ import { ITextBlock } from "interfaces/ITextBlock"
 import { IRectangle } from "interfaces/IRectangle"
 import { BlockNode } from "./Tree"
 import { IBaseBlock } from "interfaces/IBaseBlock"
+import { parseBorderStyles, parseColor, parseFirstPoint, parseSecondPoint, parseTextStyles, translateFromCyrillicRectangleBlock, translateFromCyrillicTextBlock } from "./Parse"
 
 export const DEFAULT_CELL_SIZE : number = 35
 
@@ -131,150 +132,6 @@ export class App extends ObservableObject {
     this.textModelArtel = await client.getModel(new Worker());
   }
 
-  parseSecondPoint(coordinates: string): string {
-    let colonPos = coordinates.indexOf(':');
-    return coordinates.substring(colonPos + 1);
-  }
-
-  parseFirstPoint(coordinates: string): string {
-    let colonPos = coordinates.indexOf(':');
-    return coordinates.substring(0, colonPos);
-  }
-
-  parseColor(color: string): string {
-    switch(color){
-      case 'желтый':
-        return 'yellow';
-      case 'красный':
-        return 'red';
-      case 'зеленый':
-        return 'green';
-      case 'белый':
-        return 'white';
-      case 'синий':
-        return 'blue';
-      case 'фиолетовый':
-        return 'purple';
-      case 'чёрный':
-        return 'black';
-      default:
-        return this.parseAnotherColorView(color);
-    }
-  }
-
-  parseAnotherColorView(color: string): string {
-    if (color.startsWith('rgb') || color.startsWith('rgba') || (color.startsWith('#') && color.length === 7)){
-      return 'anotherColorStyle';
-    }
-
-    return 'unknown';
-  }
-
-  parseBorder(border: string): string {
-    switch(border){
-      case 'сплошной':
-        return 'solid';
-      case 'пунктирный':
-        return 'dashed';
-      case 'точечный':
-        return 'dotted';
-      default:
-        return 'unknown';
-    }
-  }
-
-  parseBorderStyles(borderStyles: string): string {
-    let index = 0;
-    let startIndex = 0;
-    let result = '';
-
-    while (index < borderStyles.length){
-      while (index < borderStyles.length && borderStyles[index+1] !== ' ') {
-        index++;
-      }
-
-      index++;
-      const style = borderStyles.substring(startIndex, index);
-      let newStyle = this.parseColor(style.trim());
-      
-      if (newStyle === 'unknown'){
-        newStyle = this.parseBorder(style.trim());
-        if (newStyle === 'unknown'){
-          newStyle = style;
-        }
-      }
-      else if(newStyle === 'anotherColorStyle') {
-        if (style.trim().indexOf(')') === -1){
-          while (borderStyles[index] !== ')' && index < borderStyles.length){
-            index++;
-          }
-
-          index++;
-        }
-
-        newStyle = borderStyles.substring(startIndex, index);
-      }
-      result+= newStyle + ' ';
-      startIndex = index;
-    }
-
-    return result;
-  }
-
-  parseLocation(text: string): string {
-    switch(text){
-      case 'центр':
-        return 'center';
-      case 'слева':
-        return 'flex-start';
-      case 'справа':
-        return 'flex-end';
-      default:
-        return 'unknown';
-    }
-  }
-
-  parseTextStyles(textStyles: string) {
-    let index = 0;
-    let startIndex = 0;
-    let result = { color: 'black', location: 'center' };
-
-    while (index < textStyles.length){
-      while (index < textStyles.length && textStyles[index+1] !== ' ') {
-        index++;
-      }
-
-      index++;
-      const style = textStyles.substring(startIndex, index);
-      let newStyle = this.parseColor(style.trim());
-      
-      if (newStyle === 'unknown'){
-        newStyle = this.parseLocation(style.trim());
-        if (newStyle !== 'unknown'){
-          result.location = newStyle
-        }
-      }
-      else if(newStyle === 'anotherColorStyle') {
-        if (style.trim().indexOf(')') === -1){
-          while (textStyles[index] !== ')' && index < textStyles.length){
-            index++;
-          }
-
-          index++;
-        }
-
-        result.color = textStyles.substring(startIndex, index);
-      }
-      else {
-        result.color = newStyle;
-      }
-
-      startIndex = index;
-    }
-
-    return result;
-  }
-
   @raw
   renderTree: BlockNode<any> | null = null;
 
@@ -284,11 +141,11 @@ export class App extends ObservableObject {
     if (this.renderTree) {
       this.renderTree.addChild(new BlockNode<ITextBlock>((b, innerOperations) => {
         new TextBlock(
-          this.parseFirstPoint(b.coordinates),
-          this.parseSecondPoint(b.coordinates),
+          parseFirstPoint(b.coordinates),
+          parseSecondPoint(b.coordinates),
           b.text,
-          this.parseColor(b.color.trim()),
-          this.parseBorderStyles(b.borderStyles.trim()),
+          parseColor(b.color.trim()),
+          parseBorderStyles(b.borderStyles.trim()),
           b.textStyles
         ).drawBlock(this.cellsInfo, innerOperations);
       }, this.renderTree, block))
@@ -296,7 +153,7 @@ export class App extends ObservableObject {
     }
     else {
       this.renderTree = new BlockNode<ITextBlock>((b, innerOperations) => {
-        new TextBlock(this.parseFirstPoint(b.coordinates),this.parseSecondPoint(b.coordinates), b.text, b.color, b.borderStyles, b.textStyles).drawBlock(this.cellsInfo, innerOperations)
+        new TextBlock(parseFirstPoint(b.coordinates), parseSecondPoint(b.coordinates), b.text, b.color, b.borderStyles, b.textStyles).drawBlock(this.cellsInfo, innerOperations)
       }, null, block);
     }
 
@@ -322,10 +179,10 @@ export class App extends ObservableObject {
     if (this.renderTree) {
       this.renderTree.addChild(new BlockNode<IRectangle>((b, innerOperations) => {
         new Rectangle(
-          this.parseFirstPoint(b.coordinates),
-          this.parseSecondPoint(b.coordinates),
-          this.parseColor(b.color.trim()),
-          this.parseBorderStyles(b.borderStyles.trim())
+          parseFirstPoint(b.coordinates),
+          parseSecondPoint(b.coordinates),
+          parseColor(b.color.trim()),
+          parseBorderStyles(b.borderStyles.trim())
         ).drawBlock(this.cellsInfo, innerOperations);
       }, this.renderTree, block))
       this.renderTree = this.renderTree.lastChild;
@@ -333,10 +190,10 @@ export class App extends ObservableObject {
     else {
       this.renderTree = new BlockNode<IRectangle>((b, innerOperations) => {
         new Rectangle(
-          this.parseFirstPoint(b.coordinates),
-          this.parseSecondPoint(b.coordinates),
-          this.parseColor(b.color.trim()),
-          this.parseBorderStyles(b.borderStyles.trim())
+          parseFirstPoint(b.coordinates),
+          parseSecondPoint(b.coordinates),
+          parseColor(b.color.trim()),
+          parseBorderStyles(b.borderStyles.trim())
         ).drawBlock(this.cellsInfo, innerOperations);
       }, null, block);
     }
@@ -359,38 +216,38 @@ export class App extends ObservableObject {
 
   writeFunction(coordinates: string, message: string, color: string, borderStyles: string, textStyles: string): void {
     const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable();
-    let firstPoint = this.parseFirstPoint(coordinates);
-    let secondPoint = this.parseSecondPoint(coordinates);
-    let enColor = this.parseColor(color.trim());
+    let firstPoint = parseFirstPoint(coordinates);
+    let secondPoint = parseSecondPoint(coordinates);
+    let enColor = parseColor(color.trim());
     
     if (enColor === 'anotherColorStyle'){
       enColor = color.trim();
     }
 
-    const border = this.parseBorderStyles(borderStyles.trim());
-    const textSt = this.parseTextStyles(textStyles.trim());
+    const border = parseBorderStyles(borderStyles.trim());
+    const textSt = parseTextStyles(textStyles.trim());
     outputBlocks.push(new TextBlock(firstPoint, secondPoint, message, enColor, border, textSt));
   }
 
   drawImageFunction(coordinates: string, url: string): void {
     const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable();
-    let firstPoint = this.parseFirstPoint(coordinates);
-    let secondPoint = this.parseSecondPoint(coordinates);
+    let firstPoint = parseFirstPoint(coordinates);
+    let secondPoint = parseSecondPoint(coordinates);
     outputBlocks.push(new ImageBlock(firstPoint, secondPoint, url));
   }
 
   async inputFunction(coordinates: string, color: string, borderStyles: string, textStyles: string): Promise<string> {
     const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable();
-    let firstPoint = this.parseFirstPoint(coordinates);
-    let secondPoint = this.parseSecondPoint(coordinates);
-    let enColor = this.parseColor(color);
+    let firstPoint = parseFirstPoint(coordinates);
+    let secondPoint = parseSecondPoint(coordinates);
+    let enColor = parseColor(color);
 
     if (enColor === 'anotherColorStyle'){
       enColor = color.trim();
     }
 
-    const border = this.parseBorderStyles(borderStyles.trim());
-    const textSt = this.parseTextStyles(textStyles.trim());
+    const border = parseBorderStyles(borderStyles.trim());
+    const textSt = parseTextStyles(textStyles.trim());
     const inputBlock = new InputBlock(firstPoint, secondPoint, enColor, border, textSt);
     const text: string = await inputBlock.getUserInput();
     outputBlocks.push(inputBlock);
@@ -399,15 +256,15 @@ export class App extends ObservableObject {
 
   rectangleFunction(coordinates: string, color: string, borderStyles: string): void {
     const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable();
-    let firstPoint = this.parseFirstPoint(coordinates);
-    let secondPoint = this.parseSecondPoint(coordinates);
-    let enColor = this.parseColor(color.trim());
+    let firstPoint = parseFirstPoint(coordinates);
+    let secondPoint = parseSecondPoint(coordinates);
+    let enColor = parseColor(color.trim());
 
     if (enColor === 'anotherColorStyle'){
       enColor = color.trim();
     }
 
-    const border = this.parseBorderStyles(borderStyles.trim());
+    const border = parseBorderStyles(borderStyles.trim());
     outputBlocks.push(new Rectangle(firstPoint, secondPoint, enColor, border));
   }
 
@@ -520,45 +377,3 @@ export class App extends ObservableObject {
 }
 
 export const $app = new ContextVariable<App>()
-
-export function incrementLetterInCoordinate(text: string): string {
-  let i: number = text.length;
-  let isExit: boolean = false;
-
-  while (i > 0 && !isExit){
-    let lastChar;
-    if (text.charCodeAt(i - 1) < 'Z'.charCodeAt(0)){
-      lastChar = String.fromCharCode(text.charCodeAt(i - 1) + 1);
-      isExit = true;
-    }
-    else{
-      lastChar = 'A';
-    }
-
-    text = text.substring(0, i - 1) + lastChar + text.substring(i);
-    i--;
-  }
-
-  text = text + (!isExit ? 'A' : '');
-  return text;
-}
-
-function translateFromCyrillicTextBlock(b: ITextBlock, app: App){
-  translateFromCyrillicBaseBlock(b);
-  let res = b as any;
-  b.borderStyles = res.стили_границы || '';
-  b.text = res.текст || '';
-  b.textStyles = app.parseTextStyles(res.стили_текста?.trim() ?? '') || {color: '', location: ''};
-}
-
-function translateFromCyrillicBaseBlock(b: IBaseBlock) {
-  let res = b as any;
-  b.color = res.цвет_фона || '';
-  b.coordinates = res.координаты || '';
-}
-
-function translateFromCyrillicRectangleBlock(b: IRectangle){
-  translateFromCyrillicBaseBlock(b);
-  let res = b as any || '';
-  b.borderStyles = res.стили_границы || '';
-}

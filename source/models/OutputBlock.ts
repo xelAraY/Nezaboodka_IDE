@@ -1,4 +1,5 @@
-import { $app, CellInfo, incrementLetterInCoordinate } from "./App"
+import { CellInfo } from "./App"
+import { incrementLetterInCoordinate } from "./Parse";
 
 export interface IOutputBlock {
   drawBlock(cellsInfo: CellInfo, addRender?: () => void): void
