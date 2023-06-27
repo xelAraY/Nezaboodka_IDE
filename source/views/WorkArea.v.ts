@@ -1,7 +1,8 @@
 import { css } from "@emotion/css"
 import { Grid, BlockBody, Block, PlainText, HtmlText, lineFeed, line, Align, VBlock, P, Group } from "verstak"
-import { $app, incrementLetterInCoordinate, CellInfo, DEFAULT_CELL_SIZE} from "models/App"
+import { $app, CellInfo, DEFAULT_CELL_SIZE} from "models/App"
 import { findMaxLetter } from "models/OutputBlock"
+import { incrementLetterInCoordinate } from "models/Parse"
 
 export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
   Grid(body, {reaction: true,
