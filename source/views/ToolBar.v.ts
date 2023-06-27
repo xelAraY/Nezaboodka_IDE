@@ -8,21 +8,21 @@ const defaultCellSize : number = 35
 export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
   Block(body, {
     render(b) {
-      const app = $app.value
+      const app = $app.value;
       const transactionRun = Transaction.run;
-      const theme = app.theme
-      b.style(theme.panel)
+      const theme = app.theme;
+      b.style(theme.panel);
       Button({ key: 'Run',
         initialize(b, base) {
           b.model = {
             icon: 'fa-solid fa-play fa-lg',
             label: '',
             action: async () => {
-              const editor = app.getEditor()
+              const editor = app.getEditor();
               app.cellsInfo = app.getDefaultCellsInfo();
+              
               if (editor?.getValue() !== undefined){
-                let code = app.compileArtel(editor.getValue())
-
+                let code = app.compileArtel(editor.getValue());
                 let functions = `сетка = {
                                     get размер_ячейки() {
                                       return app.cellsInfo.cellSize;
@@ -135,21 +135,22 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
 
                 if (code !== undefined){
                   let resultTsCompile = code.replace('let сетка;', 'let сетка;' + functions );
-                  console.log(resultTsCompile)
-                  app.outputBlocks = []
-                  eval(resultTsCompile)
-                  console.log(app.cellsInfo)
+                  console.log(resultTsCompile);
+                  app.outputBlocks = [];
+                  eval(resultTsCompile);
+                  console.log(app.cellsInfo);
                 }
               }
             }
           }
-          base()
+          base();
         },
         render(b, base) {
-          base()
-          b.style(theme.toolbarButtonRun)
+          base();
+          b.style(theme.toolbarButtonRun);
         }
-      })
+      });
+
       Button({ key: 'Run in one step',
         initialize(b, base) {
           b.model = {
@@ -173,57 +174,48 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
               app.outputBlocks = []
               app.outputBlocks.toMutable()
             }
-          }
-          base()
+          };
+          base();
         },
         render(b, base) {
-          base()
-          b.style(theme.toolbarButtonClear)
+          base();
+          b.style(theme.toolbarButtonClear);
         }
-      })
+      });
+
       Button({ key: 'Change theme',
         initialize(b, base) {
           b.model = {
             icon: 'fa-solid fa-palette fa-lg',
             label: '',
             action: () => {
-              let codeEditor = app.getEditor()
-              app.nextTheme()
-
+              app.nextTheme();
             }
           }
-          base()
+          base();
         },
         render(b, base) {
-          base()
-          b.style(theme.toolbarButtonChangeTheme)
+          base();
+          b.style(theme.toolbarButtonChangeTheme);
         }
-      })
+      });
+
       Button({ key: 'Change monaco theme',
         initialize(b, base) {
           b.model = {
             icon: 'fa-solid fa-paint-roller fa-lg',
             label: '',
             action: () => {
-              app.nextMonacoTheme()
+              app.nextMonacoTheme();
             }
           }
-          base()
+          base();
         },
         render(b, base) {
-          base()
-          b.style(theme.toolbarButtonChangeTheme)
+          base();
+          b.style(theme.toolbarButtonChangeTheme);
         }
-      })
+      });
     }},
   )
 )
-
-
-function translateCellInfoOnLatin (code: string): string {
-
-  let result = code.replace(/размер/g, 'size')
-  result = result.replace(/количество_строк/g, 'heightCellCount')
-  return result.replace(/количество_столбцов/g, 'widthCellCount')
-
-}

@@ -20,20 +20,20 @@ import { IRectangle } from "interfaces/IRectangle"
 import { BlockNode } from "./Tree"
 import { IBaseBlock } from "interfaces/IBaseBlock"
 
-const DEFAULT_ROWS_COUNT : number = 10
-const DEFAULT_COLUMNS_COUNT : number = 10
-const DEFAULT_BACKGROUND_COLOR : string = 'white'
 export const DEFAULT_CELL_SIZE : number = 35
 
 export interface CellInfo {
-
   cellSize: number
   heightCellCount: number
 	widthCellCount: number
   backgroundColor: string
-  rowsSize: Array<string>;
-  columnsSize: Array<string>;
+  rowsSize: Array<string>
+  columnsSize: Array<string>
 }
+
+const DEFAULT_ROWS_COUNT : number = 10
+const DEFAULT_COLUMNS_COUNT : number = 10
+const DEFAULT_BACKGROUND_COLOR : string = 'white'
 
 export class App extends ObservableObject {
   version: string
@@ -54,23 +54,23 @@ export class App extends ObservableObject {
 
   constructor(version: string, ...themes: Array<AppTheme>) {
     super()
-    this.version = version
-    this.sensors = new HtmlSensors()
-    this.allThemes = themes
-    this.activeThemeIndex = 0
-    this.blinkingEffect = false
-    this.loader = new Loader()
-    this.widthGrowthCount = 3
-    this.editor = undefined
-    this.monacoThemes = ['vs', 'vs-dark', 'hc-black', 'hc-light']
-    this.activeMonacoThemeIndex = 0
-    this.textModelArtel = undefined
-    this.outputBlocks = []
-    this.cellsInfo = this.getDefaultCellsInfo()
+    this.version = version;
+    this.sensors = new HtmlSensors();
+    this.allThemes = themes;
+    this.activeThemeIndex = 0;
+    this.blinkingEffect = false;
+    this.loader = new Loader();
+    this.widthGrowthCount = 3; 
+    this.editor = undefined;
+    this.monacoThemes = ['vs', 'vs-dark', 'hc-black', 'hc-light'];
+    this.activeMonacoThemeIndex = 0;
+    this.textModelArtel = undefined;
+    this.outputBlocks = [];
+    this.cellsInfo = this.getDefaultCellsInfo();
   }
 
   get theme(): AppTheme {
-    return this.allThemes[this.activeThemeIndex]
+    return this.allThemes[this.activeThemeIndex];
   }
 
   private gridModuleSourceCode: string = `
@@ -127,153 +127,159 @@ export class App extends ObservableObject {
     const client = new ArtelMonacoClient([{
       name: 'работа-с-сеткой',
       sourceFiles: [{name: 'grid.art', text: this.gridModuleSourceCode}]
-    }])
-    this.textModelArtel = await client.getModel(new Worker())
+    }]);
+    this.textModelArtel = await client.getModel(new Worker());
   }
 
   parseSecondPoint(coordinates: string): string {
-    let colonPos = coordinates.indexOf(":")
-    return coordinates.substring(colonPos+1)
+    let colonPos = coordinates.indexOf(':');
+    return coordinates.substring(colonPos + 1);
   }
 
   parseFirstPoint(coordinates: string): string {
-    let colonPos = coordinates.indexOf(":")
-    return coordinates.substring(0, colonPos)
+    let colonPos = coordinates.indexOf(':');
+    return coordinates.substring(0, colonPos);
   }
 
   parseColor(color: string): string {
     switch(color){
       case 'желтый':
-        return 'yellow'
+        return 'yellow';
       case 'красный':
-        return 'red'
+        return 'red';
       case 'зеленый':
-        return 'green'
+        return 'green';
       case 'белый':
-        return 'white'
+        return 'white';
       case 'синий':
-        return 'blue'
+        return 'blue';
       case 'фиолетовый':
-        return 'purple'
+        return 'purple';
       case 'чёрный':
-        return 'black'
+        return 'black';
       default:
-        return this.parseAnotherColorView(color)
+        return this.parseAnotherColorView(color);
     }
   }
 
   parseAnotherColorView(color: string): string {
     if (color.startsWith('rgb') || color.startsWith('rgba') || (color.startsWith('#') && color.length === 7)){
-      return 'anotherColorStyle'
+      return 'anotherColorStyle';
     }
-    return 'unknown'
+
+    return 'unknown';
   }
 
   parseBorder(border: string): string {
     switch(border){
       case 'сплошной':
-        return 'solid'
+        return 'solid';
       case 'пунктирный':
-        return 'dashed'
+        return 'dashed';
       case 'точечный':
-        return 'dotted'
+        return 'dotted';
       default:
-        return 'unknown'
+        return 'unknown';
     }
   }
 
   parseBorderStyles(borderStyles: string): string {
-    let index = 0
-    let startIndex = 0
-    let result = ''
-    let isRGBColor: boolean = false
+    let index = 0;
+    let startIndex = 0;
+    let result = '';
+
     while (index < borderStyles.length){
       while (index < borderStyles.length && borderStyles[index+1] !== ' ') {
-        index++
+        index++;
       }
-      index++
-      const style = borderStyles.substring(startIndex, index)
-      let newStyle = this.parseColor(style.trim())
+
+      index++;
+      const style = borderStyles.substring(startIndex, index);
+      let newStyle = this.parseColor(style.trim());
+      
       if (newStyle === 'unknown'){
-        newStyle = this.parseBorder(style.trim())
+        newStyle = this.parseBorder(style.trim());
         if (newStyle === 'unknown'){
-          newStyle = style
+          newStyle = style;
         }
       }
       else if(newStyle === 'anotherColorStyle') {
         if (style.trim().indexOf(')') === -1){
           while (borderStyles[index] !== ')' && index < borderStyles.length){
-            index++
+            index++;
           }
-          index++
+
+          index++;
         }
 
-        newStyle = borderStyles.substring(startIndex, index)
+        newStyle = borderStyles.substring(startIndex, index);
       }
-      result+= newStyle+' '
-      startIndex = index
+      result+= newStyle + ' ';
+      startIndex = index;
     }
-    return result
+
+    return result;
   }
 
   parseLocation(text: string): string {
     switch(text){
       case 'центр':
-        return 'center'
+        return 'center';
       case 'слева':
-        return 'flex-start'
+        return 'flex-start';
       case 'справа':
-        return 'flex-end'
+        return 'flex-end';
       default:
-        return 'unknown'
+        return 'unknown';
     }
   }
 
   parseTextStyles(textStyles: string) {
-    let index = 0
-    let startIndex = 0
-    let result = { color: 'black', location: 'center' }
+    let index = 0;
+    let startIndex = 0;
+    let result = { color: 'black', location: 'center' };
+
     while (index < textStyles.length){
       while (index < textStyles.length && textStyles[index+1] !== ' ') {
-        index++
+        index++;
       }
-      index++
-      const style = textStyles.substring(startIndex, index)
-      let newStyle = this.parseColor(style.trim())
+
+      index++;
+      const style = textStyles.substring(startIndex, index);
+      let newStyle = this.parseColor(style.trim());
+      
       if (newStyle === 'unknown'){
-        newStyle = this.parseLocation(style.trim())
-        if (newStyle === 'unknown'){
-          // alert('Unknown style for text!')
-        }
-        else {
+        newStyle = this.parseLocation(style.trim());
+        if (newStyle !== 'unknown'){
           result.location = newStyle
         }
       }
       else if(newStyle === 'anotherColorStyle') {
         if (style.trim().indexOf(')') === -1){
           while (textStyles[index] !== ')' && index < textStyles.length){
-            index++
+            index++;
           }
-          index++
+
+          index++;
         }
 
-        result.color = textStyles.substring(startIndex, index)
+        result.color = textStyles.substring(startIndex, index);
       }
       else {
-        result.color = newStyle
+        result.color = newStyle;
       }
 
-      startIndex = index
+      startIndex = index;
     }
-    return result
+
+    return result;
   }
 
   @raw
   renderTree: BlockNode<any> | null = null;
 
   textBlockFunction(operation: (block: ITextBlock) => void): void {
-
-    let block: ITextBlock = { coordinates: '', color:'', text:'', borderStyles:'', textStyles:{ color: '', location:''}}
+    let block: ITextBlock = { coordinates: '', color:'', text:'', borderStyles:'', textStyles:{ color: '', location:''}};
 
     if (this.renderTree) {
       this.renderTree.addChild(new BlockNode<ITextBlock>((b, innerOperations) => {
@@ -284,36 +290,34 @@ export class App extends ObservableObject {
           this.parseColor(b.color.trim()),
           this.parseBorderStyles(b.borderStyles.trim()),
           b.textStyles
-        ).drawBlock(this.cellsInfo, innerOperations)
+        ).drawBlock(this.cellsInfo, innerOperations);
       }, this.renderTree, block))
       this.renderTree = this.renderTree.lastChild;
     }
     else {
       this.renderTree = new BlockNode<ITextBlock>((b, innerOperations) => {
         new TextBlock(this.parseFirstPoint(b.coordinates),this.parseSecondPoint(b.coordinates), b.text, b.color, b.borderStyles, b.textStyles).drawBlock(this.cellsInfo, innerOperations)
-      }, null, block)
-
+      }, null, block);
     }
 
-    operation(block)
-    translateFromCyrillicTextBlock(block, this)
-    // пуш элемента в массив outputBlocks
+    operation(block);
+    translateFromCyrillicTextBlock(block, this);
+
     if (this.renderTree.parent != null) {
       this.renderTree = this.renderTree.parent;
     }
     else {
-      const parent = this.renderTree
+      const parent = this.renderTree;
       const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable();
-      outputBlocks.push({drawBlock: (info) => {
+      outputBlocks.push({drawBlock: () => {
         parent?.renderChain();
       }})
       this.renderTree = null;
     }
-
   }
 
   rectangleBlockFunction(operation: (block: IRectangle) => void): void {
-    let block: IRectangle = { coordinates: '', color:'', borderStyles:''}
+    let block: IRectangle = { coordinates: '', color:'', borderStyles:''};
 
     if (this.renderTree) {
       this.renderTree.addChild(new BlockNode<IRectangle>((b, innerOperations) => {
@@ -322,7 +326,7 @@ export class App extends ObservableObject {
           this.parseSecondPoint(b.coordinates),
           this.parseColor(b.color.trim()),
           this.parseBorderStyles(b.borderStyles.trim())
-        ).drawBlock(this.cellsInfo, innerOperations)
+        ).drawBlock(this.cellsInfo, innerOperations);
       }, this.renderTree, block))
       this.renderTree = this.renderTree.lastChild;
     }
@@ -333,101 +337,94 @@ export class App extends ObservableObject {
           this.parseSecondPoint(b.coordinates),
           this.parseColor(b.color.trim()),
           this.parseBorderStyles(b.borderStyles.trim())
-        ).drawBlock(this.cellsInfo, innerOperations)
-      }, null, block)
-
+        ).drawBlock(this.cellsInfo, innerOperations);
+      }, null, block);
     }
 
-    operation(block)
-    // пуш элемента в массив outputBlocks
-    translateFromCyrillicRectangleBlock(block)
+    operation(block);
+    translateFromCyrillicRectangleBlock(block);
+
     if (this.renderTree.parent != null) {
       this.renderTree = this.renderTree.parent;
     }
     else {
-      const parent = this.renderTree
+      const parent = this.renderTree;
       const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable();
-      outputBlocks.push({drawBlock: (info) => {
+      outputBlocks.push({drawBlock: () => {
         parent?.renderChain();
       }})
       this.renderTree = null;
     }
-
   }
 
   writeFunction(coordinates: string, message: string, color: string, borderStyles: string, textStyles: string): void {
-    const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable()
-    let firstPoint = this.parseFirstPoint(coordinates)
-    let secondPoint = this.parseSecondPoint(coordinates)
-    let enColor = this.parseColor(color.trim())
+    const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable();
+    let firstPoint = this.parseFirstPoint(coordinates);
+    let secondPoint = this.parseSecondPoint(coordinates);
+    let enColor = this.parseColor(color.trim());
+    
     if (enColor === 'anotherColorStyle'){
-      enColor = color.trim()
+      enColor = color.trim();
     }
-    const border = this.parseBorderStyles(borderStyles.trim())
-    const textSt = this.parseTextStyles(textStyles.trim())
-    outputBlocks.push(new TextBlock(firstPoint, secondPoint, message, enColor, border, textSt))
+
+    const border = this.parseBorderStyles(borderStyles.trim());
+    const textSt = this.parseTextStyles(textStyles.trim());
+    outputBlocks.push(new TextBlock(firstPoint, secondPoint, message, enColor, border, textSt));
   }
 
   drawImageFunction(coordinates: string, url: string): void {
-    const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable()
-    let firstPoint = this.parseFirstPoint(coordinates)
-    let secondPoint = this.parseSecondPoint(coordinates)
-    outputBlocks.push(new ImageBlock(firstPoint, secondPoint, url))
+    const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable();
+    let firstPoint = this.parseFirstPoint(coordinates);
+    let secondPoint = this.parseSecondPoint(coordinates);
+    outputBlocks.push(new ImageBlock(firstPoint, secondPoint, url));
   }
 
   async inputFunction(coordinates: string, color: string, borderStyles: string, textStyles: string): Promise<string> {
+    const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable();
+    let firstPoint = this.parseFirstPoint(coordinates);
+    let secondPoint = this.parseSecondPoint(coordinates);
+    let enColor = this.parseColor(color);
 
-    const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable()
-
-    let firstPoint = this.parseFirstPoint(coordinates)
-    let secondPoint = this.parseSecondPoint(coordinates)
-    let enColor = this.parseColor(color)
     if (enColor === 'anotherColorStyle'){
-      enColor = color.trim()
+      enColor = color.trim();
     }
 
-    const border = this.parseBorderStyles(borderStyles.trim())
-    const textSt = this.parseTextStyles(textStyles.trim())
-
-
-    const inputBlock = new InputBlock(firstPoint, secondPoint, enColor, border, textSt)
-
-    const text: string = await inputBlock.getUserInput()
-
-    outputBlocks.push(inputBlock)
-    return Promise.resolve<string>(text)
-
+    const border = this.parseBorderStyles(borderStyles.trim());
+    const textSt = this.parseTextStyles(textStyles.trim());
+    const inputBlock = new InputBlock(firstPoint, secondPoint, enColor, border, textSt);
+    const text: string = await inputBlock.getUserInput();
+    outputBlocks.push(inputBlock);
+    return Promise.resolve<string>(text);
   }
 
   rectangleFunction(coordinates: string, color: string, borderStyles: string): void {
-    const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable()
-    let firstPoint = this.parseFirstPoint(coordinates)
-    let secondPoint = this.parseSecondPoint(coordinates)
-    let enColor = this.parseColor(color.trim())
+    const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable();
+    let firstPoint = this.parseFirstPoint(coordinates);
+    let secondPoint = this.parseSecondPoint(coordinates);
+    let enColor = this.parseColor(color.trim());
+
     if (enColor === 'anotherColorStyle'){
-      enColor = color.trim()
+      enColor = color.trim();
     }
-    const border = this.parseBorderStyles(borderStyles.trim())
-    outputBlocks.push(new Rectangle(firstPoint, secondPoint, enColor, border))
+
+    const border = this.parseBorderStyles(borderStyles.trim());
+    outputBlocks.push(new Rectangle(firstPoint, secondPoint, enColor, border));
   }
 
   clearBlocks() {
     this.outputBlocks = this.outputBlocks.toMutable();
-    this.outputBlocks = []
+    this.outputBlocks = [];
   }
 
   clearFunction(time: number = 0) {
     return new Promise<void>(resolve => {
       setTimeout(() => {
-        resolve(Transaction.run(null, () => this.clearBlocks()))
-      }, time)
-    });
-
+        resolve(Transaction.run(null, () => this.clearBlocks()));
+      }, time);
+    })
   }
 
-
   compileArtel(code: string): string {
-
     const fileSystemTree =
       new DirectoryNode(
         new Uri(['project']),
@@ -450,112 +447,118 @@ export class App extends ObservableObject {
             ]
           )
         ]
-      )
+      );
 
+    const workspace = new Workspace([fileSystemTree]);
+    const project = workspace.projectGraphs[0];
 
-    const workspace = new Workspace([fileSystemTree])
-    const project = workspace.projectGraphs[0]
     if (project.mainProject.role !== 'main')
-      throw new Error('Internal error')
-    const emitter = new Emitter(project)
+      throw new Error('Internal error');
+
+    const emitter = new Emitter(project);
 
     function collectProjectDiagnostics(project: ProjectGraph) {
-      const diagnosticsByFileUri = new Map<string, Diagnostic[]>()
-      const cursor = ProjectCursor.fromProjectGraph(project)
+      const diagnosticsByFileUri = new Map<string, Diagnostic[]>();
+      const cursor = ProjectCursor.fromProjectGraph(project);
       for (const sourceFile of cursor.enumerateSourceFiles()) {
         // const diagnostics = [...sourceFile.syntax.diagnostics.items]
         // const semanticDiagnostics = collectDiagnostics(project.ctx, sourceFile.syntax)
         // diagnostics.push(...semanticDiagnostics)
         // diagnosticsByFileUri.set(sourceFile.uri.toString(), diagnostics)
       }
-      return diagnosticsByFileUri
+      return diagnosticsByFileUri;
     }
-    console.log(collectProjectDiagnostics(project))
-    const compiledCode = emitter.emitToString()
 
-    return compiledCode
+    console.log(collectProjectDiagnostics(project));
+    const compiledCode = emitter.emitToString();
+    return compiledCode;
   }
 
   @transactional
   nextTheme(): void {
-    this.activeThemeIndex = (this.activeThemeIndex + 1) % this.allThemes.length
+    this.activeThemeIndex = (this.activeThemeIndex + 1) % this.allThemes.length;
   }
 
   @transactional
   nextMonacoTheme(): void {
-    this.activeMonacoThemeIndex = (this.activeMonacoThemeIndex + 1) % this.monacoThemes.length
-    this.editor?.updateOptions({theme: this.monacoThemes[this.activeMonacoThemeIndex]})
+    this.activeMonacoThemeIndex = (this.activeMonacoThemeIndex + 1) % this.monacoThemes.length;
+    this.editor?.updateOptions({theme: this.monacoThemes[this.activeMonacoThemeIndex]});
   }
 
   @reactive
   protected actualizeBrowserTitle(): void {
-    document.title = `Verstak Demo ${this.version}`
+    document.title = `Verstak Demo ${this.version}`;
   }
 
   @reactive
   protected applyBlinkingEffect(): void {
-    BaseHtmlDriver.blinkingEffect = this.blinkingEffect ? "verstak-blinking-effect" : undefined
+    BaseHtmlDriver.blinkingEffect = this.blinkingEffect ? "verstak-blinking-effect" : undefined;
   }
 
-  getDefaultCellsInfo(): CellInfo{
-    return {heightCellCount : DEFAULT_ROWS_COUNT, widthCellCount : DEFAULT_COLUMNS_COUNT, cellSize : DEFAULT_CELL_SIZE, backgroundColor: DEFAULT_BACKGROUND_COLOR, columnsSize: [], rowsSize: []}
+  getDefaultCellsInfo(): CellInfo {
+    return {
+      heightCellCount : DEFAULT_ROWS_COUNT, 
+      widthCellCount : DEFAULT_COLUMNS_COUNT, 
+      cellSize : DEFAULT_CELL_SIZE, 
+      backgroundColor: DEFAULT_BACKGROUND_COLOR, 
+      columnsSize: [], 
+      rowsSize: []
+    };
   }
 
-  public getWidthGrowth():Number{
-    return this.widthGrowthCount
+  public getWidthGrowth(): Number {
+    return this.widthGrowthCount;
   }
 
-  public setEditor (editor: editor.IStandaloneCodeEditor): void{
-    this.editor = editor
+  public setEditor (editor: editor.IStandaloneCodeEditor): void {
+    this.editor = editor;
   }
 
-  public getEditor(): editor.IStandaloneCodeEditor | undefined{
-    return this.editor
+  public getEditor(): editor.IStandaloneCodeEditor | undefined {
+    return this.editor;
   }
-
 }
 
 export const $app = new ContextVariable<App>()
 
 export function incrementLetterInCoordinate(text: string): string {
+  let i: number = text.length;
+  let isExit: boolean = false;
 
-  let i: number = text.length
-  let isExit: boolean = false
   while (i > 0 && !isExit){
-    let lastChar
+    let lastChar;
     if (text.charCodeAt(i - 1) < 'Z'.charCodeAt(0)){
-      lastChar = String.fromCharCode(text.charCodeAt(i - 1) + 1)
-      isExit = true
+      lastChar = String.fromCharCode(text.charCodeAt(i - 1) + 1);
+      isExit = true;
     }
     else{
-      lastChar = 'A'
+      lastChar = 'A';
     }
 
-    text = text.substring(0, i - 1) + lastChar + text.substring(i)
-    i--
+    text = text.substring(0, i - 1) + lastChar + text.substring(i);
+    i--;
   }
 
-  text = text + (!isExit ? 'A' : '')
-  return text
+  text = text + (!isExit ? 'A' : '');
+  return text;
 }
 
-
 function translateFromCyrillicTextBlock(b: ITextBlock, app: App){
-  translateFromCyrillicBaseBlock(b)
-  let res = b as any
-  b.borderStyles = res.стили_границы || ""
-  b.text = res.текст || ""
-  b.textStyles = app.parseTextStyles(res.стили_текста?.trim() ?? "") || {color: "", location: ""}
+  translateFromCyrillicBaseBlock(b);
+  let res = b as any;
+  b.borderStyles = res.стили_границы || '';
+  b.text = res.текст || '';
+  b.textStyles = app.parseTextStyles(res.стили_текста?.trim() ?? '') || {color: '', location: ''};
 }
 
 function translateFromCyrillicBaseBlock(b: IBaseBlock) {
-  let res = b as any
-  b.color = res.цвет_фона || ""
-  b.coordinates = res.координаты || ""
+  let res = b as any;
+  b.color = res.цвет_фона || '';
+  b.coordinates = res.координаты || '';
 }
 
 function translateFromCyrillicRectangleBlock(b: IRectangle){
   translateFromCyrillicBaseBlock(b);
-  let res = b as any || ""
-  b.borderStyles = res.стили_границы || ""
+  let res = b as any || '';
+  b.borderStyles = res.стили_границы || '';
 }

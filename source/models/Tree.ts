@@ -1,18 +1,13 @@
 import { IBaseBlock } from "interfaces/IBaseBlock";
-import { IOutputBlock } from "./OutputBlock"
-import { CellInfo } from "./App";
-
 
 type RenderFunction<T extends IBaseBlock> = (block: T, innerOperations?: () => void) => void;
 
-
 export class BlockNode<T extends IBaseBlock> {
+  private renderFunction: RenderFunction<T>
+  private children: BlockNode<any>[] = []
+  private block: T
 
-  private renderFunction: RenderFunction<T>;
-  private children: BlockNode<any>[] = [];
-  private block: T;
-
-  parent: BlockNode<any> | null;
+  parent: BlockNode<any> | null
 
   constructor(renderFunction: RenderFunction<T>, parent: BlockNode<any> | null, block: T) {
     this.renderFunction = renderFunction;
@@ -29,13 +24,12 @@ export class BlockNode<T extends IBaseBlock> {
       this.renderFunction(this.block, () => {
         this.children.forEach(child => {
           child.renderChain();
-        })
-      })
+        });
+      });
     }
   }
 
   public get lastChild(): BlockNode<any> {
     return this.children[this.children.length - 1];
   }
-
 }

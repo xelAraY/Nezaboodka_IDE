@@ -25,13 +25,13 @@ VBlock.root(() => {
   HtmlBody({
     reaction: true,
     render(b) {
-      $app.value = app
-      const t = app.theme
-      const css = b.native.style
-      css.color = t.textColor
-      css.backgroundColor = t.spaceFillColor
-      lineFeed() // WORKAROUND
-      MainWindow()
+      $app.value = app;
+      const t = app.theme;
+      const css = b.native.style;
+      css.color = t.textColor;
+      css.backgroundColor = t.spaceFillColor;
+      lineFeed(); // WORKAROUND
+      MainWindow();
     }
-  })
+  });
 })

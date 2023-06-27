@@ -1,14 +1,9 @@
 import { css } from "@emotion/css";
 import { AppTheme } from "themes/AppTheme";
-import { Align, Block, BlockBody, Grid } from "verstak";
-import { GridCordText, GridRectangle, WorkArea } from "./WorkArea.v";
-import { $app, incrementLetterInCoordinate } from "models/App";
-import { findMaxLetter } from "models/OutputBlock";
-import { reactive } from "reactronic";
-
+import { Align, Block, BlockBody } from "verstak";
+import { WorkArea } from "./WorkArea.v";
 
 export const Smartphone = (theme: AppTheme, body?: BlockBody<HTMLElement, void, void>) => (
-
   Block(body, {reaction: true,
     initialize(b) {
 
