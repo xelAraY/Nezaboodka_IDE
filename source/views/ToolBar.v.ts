@@ -2,6 +2,7 @@ import { Block, BlockBody} from "verstak"
 import { Button, createFieldModel} from "gost-pi"
 import { $app, CellInfo } from "models/App"
 import { Transaction } from "reactronic"
+import { textBlockFunction,  rectangleBlockFunction, writeFunction, drawImageFunction, inputFunction, rectangleFunction, clearFunction} from "models/ArtelFunctions"
 
 const defaultCellSize : number = 35
 
@@ -20,7 +21,7 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
             action: async () => {
               const editor = app.getEditor();
               app.cellsInfo = app.getDefaultCellsInfo();
-              
+
               if (editor?.getValue() !== undefined){
                 let code = app.compileArtel(editor.getValue());
                 let functions = `сетка = {
@@ -43,9 +44,9 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                                     set количество_строк(value) {
                                       transactionRun(null, () => {
                                         for (let i = app.cellsInfo.heightCellCount; i < value; i++){
-                                          this.размер_строк[i] = '';   
+                                          this.размер_строк[i] = '';
                                         }
-                                        
+
                                         app.cellsInfo = {...app.cellsInfo, heightCellCount: value}
                                       })
                                     },
@@ -55,7 +56,7 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                                     set количество_столбцов(value) {
                                       transactionRun(null, () => {
                                         for (let i = app.cellsInfo.widthCellCount; i < value; i++){
-                                          this.размер_столбцов[i] = '';   
+                                          this.размер_столбцов[i] = '';
                                         }
 
                                         app.cellsInfo = {...app.cellsInfo, widthCellCount: value}
@@ -81,7 +82,7 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                                           // transactionRun(null, () => {
                                             target[property] = value;
                                             console.log('set ' + value + ' for index ' + property);
-                                          // });   
+                                          // });
                                         }
                                         return true;
                                       }
@@ -96,33 +97,33 @@ export const ToolBar = (body?: BlockBody<HTMLElement, void, void>) => (
                                           // transactionRun(null, () => {
                                             target[property] = value
                                             console.log('set ' + value + ' for index ' + property)
-                                          // });   
+                                          // });
                                         }
                                         return true;
                                       }
                                     }),
                                   }\n`+
                                 'function вписать(coordinates, message, color="красный", border = "1px solid", textStyles = "black center")\{\n' +
-                                '  transactionRun(null, () => app.writeFunction(coordinates, message, color, border, textStyles))\n' +
+                                '  transactionRun(null, () => writeFunction(coordinates, message, color, border, textStyles))\n' +
                                 '}\n' +
                                 '\n' +
                                 'function прямоугольник(coordinates, color = "красный", border = "1px solid")\{\n' +
-                                '  transactionRun(null, () => app.rectangleFunction(coordinates, color, border))\n' +
+                                '  transactionRun(null, () => rectangleFunction(coordinates, color, border))\n' +
                                 '}\n'+
                                 'function изображение(coordinates, url)\{\n' +
-                                '  transactionRun(null, () => app.drawImageFunction(coordinates, url))\n' +
+                                '  transactionRun(null, () => drawImageFunction(coordinates, url))\n' +
                                 '}\n'+
                                 'async function ввести(coordinates, color="красный", border = "1px solid", textStyles = "black center"){\n' +
-                                '  return await app.inputFunction(coordinates, color, border, textStyles)\n' +
+                                '  return await inputFunction(coordinates, color, border, textStyles)\n' +
                                 '}\n'+
                                 'function Текст_блок(render)\{\n' +
-                                '  transactionRun(null, () => app.textBlockFunction(render))\n' +
+                                '  transactionRun(null, () => textBlockFunction(render))\n' +
                                 '}\n'+
                                 'function Прямоугольник_блок(render)\{\n' +
-                                '  transactionRun(null, () => app.rectangleBlockFunction(render))\n' +
+                                '  transactionRun(null, () => rectangleBlockFunction(render))\n' +
                                 '}\n'+
                                 'async function очистить(time)\{\n' +
-                                ' return app.clearFunction(time)\n' +
+                                ' return clearFunction(time)\n' +
                                 '}\n' +
                                 `for (let i = 0; i < app.cellsInfo.heightCellCount; i++){
                                    сетка.размер_строк[i.toString()] = '';

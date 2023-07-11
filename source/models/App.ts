@@ -1,25 +1,15 @@
-import { raw, ObservableObject, reactive, transactional, Transaction, options } from "reactronic"
-import { BaseHtmlDriver, ContextVariable, HtmlSensors, I, Output } from "verstak"
+import { raw, ObservableObject, reactive, transactional, Transaction } from "reactronic"
+import { BaseHtmlDriver, ContextVariable, HtmlSensors } from "verstak"
 import { AppTheme } from "themes/AppTheme"
-import { Loader } from "./Loader"
 import Worker from "../../library/artel/projects/monaco-client/source/worker?worker"
 import { editor } from "monaco-editor"
 import { IOutputBlock } from "./OutputBlock"
-import { Rectangle } from "./Rectangle"
-import { TextBlock } from "./TextBlock"
-import { InputBlock } from "./InputBlock"
-import { ImageBlock } from "./ImageBlock"
 import { ArtelMonacoClient } from "../../library/artel/projects/monaco-client/source"
 import { DirectoryNode, FileNode, ProjectGraph, ProjectCursor, SourceFileState, Workspace } from "../../library/artel/projects/compiler/source/project"
 import { Uri } from "../../library/artel/projects/compiler/source/common"
 import { Emitter } from "../../library/artel/projects/compiler/source/emitter"
 import { Diagnostic } from "../../library/artel/projects/compiler/source/diagnostic/Diagnostic"
-import { collectDiagnostics } from "../../library/artel/projects/compiler/source/analysis/collect-diagnostics"
-import { ITextBlock } from "interfaces/ITextBlock"
-import { IRectangle } from "interfaces/IRectangle"
 import { BlockNode } from "./Tree"
-import { IBaseBlock } from "interfaces/IBaseBlock"
-import { parseBorderStyles, parseColor, parseFirstPoint, parseSecondPoint, parseTextStyles, translateFromCyrillicRectangleBlock, translateFromCyrillicTextBlock } from "./Parse"
 
 export const DEFAULT_CELL_SIZE : number = 35
 
@@ -42,7 +32,6 @@ export class App extends ObservableObject {
   allThemes: Array<AppTheme>
   activeThemeIndex: number
   blinkingEffect: boolean
-  loader: Loader
   widthGrowthCount: number
   monacoThemes: string[]
   activeMonacoThemeIndex: number
@@ -52,6 +41,8 @@ export class App extends ObservableObject {
 
   @raw
   editor: editor.IStandaloneCodeEditor | undefined
+  @raw
+  renderTree: BlockNode<any> | null = null;
 
   constructor(version: string, ...themes: Array<AppTheme>) {
     super()
@@ -60,8 +51,7 @@ export class App extends ObservableObject {
     this.allThemes = themes;
     this.activeThemeIndex = 0;
     this.blinkingEffect = false;
-    this.loader = new Loader();
-    this.widthGrowthCount = 3; 
+    this.widthGrowthCount = 3;
     this.editor = undefined;
     this.monacoThemes = ['vs', 'vs-dark', 'hc-black', 'hc-light'];
     this.activeMonacoThemeIndex = 0;
@@ -130,155 +120,6 @@ export class App extends ObservableObject {
       sourceFiles: [{name: 'grid.art', text: this.gridModuleSourceCode}]
     }]);
     this.textModelArtel = await client.getModel(new Worker());
-  }
-
-  @raw
-  renderTree: BlockNode<any> | null = null;
-
-  textBlockFunction(operation: (block: ITextBlock) => void): void {
-    let block: ITextBlock = { coordinates: '', color:'', text:'', borderStyles:'', textStyles:{ color: '', location:''}};
-
-    if (this.renderTree) {
-      this.renderTree.addChild(new BlockNode<ITextBlock>((b, innerOperations) => {
-        new TextBlock(
-          parseFirstPoint(b.coordinates),
-          parseSecondPoint(b.coordinates),
-          b.text,
-          parseColor(b.color.trim()),
-          parseBorderStyles(b.borderStyles.trim()),
-          b.textStyles
-        ).drawBlock(this.cellsInfo, innerOperations);
-      }, this.renderTree, block))
-      this.renderTree = this.renderTree.lastChild;
-    }
-    else {
-      this.renderTree = new BlockNode<ITextBlock>((b, innerOperations) => {
-        new TextBlock(parseFirstPoint(b.coordinates), parseSecondPoint(b.coordinates), b.text, b.color, b.borderStyles, b.textStyles).drawBlock(this.cellsInfo, innerOperations)
-      }, null, block);
-    }
-
-    operation(block);
-    translateFromCyrillicTextBlock(block, this);
-
-    if (this.renderTree.parent != null) {
-      this.renderTree = this.renderTree.parent;
-    }
-    else {
-      const parent = this.renderTree;
-      const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable();
-      outputBlocks.push({drawBlock: () => {
-        parent?.renderChain();
-      }})
-      this.renderTree = null;
-    }
-  }
-
-  rectangleBlockFunction(operation: (block: IRectangle) => void): void {
-    let block: IRectangle = { coordinates: '', color:'', borderStyles:''};
-
-    if (this.renderTree) {
-      this.renderTree.addChild(new BlockNode<IRectangle>((b, innerOperations) => {
-        new Rectangle(
-          parseFirstPoint(b.coordinates),
-          parseSecondPoint(b.coordinates),
-          parseColor(b.color.trim()),
-          parseBorderStyles(b.borderStyles.trim())
-        ).drawBlock(this.cellsInfo, innerOperations);
-      }, this.renderTree, block))
-      this.renderTree = this.renderTree.lastChild;
-    }
-    else {
-      this.renderTree = new BlockNode<IRectangle>((b, innerOperations) => {
-        new Rectangle(
-          parseFirstPoint(b.coordinates),
-          parseSecondPoint(b.coordinates),
-          parseColor(b.color.trim()),
-          parseBorderStyles(b.borderStyles.trim())
-        ).drawBlock(this.cellsInfo, innerOperations);
-      }, null, block);
-    }
-
-    operation(block);
-    translateFromCyrillicRectangleBlock(block);
-
-    if (this.renderTree.parent != null) {
-      this.renderTree = this.renderTree.parent;
-    }
-    else {
-      const parent = this.renderTree;
-      const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable();
-      outputBlocks.push({drawBlock: () => {
-        parent?.renderChain();
-      }})
-      this.renderTree = null;
-    }
-  }
-
-  writeFunction(coordinates: string, message: string, color: string, borderStyles: string, textStyles: string): void {
-    const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable();
-    let firstPoint = parseFirstPoint(coordinates);
-    let secondPoint = parseSecondPoint(coordinates);
-    let enColor = parseColor(color.trim());
-    
-    if (enColor === 'anotherColorStyle'){
-      enColor = color.trim();
-    }
-
-    const border = parseBorderStyles(borderStyles.trim());
-    const textSt = parseTextStyles(textStyles.trim());
-    outputBlocks.push(new TextBlock(firstPoint, secondPoint, message, enColor, border, textSt));
-  }
-
-  drawImageFunction(coordinates: string, url: string): void {
-    const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable();
-    let firstPoint = parseFirstPoint(coordinates);
-    let secondPoint = parseSecondPoint(coordinates);
-    outputBlocks.push(new ImageBlock(firstPoint, secondPoint, url));
-  }
-
-  async inputFunction(coordinates: string, color: string, borderStyles: string, textStyles: string): Promise<string> {
-    const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable();
-    let firstPoint = parseFirstPoint(coordinates);
-    let secondPoint = parseSecondPoint(coordinates);
-    let enColor = parseColor(color);
-
-    if (enColor === 'anotherColorStyle'){
-      enColor = color.trim();
-    }
-
-    const border = parseBorderStyles(borderStyles.trim());
-    const textSt = parseTextStyles(textStyles.trim());
-    const inputBlock = new InputBlock(firstPoint, secondPoint, enColor, border, textSt);
-    const text: string = await inputBlock.getUserInput();
-    outputBlocks.push(inputBlock);
-    return Promise.resolve<string>(text);
-  }
-
-  rectangleFunction(coordinates: string, color: string, borderStyles: string): void {
-    const outputBlocks = this.outputBlocks = this.outputBlocks.toMutable();
-    let firstPoint = parseFirstPoint(coordinates);
-    let secondPoint = parseSecondPoint(coordinates);
-    let enColor = parseColor(color.trim());
-
-    if (enColor === 'anotherColorStyle'){
-      enColor = color.trim();
-    }
-
-    const border = parseBorderStyles(borderStyles.trim());
-    outputBlocks.push(new Rectangle(firstPoint, secondPoint, enColor, border));
-  }
-
-  clearBlocks() {
-    this.outputBlocks = this.outputBlocks.toMutable();
-    this.outputBlocks = [];
-  }
-
-  clearFunction(time: number = 0) {
-    return new Promise<void>(resolve => {
-      setTimeout(() => {
-        resolve(Transaction.run(null, () => this.clearBlocks()));
-      }, time);
-    })
   }
 
   compileArtel(code: string): string {
@@ -354,11 +195,11 @@ export class App extends ObservableObject {
 
   getDefaultCellsInfo(): CellInfo {
     return {
-      heightCellCount : DEFAULT_ROWS_COUNT, 
-      widthCellCount : DEFAULT_COLUMNS_COUNT, 
-      cellSize : DEFAULT_CELL_SIZE, 
-      backgroundColor: DEFAULT_BACKGROUND_COLOR, 
-      columnsSize: [], 
+      heightCellCount : DEFAULT_ROWS_COUNT,
+      widthCellCount : DEFAULT_COLUMNS_COUNT,
+      cellSize : DEFAULT_CELL_SIZE,
+      backgroundColor: DEFAULT_BACKGROUND_COLOR,
+      columnsSize: [],
       rowsSize: []
     };
   }
