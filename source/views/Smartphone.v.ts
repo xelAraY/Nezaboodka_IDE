@@ -17,7 +17,7 @@ export const Smartphone = (theme: AppTheme, body?: BlockBody<HTMLElement, void, 
       Block({initialize(b){
         b.style(css`
           height: 630px;
-          width: 430px;
+          width: 530px;
         `);
       },
       render(){

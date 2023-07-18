@@ -10,8 +10,13 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
       b.widthGrowth = 3;
       b.heightGrowth = 1;
       b.style(css`
-        height: 630px;
-        width: 430px;`);
+        min-width: 530px;
+        min-height: 630px;
+        max-width: 530px;
+        max-height: 630px;
+        padding: 10px;
+        overflow: auto;
+        `);
     },
     render(b){
       const app = $app.value;
