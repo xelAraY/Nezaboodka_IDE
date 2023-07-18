@@ -14,7 +14,7 @@ export const WorkArea = (body?: BlockBody<HTMLElement, void, void>) => (
         min-height: 630px;
         max-width: 530px;
         max-height: 630px;
-        padding: 10px;
+        padding: 20px;
         overflow: auto;
         `);
     },
